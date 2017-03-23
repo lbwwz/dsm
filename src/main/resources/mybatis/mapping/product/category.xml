@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace必须是接口的全类名  -->
+<mapper namespace="com.dsm.dao.ICategoryDao">
+
+    <!--location属性别名与字段之间映射-->
+    <resultMap type="CategoryBean" id="categoryResult">
+        <id column="cat_id" property="catId"/>
+        <result column="cat_name" property="catName"/>
+        <result column="cat_desc" property="catDesc"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="sort_order" property="catSort"/>
+        <result column="status" property="status"/>
+        <result column="show_in_nav" property="showInNav"/>
+    </resultMap>
+
+    <!--添加一组类目-->
+    <insert id="addCategoryList"  parameterType="java.util.List" >
+        INSERT INTO dsm_category(cat_name,cat_desc,parent_id,show_in_nav,status)
+        values
+        <foreach collection="list" item="bean" index="index" separator="," >
+            (#{bean.catName},#{bean.catDesc},#{bean.parentId},#{bean.showInNav},#{bean.status})
+        </foreach>
+    </insert>
+
+    <!--查询分类所有根级类目-->
+    <select id="getRootCategory" resultMap="categoryResult" parameterType="boolean">
+        SELECT *
+        FROM dsm_category
+        WHERE parent_id=0
+        <if test='_parameter == false'>
+            AND status=1
+        </if>
+
+    </select>
+
+    <select id="getChildCategory" resultMap="categoryResult" parameterType="java.util.Map">
+        SELECT *
+        FROM dsm_category
+        WHERE parent_id=#{catId}
+        <if test='status gte 0'>
+            AND status=#{status}
+        </if>
+    </select>
+
+    <select id="getCategoryById" resultMap="categoryResult" parameterType="int">
+        SELECT *
+        FROM dsm_category
+        WHERE cat_id=#{catId}
+    </select>
+
+    <!--更新一条类目-->
+    <update id="updateCategory" parameterType="CategoryBean">
+        UPDATE dsm_category
+        <set>
+            <if test="catName != null">
+                cat_name=#{catName},
+            </if>
+            <if test="catDesc != null">
+                cat_desc=#{catDesc},
+            </if>
+            <if test="parentId != null">
+                parent_id=#{parentId},
+            </if>
+            <if test="catSort != null">
+                sort_order=#{catSort},
+            </if>
+            <if test="showInNav != null">
+                show_in_nav=#{showInNav},
+            </if>
+            <if test="status != null">
+                status=#{status}
+            </if>
+        </set>
+        WHERE cat_id=#{catId}
+    </update>
+
+    <update id="changeStatus" parameterType="int">
+        UPDATE dsm_category SET status=1-status WHERE cat_id=#{catId}
+    </update>
+
+    <!--插入一条信息数据-->
+    <insert id="addIdentifyInfo" parameterType="IdentifyInfo" useGeneratedKeys="true" keyProperty="identityId">
+        INSERT INTO dsm_user_identify_info(user_id, user_realName, user_idCardNum, identification_image)
+        values (#{userId},#{realName},#{idCardNum},#{imageUrl})
+    </insert>
+
+    <!--删除某条物流地址信息(触发器中将级联删除location中的地址信息)-->
+    <delete id="deleteShippingAddress" parameterType="int">
+        DELETE FROM dsm_shipping_address WHERE address_id=#{addressId}
+    </delete>
+
+
+</mapper>

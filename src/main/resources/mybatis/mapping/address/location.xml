@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace必须是接口的全类名  -->
+<mapper namespace="com.dsm.dao.ILocationDao">
+
+    <!--location属性别名与字段之间映射-->
+    <resultMap type="Location" id="locationResult">
+        <id column="location_id" property="locationId"/>
+        <result column="address" property="address"/>
+        <association property="province" column="province_code" javaType="ProvinceBean"
+                     select="getProvince">
+        </association>
+        <association property="city" column="city_code" javaType="CityBean"
+                     select="getCity">
+        </association>
+        <association property="district" column="district_code" javaType="DistrictBean"
+                     select="getDistrict">
+        </association>
+    </resultMap>
+
+    <!--省份信息的bean对象别名映射-->
+    <resultMap type="ProvinceBean" id="provinceResult">
+        <result column="zip_code" property="zipCode"/>
+        <result column="province_name" property="provinceName"/>
+    </resultMap>
+
+    <!--城市信息的bean对象别名映射-->
+    <resultMap type="CityBean" id="cityResult">
+        <result column="zip_code" property="zipCode"/>
+        <result column="city_name" property="cityName"/>
+        <result column="province_code" property="provinceCode"/>
+    </resultMap>
+
+    <!--地区信息的bean对象别名映射-->
+    <resultMap type="DistrictBean" id="districtResult">
+        <result column="zip_code" property="zipCode"/>
+        <result column="district_name" property="districtName"/>
+        <result column="city_code" property="cityCode"/>
+    </resultMap>
+
+    <!--插入一条地址数据,并为locationId主键赋值-->
+    <insert id="addLocation" parameterType="LocationDTO" useGeneratedKeys="true" keyProperty="locationId">
+        INSERT INTO dsm_location(province_code, city_code, district_code, address,created_time)
+        VALUES(#{provinceCode},#{cityCode},#{districtCode},#{address},now())
+    </insert>
+
+    <!--更新地址信息-->
+    <update id="updateLocation" parameterType="LocationDTO">
+        UPDATE dsm_location
+        SET province_code=#{provinceCode}, city_code=#{cityCode}, district_code=#{districtCode}, address=#{address}
+        WHERE location_id=#{locationId}
+    </update>
+
+    <!--根据地址ID查询地址库地址的详细信息-->
+    <select id="getLocation" resultMap="locationResult" parameterType="int">
+       SELECT *
+       FROM dsm_location
+       WHERE location_id=#{locationId}
+    </select>
+
+    <!--根据zipCode查询省份信息-->
+    <select id="getProvince" parameterType="java.lang.String" resultMap="provinceResult">
+        SELECT * FROM dsm_province WHERE zip_code=#{province_code}
+    </select>
+
+    <!--根据zipCode查询城市信息-->
+    <select id="getCity" parameterType="java.lang.String" resultMap="cityResult">
+        SELECT * FROM dsm_city WHERE zip_code=#{city_code}
+    </select>
+
+    <!--根据zipCode查询城市信息-->
+    <select id="getDistrict" parameterType="java.lang.String" resultMap="districtResult">
+        SELECT * FROM dsm_district WHERE zip_code=#{district_code}
+    </select>
+
+    <!--查询省份列表信息-->
+    <select id="getProvinces" resultMap="provinceResult">
+        SELECT zip_code, province_name
+        FROM dsm_province
+    </select>
+
+    <!--根据省份编号查询省份下面的所有城市信息-->
+    <select id="getCities" resultMap="cityResult" parameterType="java.lang.String">
+        SELECT zip_code, city_name, province_code
+        FROM dsm_city
+        WHERE province_code=#{provinceCode}
+    </select>
+
+    <!--根据城市编号查询城市下面的所有区域信息-->
+    <select id="getDistricts" resultMap="districtResult" parameterType="java.lang.String">
+        SELECT zip_code, district_name, city_code
+        FROM dsm_district
+        WHERE city_code=#{cityCode}
+    </select>
+
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsm.dao.IIdentifyInfoDao">
+
+    <resultMap type="IdentifyInfo" id="identifyInfoResult">
+        <result column="identify_id" property="identifyId"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_realName" property="realName"/>
+        <result column="user_idCardNum" property="idCardNum"/>
+        <result column="identification_image" property="imageUrls"/>
+    </resultMap>
+
+
+    <!--根据用户ID查询用户的实名身份信息-->
+    <select id="getIdentifyInfo" resultMap="identifyInfoResult" parameterType="int">
+       SELECT *
+       FROM dsm_user_identify_info
+       WHERE user_id=#{userId};
+    </select>
+
+    <!--插入一条信息数据-->
+    <insert id="addIdentifyInfo" parameterType="IdentifyInfo" useGeneratedKeys="true" keyProperty="identityId">
+        INSERT INTO dsm_user_identify_info(user_id, user_realName, user_idCardNum, identification_image)
+        values (#{userId},#{realName},#{idCardNum},#{imageUrls})
+    </insert>
+
+    <update id="updateIdentifyInfo" parameterType="IdentifyInfo">
+        UPDATE dsm_user_identify_info
+        <set>
+            <if test="realName != null">
+                user_realName=#{realName},
+            </if>
+            <if test="idCardNum != null">
+                user_idCardNum=#{idCardNum},
+            </if>
+            <if test="imageUrls != null">
+                identification_image=#{imageUrls}
+            </if>
+        </set>
+        WHERE user_id =#{userId}
+    </update>
+
+
+</mapper>

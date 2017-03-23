@@ -1,0 +1,59 @@
+@CHARSET "UTF-8";
+/* 关于卖家页面的  CSS Document*/
+
+.container{min-width:1090px;}
+.pageLogo{margin-bottom:20px;}
+
+.horizontal-navbar{font-weight: 600;}
+.horizontal-navbar,.shop-infoPanel{
+	background: #E9E9E9;
+    background: -moz-linear-gradient(top, #FAFAFA 0%, #E9E9E9 100%);
+    background: -o-linear-gradient(top, #FAFAFA 0%,#E9E9E9 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FAFAFA), color-stop(100%,#E9E9E9));
+    background: -webkit-linear-gradient(top, #FAFAFA 0%,#E9E9E9 100%);
+    background: -ms-linear-gradient(top, #FAFAFA 0%,#E9E9E9 100%);
+    background: linear-gradient(top, #FAFAFA 0%,#E9E9E9 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FAFAFA', endColorstr='#E9E9E9');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#FAFAFA', endColorstr='#E9E9E9')";
+    border: 1px solid #D5D5D5;
+    border-radius: 4px;}
+.horizontal-navbar .navbar-collapse>ul>li .active{background: #fff;}
+
+.shop-infoPanel{min-height: 160px;}
+.shop-infoPanel>div{height: 100%;}
+.shopPicturePanel a{margin:-10px 15px; width:80px}
+.shopInfoItem, .shopScorePanel{padding: 10px 10px;}
+.shopInfoItem{font: 12px/1.5 tahoma,arial,'Hiragino Sans GB',\5b8b\4f53,sans-serif; width: 520px; margin-left:-20px;}
+.shopScorePanel{border-left: 2px dashed #ccd; }
+.shopPicture{margin: 18px 5px;width: 100px; height: 100px;}
+.shopAttrTable {color:#888; }
+.shopAttrTable span{color:#337ab7; }
+.shopAttrTable table{width: 100%;}
+.shopAttrTable tbody td{width:25%; line-height: 18px; padding: 4px 20px 4px 0;}
+
+/*商品详细信息添加页面*/
+.checkbox-inline{margin-left: 10px; min-width:120px;}
+.formAlert{padding:5px;}
+.sideAlert{padding:5px; margin-bottom:0px;}
+.skuProductSetter{overflow: scroll;max-height: 450px; border: 1px solid #ddd; padding: 0;}
+.skuSetterTable{margin:0;}
+.skuSetterTable td,.skuSetterTable th{text-align: center;}
+.skuSetterTable>tbody>tr>td{text-align: center; vertical-align: middle; min-width: 80px; }
+.skuSetterTable input[type='text']{width:100%; font-size: 12px; padding-left:3px; color:#666; height: 20px}
+.td_hidden{display: none;}
+.fileInputContainer{position:relative;}
+#productImgUpload{ height:29.2px; width:100%; overflow: hidden; position:absolute; right:0; top:0; opacity: 0; 
+	filter:alpha(opacity=0); cursor:pointer; }
+.imgContainter{margin:-5px;border:2px dashed #ddd; min-height: 155px;}
+.imgItem{position: relative; width:128px; height:128px; border: 4px solid #eee; margin: 6px; float:left; text-align:center;}
+.imgMask{position:absolute; left:0; height: 30px;width:100%; background: #000; opacity: 0.5; filter:alpha(opacity=50);
+	display:none; padding: 5px 10px; text-align: left;}
+.imgMask a{display: inline-block; color:#fff; font-family: tahoma, arial, 'Hiragino Sans GB', 'Microsoft YaHei', 黑体, sans-serif;
+	font-size:13px; text-decoration: none;}
+.imgItem img{margin:0 auto;max-width:100%; height:100%;}
+#mainImgMark{border: 4px solid #ff8080;}
+
+/*物流工具*/
+.nav-tabs>li>a{border: 1px solid #ddd; border-bottom: 0px;}
+
+.shopAlert{}

@@ -1,0 +1,60 @@
+@CHARSET "UTF-8";
+/* 身份认证页面CSS Document */
+
+.pageLogo{margin-bottom:20px;}
+
+.panel{border-radius: 1px;}
+
+.media{padding:35px;}
+.media img{margin-right:20px;}
+.media-body h1{border-bottom: 1px solid #999999;}
+.media-body p a{color:#bbbbbb;}
+
+.page-header-title{padding-bottom:10px; border-bottom: 1px solid #999999; margin-bottom: 30px;}
+.page-header-title>a{font-size: 14px;padding: 10px 10px 0 0;}
+.under-line{border-bottom: 2px solid #eeeeee; padding-bottom: 8px;}
+.imageShow{border:5px #ddd solid;min-height: 100px; }
+.imageShow img{width:100%; min-height: 100px;}
+
+.checkbox-control input[type=checkbox], input[type=radio]{margin-top:10px; height:16px;   width:16px;}
+
+.footer-style{padding-top: 20px; border-top: 1px solid #eeeeee;}
+.uploadFileBtn{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer;
+
+}
+/*images/1.jpg*/
+.imageFileContainer{
+    position: relative;
+    height: 200px;
+    width:100%;
+}
+.imageFileContainer a{
+    height: 200px;
+    width:100%;
+    border: 5px solid #dddddd;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+    line-height: 200px;
+    color:#eeeeee;
+    font-weight: bolder;
+    font-size: 60px;
+    /*background-image: url("../../images/1.jpg");*/
+    -moz-background-size:cover;
+    -webkit-background-size:cover;
+    -o-background-size:cover;
+    background-size:cover;
+}
+.imageFileContainer a:hover{
+    color: #ccc;
+    text-decoration:none;
+}

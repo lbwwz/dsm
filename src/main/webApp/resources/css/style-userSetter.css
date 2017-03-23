@@ -1,0 +1,82 @@
+@CHARSET "UTF-8";
+
+body{background: #F5F5F5;}
+.container{min-width:970px;}
+
+
+
+.userSetter-panel{background: #F5F5F5;}
+
+
+.side-list .avatar{ padding: 2px 17px 15px;}
+.avatar .avatar-box { position: relative; overflow: hidden; width: 110px; height: 110px; padding: 4px; background: #fff;
+ border: 1px solid #eee;  border-radius: 3px;}
+.avatar .avatar-box .user-avatar {text-align: center; display: table-cell; vertical-align: middle; width: 100px; height: 100px;}
+.avatar .avatar-box img {vertical-align: middle; max-width: 100px; max-height: 100px; width: 100px; height: 100px; display: block;}
+
+.side-list h4{color:#666666; font-weight: bold; padding-left: 20px;}
+
+.panel-body{border-radius: 4px; box-shadow: 0px 0px 10px #dfdfdf;}
+.info-panel{margin:-15px 0px; padding:15px; min-height: 700px;border-left: 1px solid #cccccc; background: #fff;}
+
+/* 安全设置 */
+.info-panel dt{padding: 10px 20px 0; line-height: 32px;}
+.info-panel dd{font-size: 12px;}
+.info-panel dd ul li{list-style-type: none; line-height: 24px;}
+.tit{width:78px; display:inline-block;}
+.grid-msg{width:162px; display:inline-block;}
+
+.safe-progress{margin: 20px 20px 0 60px;}
+.progress{height:10px;margin-top:5px;}
+
+.item{padding:12px 0 12px 16px;  margin-right:20px;  vertical-align: middle;  text-align: center; border-top: 1px dashed #e1e1e1;}
+.safe-info>li:first-of-type{border-width: 0px;}
+.safe-info .state span{ display: block; background: url(../images/msg_bg.png) no-repeat;}
+.safe-info .state .safe-alert {padding-top: 20px; background-position: 37px -197px;}
+.safe-info .state .safe-over {padding-top: 20px; background-position: 37px -247px;}
+
+.safe-info .supply{text-align: left;color: #666}
+.safe-info .operate a{font-weight: bold;}
+
+/* 个人设置 */
+.personal_setter{padding: 5px 5px;margin-left: 2px; border-bottom: 1px solid #ddd;}
+.personal_setter li{width:75px; text-align: center; line-height: 24px; border-radius:2px; border: 1px solid #fff;}
+.personal_setter li:hover{border: 1px solid #ddd;}
+.personal_setter li a{color:#999; font-size: 12px;}
+
+#actived{color: #666; font-weight: bold;}
+
+.user_baseInfo{padding: 10px;}
+.user_baseInfo i{color:#f40;}
+.user_baseInfo h5{padding: 0 30px 10px;}
+
+.head_image a{display: table-cell; width: 80px; height: 80px; vertical-align: middle; text-align: center;}
+.head_image a>img{display: table-cell; width: 80px; height: 80px;}
+.head_image .edit-avatar{background:#333; opacity: .7; filter: alpha(opacity=70); background-position: 10px 6px; position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 22px; line-height: 22px; text-align: center; color: #e1d7ca;}
+.head_image .edit-avatar:hover{text-decoration:underline;}
+.bas-avatar-box{display: inline-block; position: relative; border: 4px solid #e6e6e6; border-radius:2px; width: 88px; height: 88px;}
+.select-param{padding-right:0px;}
+
+/* 头像上传 */
+#result img{width:150px; height:150px; border:5px solid #ccc;}
+
+/* 收货地址 */
+#address{width:492.462px;}
+.address-dataTable{padding: 15px;}
+.address-dataTable table{border:2px solid #ddd;}
+.address-dataTable table thead>tr{background: #eee;}
+.address-dataTable table tbody{font-size:12px;}
+.address-dataTable table tbody tr td{line-height:22px;}
+.address-dataTable table tbody tr td:last-of-type{width:85px;}
+.address-dataTable table tbody tr span{width:65px; display: block; line-height: 16.5px;margin:auto 0;}
+.updateAddress:hover, .deleteAddress:hover{color:#f40; text-decoration:underline;}
+.changeDefaultAddr{background-color: #f40; border-color: #e25601; display:none; width: 65px; margin:auto 0;}
+#addrBackMsg{line-height: 26px; display: block;padding: 0 10px; border: 2px dashed #AAD698; 
+	-moz-border-radius: 4px;      /* Gecko browsers */
+    -webkit-border-radius: 4px;   /* Webkit browsers */
+    border-radius:4px;
+}
+
+/* 默认下划线 */
+.topline{border-top: 1px solid #ddd;}

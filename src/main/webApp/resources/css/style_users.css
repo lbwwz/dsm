@@ -1,0 +1,52 @@
+@CHARSET "UTF-8";
+
+body{}
+a:link,a:visited,a:hover,a:active{text-decoration:none;}
+.container{min-width:1170px;}
+.user_center{min-width:970px;}
+.user-pageTab{margin-top :-20px; width:100%; background: #f40;padding: 0px;margin-bottom:20px;}
+.user-pageTab ul {margin:0;}
+.user-pageTab ul li{color: #fff; margin:0 10px; font-size: 16px; font-weight: 400; line-height: 54.4px; position: relative;}
+.user-pageTab ul li>a{color: #fff; height:54.4px; display:block; transition: color 0.3s ease-in-out; ;}
+.user-pageTab ul li>a:hover{color:#dddddd; }
+.block-angle{position: absolute; left:39%; top:44px; border-style: solid; border-width: 6px;
+border-color: #f40 #f40 #fff; }
+
+
+/* user-Center 页面css配置 */
+.side-list{padding: 5px;}
+.side-list h4{margin-top:0px; color: #f40;}
+.side-list ul li{padding:4px 0px; color: #cccccc;}
+.side-list ul li>a{color: #8f8f8f;}
+.side-list ul li>a:hover{color: #373737;}
+
+/* userIndex */
+.user_name h4{ line-height: 30px;}
+.bas-list{width:100%; text-align: center; margin:15px 0;}
+.bas-list li{width:32%;}
+.bas-list li>a{color: #6f6f6f;}
+
+.goods-operate-list{width:814px; margin:0;}
+.goods-operate-list>li{padding:0; width:19.61%; border-right: 1px solid #ddd; text-align: center;line-height: 26px;}
+.goods-operate-list>li:last-of-type{border-right-width:0px;}
+.goods-operate-list>li a{display: block; width:100%; height: 26px; color:#6f6f6f;}
+.goods-operate-list>li a:hover{color:#f40;}
+
+/* 订单页面——"t-**" */
+.translation-list-panel{position: relative; border-bottom: 2px solid #ddd; height: 35px;}
+.translation-list-panel ul{width:600px;position: absolute;}
+.translation-list>li{width:16.1%; border-right: 2px solid #ddd;}
+.translation-list>li a{font-weight: bold; font-family: 'Microsoft YaHei'; font-size: 16px;}
+
+/* 店铺申请和开店form页面 */
+.breadcrumb{border:1px solid #ddd;}
+.applyShopPanel{padding:15px;}
+.timeline > li > .timeline-badge, .timeline:before{left: 5%;} 
+.timeline > li > .timeline-panel {width: 90%;}
+.tips-text{color: #690;}
+#checkedTitle{color:#5bc0de;}
+.authSchedule{border:2px solid #ddd;}
+.authSchedule tbody{color:#666;}
+
+#be-Checked{color:#f40; font-weight: 400;}
+.footer-style{padding-top: 20px; border-top: 1px solid #e2e2e2;}
