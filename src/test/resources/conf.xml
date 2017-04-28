@@ -27,13 +27,13 @@
 	</environments>
 	
 	<mappers>
-		<!--<mapper resource="mybatis/mapping/user/user.xml"/>-->
-		<!--<mapper resource="mybatis/mapping/user/IdentifyInfo.xml"/>-->
-		<!--<mapper resource="mybatis/mapping/address/location.xml"/>-->
-		<!--<mapper resource="mybatis/mapping/address/ShippingAddress.xml"/>-->
-		<!--<mapper resource="mybatis/mapping/product/category.xml"/>-->
-		<!--<mapper resource="mybatis/mapping/product/productAttr.xml"/>-->
+		<mapper resource="mybatis/mapping/user/user.xml"/>
+		<mapper resource="mybatis/mapping/user/IdentifyInfo.xml"/>
+		<mapper resource="mybatis/mapping/address/location.xml"/>
+		<mapper resource="mybatis/mapping/address/ShippingAddress.xml"/>
+		<mapper resource="mybatis/mapping/product/category.xml"/>
+		<mapper resource="mybatis/mapping/product/productAttr.xml"/>
 		<mapper resource="mybatis/mapping/product/product.xml"/>
-		<!--<mapper resource="mybatis/mapping/shop/shop.xml"/>-->
+		<mapper resource="mybatis/mapping/shop/shop.xml"/>
 	</mappers>
 </configuration>

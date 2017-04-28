@@ -1,7 +1,6 @@
 package com.dsm.common.interceptor;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,23 +59,5 @@ public class ControllerInterceptor extends HandlerInterceptorAdapter {
         }
 
         return true;
-    }
-
-    /**
-     * 控制器执行完，生成视图的处理
-     */
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response,
-                           Object handler, ModelAndView modelAndView) throws Exception {
-
-    }
-
-    /**
-     * 一般用于释放一些被占用的公共资源
-     */
-    @Override
-    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-                                Object o, Exception e) throws Exception {
-
     }
 }

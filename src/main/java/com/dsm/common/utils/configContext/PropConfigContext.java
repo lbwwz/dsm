@@ -8,7 +8,9 @@ import java.util.*;
  * <p>
  * properties的文件动态的信息类
  */
-public class PropConfigContext extends AbstractConfigContext{
+public class PropConfigContext extends AbstractConfigContext implements Serializable{
+
+    private static final long serialVersionUID = 5662989259241302859L;
 
     /**
      * 构造方法

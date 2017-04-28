@@ -3,6 +3,6 @@
 body{overflow-x: hidden;}
 #topNavbar .navbar-nav>li>a>span{color:#F40; font-size: 12px;}
 #topNavbar .navbar-nav>li>a:hover{background-color: #eee;}
-#topNavbar .list-group>li:{color: #777;text-decoration: none;}
+#topNavbar .list-group>li{color: #777;text-decoration: none;}
 #topNavbar .list-group>li:hover{background-color: #eee;}
 .personalMsg{position: absolute; width:145%; z-index: 10; display: none; }

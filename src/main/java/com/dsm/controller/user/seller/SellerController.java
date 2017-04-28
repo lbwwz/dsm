@@ -145,7 +145,6 @@ public class SellerController extends BaseController {
         String msg = null;
 
 
-
         return msg;
     }
 }

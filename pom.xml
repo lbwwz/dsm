@@ -17,13 +17,15 @@
         <!--aspectJ 版本-->
         <aspectj.version>1.8.9</aspectj.version>
         <!--log4j 版本-->
-        <log4j.version>1.2.17</log4j.version>
+        <log4j.version>2.7</log4j.version>
         <!--slf4j 版本-->
-        <slf4j.version>1.7.12</slf4j.version>
+        <slf4j.version>1.7.21</slf4j.version>
         <!--shiro 版本-->
         <shiro.version>1.2.3</shiro.version>
         <!--jedis 版本-->
         <jedis.version>2.9.0</jedis.version>
+
+        <log4j2.LOG_LEVEL>INFO</log4j2.LOG_LEVEL>
     </properties>
 
     <build>
@@ -228,27 +230,40 @@
         </dependency>
         <!--shiro end-->
 
-        <!--日志类的jar-->
+        <!-- log配置：Log4j2 + Slf4j -->
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
             <version>${log4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>1.1.1</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-web</artifactId>
+            <version>${log4j.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency> <!-- 桥接：告诉commons logging使用Log4j2 -->
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-jcl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency> <!-- 桥接：告诉Slf4j使用Log4j2 -->
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <!--web工程需要包含log4j-web，非web工程不需要-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
+
         <!--logger end-->
 
 
@@ -295,10 +310,5 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.7</version>
         </dependency>
-
     </dependencies>
-
-
-
-
 </project>

@@ -13,8 +13,8 @@
 			<!--左侧菜单 -->
             <ul class="nav navbar-nav">
             <c:if test="${empty sessionScope.user }">
-                <li><a href="/showLogin">登录</a></li>
-                <li><a href="/showRegister">新注册</a></li>
+                <li><a href="${webRoot}/showLogin">登录</a></li>
+                <li><a href="${webRoot}/showRegister">新注册</a></li>
             </c:if>
             <c:if test="${!empty sessionScope.user }">
                 <li class="dsm_user"><a href="#">${user.userName }  <span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
@@ -23,7 +23,7 @@
 					  <li class="list-group-item"><a href="${webRoot}/logout"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 退出</a></li>
 					</ul>
                 </li>
-                <li><a href="register.jsp">消息  <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></li>
+                <li><a href="${webRoot}/register.jsp">消息  <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></li>
             </c:if>
             </ul>
             <!-------->

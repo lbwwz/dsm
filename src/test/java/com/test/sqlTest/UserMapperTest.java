@@ -7,6 +7,8 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 
@@ -37,7 +39,7 @@ public class UserMapperTest {
         session.clearCache();
         session.close();
     }
-
+    public static Logger logger = LoggerFactory.getLogger(UserMapperTest.class);
 
     /**
      * 测试user相关的查询操作
@@ -51,6 +53,7 @@ public class UserMapperTest {
         user.setEmail("353394368@qq.com");
         user = session.selectOne(statement,user);
         System.out.println(user);
+        logger.info("打印对象：{} __ {}","123",123);
     }
 
     /**
