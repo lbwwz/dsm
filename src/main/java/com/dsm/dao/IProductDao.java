@@ -22,6 +22,12 @@ public interface IProductDao {
      */
     Integer addProductInfo(ProductBean bean);
 
+
+    /**
+     * 根据商品id查询相关的商品信息
+     * @param goodsId 商品Id
+     * @return
+     */
     ProductBean getProduct(Integer goodsId);
 
     /**

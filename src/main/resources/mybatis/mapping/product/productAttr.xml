@@ -83,7 +83,7 @@
         </trim>
     </select>
 
-    <!--添加一组商品属性-->
+    <!--品类下添加一组商品属性-->
     <insert id="addAttr"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="attrId">
         INSERT INTO dsm_product_attribute(attr_name, cat_id, is_sale_attr, is_key_attr, is_must)
         VALUES
@@ -92,14 +92,14 @@
         </foreach>
     </insert>
 
-    <!--更新商品属性-->
+    <!--更新品类商品属性-->
     <update id="updateAttr" parameterType="ProductAttrBean">
         UPDATE dsm_product_attribute
         SET attr_name=#{attrName}, is_key_attr=#{isKey}, is_must=#{isMust}
         WHERE attr_id=#{attrId}
     </update>
 
-    <!--更改一组商品属性可用状态-->
+    <!--更改品类下一组商品属性可用状态-->
     <update id="changeAttrStatus" parameterType="int">
         UPDATE dsm_product_attribute
         SET status=1-status
@@ -108,7 +108,7 @@
 
     <!--======= 属性值操作 =========-->
 
-    <!--查询商品属性的属性值-->
+    <!--查询品类下商品属性的属性值-->
     <select id="getValuesByAttrId" resultMap="AttrValueResult" parameterType="java.util.Map">
         SELECT *
         FROM dsm_product_attribute_values
@@ -120,7 +120,7 @@
         </trim>
     </select>
 
-    <!--根据属性值ID查询对应属性值信息-->
+    <!--品类下根据属性值ID查询对应属性值信息-->
     <select id="getValueById" resultMap="AttrValueResult" parameterType="AttrValueBean">
         SELECT *
         FROM dsm_product_attribute_values
@@ -132,7 +132,7 @@
         </trim>
     </select>
 
-    <!--添加一组商品属性值-->
+    <!--品类下添加一组商品属性值-->
     <insert id="addAttrValues"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="atteId">
         INSERT INTO dsm_product_attribute_values(name, attr_id, status, edit_date)
         VALUES
@@ -141,14 +141,14 @@
         </foreach>
     </insert>
 
-    <!--更新商品属性值-->
+    <!--品类下更新商品属性值-->
     <update id="updateAttrValue" parameterType="AttrValueBean">
         UPDATE dsm_product_attribute_values
         SET name=#{valueName}
         WHERE value_id=#{valueId}
     </update>
 
-    <!--更改一组商品属性值可用状态-->
+    <!--品类下更改一组商品属性值可用状态-->
     <update id="changeValueStatus" parameterType="int">
         UPDATE dsm_product_attribute_values
         SET status=1-status
