@@ -2,6 +2,7 @@ package com.dsm.model.formData;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 /**
  * Created with IntelliJ IDEA.
@@ -164,5 +165,26 @@ public class ReleaseProductFormDTO implements Serializable{
 
     public void setDetailContent(String detailContent) {
         this.detailContent = detailContent;
+    }
+
+    @Override
+    public String toString() {
+        return "ReleaseProductFormDTO{" +
+                "productName='" + productName + '\'' +
+                ", catId=" + catId +
+                ", brand=" + brand +
+                ", productMarketPrice=" + productMarketPrice +
+                ", keywords='" + keywords + '\'' +
+                ", baseAttrInfo=" + Arrays.toString(baseAttrInfo) +
+                ", customBaseAttrName=" + Arrays.toString(customBaseAttrName) +
+                ", customBaseAttrValue=" + Arrays.toString(customBaseAttrValue) +
+                ", property=" + Arrays.toString(property) +
+                ", productPrice=" + Arrays.toString(productPrice) +
+                ", productCount=" + Arrays.toString(productCount) +
+                ", customProductNum=" + Arrays.toString(customProductNum) +
+                ", imgItem=" + Arrays.toString(imgItem) +
+                ", mainImgItem='" + mainImgItem + '\'' +
+                ", detailContent='" + detailContent + '\'' +
+                '}';
     }
 }

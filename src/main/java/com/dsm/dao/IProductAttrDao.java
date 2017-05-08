@@ -131,4 +131,7 @@ public interface IProductAttrDao {
      * @param valueId 属性值ID
      */
     Integer changeValueStatus(Integer valueId);
+
+
+
 }

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:content="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+                        http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--载入数据源配置文件-->
+    <context:property-placeholder location="classpath:/datasource.properties" ignore-unresolvable="true"/>
+
+    <!--========== 配置数据源 ==========-->
+    <bean id="dataSource" name="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <!-- 指定连接数据库的驱动-->
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <!-- 指定连接数据库的URL-->
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <!-- 指定连接数据库的用户名-->
+        <property name="user" value="${jdbc.username}"/>
+        <!-- 指定连接数据库的密码-->
+        <property name="password" value="${jdbc.password}"/>
+        <!-- 指定连接池中保留的最大连接数. Default:15-->
+        <property name="maxPoolSize" value="${jdbc.maxPoolSize}"/>
+        <!-- 指定连接池中保留的最小连接数-->
+        <property name="minPoolSize" value="${jdbc.minPoolSize}"/>
+        <!-- 指定连接池的初始化连接数  取值应在minPoolSize 与 maxPoolSize 之间.Default:3-->
+        <property name="initialPoolSize" value="${jdbc.initialPoolSize}"/>
+        <!-- 最大空闲时间,60秒内未使用则连接被丢弃。若为0则永不丢弃。 Default:0-->
+        <property name="maxIdleTime" value="${jdbc.maxIdleTime}"/>
+        <!-- 当连接池中的连接耗尽的时候c3p0一次同时获取的连接数. Default:3-->
+        <property name="acquireIncrement" value="${jdbc.acquireIncrement}"/>
+        <!-- JDBC的标准,用以控制数据源内加载的PreparedStatements数量。
+        但由于预缓存的statements属于单个connection而不是整个连接池所以设置这个参数需要考虑到多方面的因数.如果maxStatements与maxStatementsPerConnection均为0,则缓存被关闭。Default:0-->
+        <property name="maxStatements" value="${jdbc.maxStatements}"/>
+        <!-- 每120秒检查所有连接池中的空闲连接.Default:0 -->
+        <property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}"/>
+    </bean>
+
+    <!--dbcp数据库连接池-->
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"-->
+          <!--destroy-method="close">-->
+        <!--<property name="driverClassName" value="${driver}" />-->
+        <!--<property name="url" value="${url}" />-->
+        <!--<property name="username" value="${username}" />-->
+        <!--<property name="password" value="${password}" />-->
+        <!--&lt;!&ndash; 初始化连接大小 &ndash;&gt;-->
+        <!--<property name="initialSize" value="${initialSize}"></property>-->
+        <!--&lt;!&ndash; 连接池最大数量 &ndash;&gt;-->
+        <!--<property name="maxActive" value="${maxActive}"></property>-->
+        <!--&lt;!&ndash; 连接池最大空闲 &ndash;&gt;-->
+        <!--<property name="maxIdle" value="${maxIdle}"></property>-->
+        <!--&lt;!&ndash; 连接池最小空闲 &ndash;&gt;-->
+        <!--<property name="minIdle" value="${minIdle}"></property>-->
+        <!--&lt;!&ndash; 获取连接最大等待时间 &ndash;&gt;-->
+        <!--<property name="maxWait" value="${maxWait}"></property>-->
+        <!--<property name="defaultAutoCommit" value="false"></property>-->
+    <!--</bean>-->
+
+
+    <!--========== 整合 spring-mybatis =========-->
+    <!--配置sqlSessionFactory
+        mybatis的SqlSession的工厂: SqlSessionFactoryBean
+            dataSource / typeAliasesPackage / mapperLocations
+    -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 实例化sqlSessionFactory时需要使用上述配置好的数据源以及SQL映射文件 -->
+        <property name="dataSource" ref="dataSource"/>
+
+        <!-- 自动扫描mybatis/mapping/目录下的所有SQL映射的xml文件, 省掉 Configuration.xml 里的手工配置
+        value="classpath:mybatis/mapping/*.xml"指的是classpath(类路径)下 mybatis.mapping 包中的所有
+        xml文件,/**表示mapper下层任意多级目录， User.xml 位于 mybatis.mapping.user 包下，
+        这样User.xml就可以被自动扫描
+         -->
+        <property name="mapperLocations" value="classpath:mybatis/mapping/**/*.xml"/>
+        <!-- 批量扫描该包目录下的文件设置为别名, 目录和目录之间用“,”分隔 -->
+        <property name="typeAliasesPackage"
+                  value="com.dsm.model,
+                  com.dsm.model.address,
+                  com.dsm.model.product,
+                  com.dsm.model.seller,
+                  com.dsm.model.user" />
+    </bean>
+
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 （扫描器扫描）-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.dsm.dao" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+
+
+    <!--========== spring 事务配置 ==========-->
+    <!-- 注册事务管理 : DataSourceTransactionManager -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="globalRollbackOnParticipationFailure" value="false"/> <!--指定此参数为false-->
+    </bean>
+
+    <!-- 开启使用声明式事务(基于注解的方式) -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- 配置事务特性 -->
+    <tx:advice id="txAdvice"  transaction-manager="transactionManager">
+        <tx:attributes>
+            <!--增-->
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
+            <tx:method name="insert*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
+            <tx:method name="save*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
+            <!--删-->
+            <tx:method name="del*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
+            <!--改-->
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
+            <tx:method name="main*" propagation="REQUIRED"/>
+            <!--其他-->
+            <tx:method name="*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--======== redis 缓存配置 ========-->
+    <context:property-placeholder location="classpath:/redis.properties" ignore-unresolvable="true"/>
+    <!--redis 缓存池-->
+    <bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool">
+        <constructor-arg index="0" ref="jedisPoolConfig"/>
+        <constructor-arg index="1">
+            <list>
+                <bean name="master" class="redis.clients.jedis.JedisShardInfo">
+                    <!--ip-->
+                    <constructor-arg index="0" value="${redis.master.host}"/>
+                    <!--端口号-->
+                    <constructor-arg index="1" value="${redis.master.port}" type="int"/>
+                    <!--设置超时-->
+                    <constructor-arg index="2" value="${redis.timeout}" type="int"/>
+                    <!--缓存库名-->
+                    <constructor-arg index="3" value="${redis.master.name}"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!--redis 缓存其他参数配置-->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="${redis.pool.maxTotal}" />
+        <property name="maxIdle" value="${redis.pool.maxIdle}" />
+        <property name="numTestsPerEvictionRun" value="${redis.pool.numTestsPerEvictionRun}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${redis.pool.timeBetweenEvictionRunsMillis}" />
+        <property name="minEvictableIdleTimeMillis" value="${redis.pool.minEvictableIdleTimeMillis}" />
+        <property name="softMinEvictableIdleTimeMillis" value="${redis.pool.softMinEvictableIdleTimeMillis}" />
+        <property name="maxWaitMillis" value="${redis.pool.maxWaitMillis}"/>
+        <property name="testOnBorrow" value="${redis.pool.testOnBorrow}" />
+        <property name="testWhileIdle" value="${redis.pool.testWhileIdle}"/>
+        <property name="testOnReturn" value="${redis.pool.testOnReturn}"/>
+        <property name="jmxEnabled" value="${redis.pool.jmxEnabled}"/>
+        <property name="blockWhenExhausted" value="${redis.pool.blockWhenExhausted}"/>
+    </bean>
+
+</beans>

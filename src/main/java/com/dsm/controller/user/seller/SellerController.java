@@ -1,7 +1,5 @@
 package com.dsm.controller.user.seller;
 
-import com.dsm.common.DsmConcepts;
-import com.dsm.common.utils.ServletToolUtils;
 import com.dsm.controller.common.BaseController;
 import com.dsm.model.BackMsg;
 import com.dsm.model.formData.ReleaseProductFormDTO;
@@ -10,7 +8,7 @@ import com.dsm.model.product.ProductAttrBean;
 import com.dsm.service.interfaces.ICategoryService;
 import com.dsm.service.interfaces.IFileUploadService;
 import com.dsm.service.interfaces.IProductAttrService;
-import org.apache.commons.lang3.StringUtils;
+import com.dsm.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +38,9 @@ public class SellerController extends BaseController {
 
     @Autowired
     private IProductAttrService productAttrService;
+
+    @Autowired
+    private IProductService productService;
 
     @Autowired
     private IFileUploadService fileUploadService;
@@ -126,25 +127,20 @@ public class SellerController extends BaseController {
     public BackMsg releaseProductInfo(ReleaseProductFormDTO releaseProductFormDTO,String token){
         //校验提交的信息
 
-        if (ServletToolUtils.checkRepeatSubmit(getRequest(), "token", "token")) {
+//        if (ServletToolUtils.checkRepeatSubmit(getRequest().getSession(), token, "token")) {
 
-        String errorMsg = checkReleaseProductFormInfo(releaseProductFormDTO);
-        if(StringUtils.isNotEmpty(errorMsg)){
-            return new BackMsg(DsmConcepts.ERROR,"",errorMsg);
-        }
+
+
         //校验通过
         System.out.println(releaseProductFormDTO);
-        }else{
-
-        }
-        return null;
-
-    }
-
-    private String checkReleaseProductFormInfo(ReleaseProductFormDTO releaseProductFormDTO) {
-        String msg = null;
-
-
+        BackMsg msg = productService.releaseProduct(releaseProductFormDTO);
+//        }else{
+//
+//        }
         return msg;
+
     }
+//
+
+
 }

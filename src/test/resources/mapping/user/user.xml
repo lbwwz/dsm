@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace必须是接口的全类名  -->
+<mapper namespace="com.dsm.dao.IUserDao">
+
+    <!--配置 User 对象和字段名之间的映射-->
+    <resultMap type="User" id="userResult">
+        <id column="user_id" property="id"/>
+        <result column="user_name" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="sex" property="sex"/>
+        <result column="email" property="email"/>
+        <result column="mobile_phone" property="mobile"/>
+        <result column="birthday" property="birthday"/>
+        <result column="qq" property="qq"/>
+        <result column="role" property="role"/>
+        <result column="promote_type" property="promotedType"/>
+        <result column="reg_time" property="regTime"/>
+        <result column="last_visit" property="lastVisit"/>
+        <result column="head_image" property="headImage"/>
+        <result column="has_question" property="hasQuestion"/>
+        <result column="user_money" property="userMoney"/>
+        <result column="pay_password" property="payPassword"/>
+        <association column="hometown" property="hometown" javaType="Location"
+                     select="com.dsm.dao.ILocationDao.getLocation">
+        </association>
+        <association column="domicile" property="domicile" javaType="Location"
+                     select="com.dsm.dao.ILocationDao.getLocation">
+        </association>
+        <association property="defaultAddress" column="user_Id" javaType="DistrictBean"
+                     select="com.dsm.dao.IShippingAddressDao.getDefaultAddress">
+        </association>
+    </resultMap>
+
+
+    <!--根据用于的登录名称查询相应的用户信息-->
+    <select id="queryUserByLogin" resultMap="userResult" parameterType="User">
+        select *
+        from dsm_users
+        WHERE
+        <choose>
+            <when test="userName != null">
+                user_name = #{userName}
+            </when>
+            <when test="mobile != null">
+                mobile_phone = #{mobile}
+            </when>
+            <otherwise>
+                email = #{email}
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--根据用户ID查询相应的用户信息-->
+    <select id="getUserById" resultMap="userResult" parameterType="int">
+        SELECT *
+        FROM dsm_users
+        WHERE user_id = #{id}
+    </select>
+
+    <!--用户注册-->
+    <insert id="register" parameterType="UserRegisterDTO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dsm_users(user_name, password, sex, mobile_phone,email,reg_time,last_visit)
+        values (#{userName},#{password},#{sex},#{mobile},#{email},now(),now())
+    </insert>
+
+    <!--根据用户昵称查询用户是否存在-->
+    <select id="checkUserNameExist" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM dsm_users
+        WHERE user_name=#{userName}
+    </select>
+
+    <!--为角色设置卖家权限-->
+    <update id="becomeSeller" parameterType="int">
+        UPDATE dsm_users
+        SET role=1
+        WHERE user_id=#{userId}
+    </update>
+
+    <!--变更用户账户的可用权限-->
+    <update id="changeStatus" parameterType="int">
+        UPDATE dsm_users
+        SET status=1-status
+        WHERE user_id=#{userId}
+    </update>
+
+    <!--更新用户的最后一次登录时间-->
+    <update id="setLastVisit" parameterType="int">
+        UPDATE dsm_users
+        SET last_visit = NOW()
+        WHERE user_id=#{userId}
+    </update>
+
+
+    <!--用户基本设置页面保存基本信息-->
+    <update id="updateBaseInfo" parameterType="UserBaseInfoDTO" >
+        UPDATE dsm_users
+        SET sex=#{sex}, qq=#{qq}, birthday=#{birthday}
+        WHERE user_id=#{userId}
+    </update>
+
+    <!--更新用户头像-->
+    <update id="updateHeadImage" parameterType="UserBaseInfoDTO" >
+        UPDATE dsm_users
+        SET head_image=#{headImage}
+        WHERE user_id=#{userId}
+    </update>
+    
+    <update id="changePromotedType" parameterType="User">
+        UPDATE dsm_users
+        SET promote_type=#{promotedType}
+        WHERE user_id=#{id}
+    </update>
+
+</mapper>

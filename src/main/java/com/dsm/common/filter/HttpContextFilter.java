@@ -32,6 +32,7 @@ public class HttpContextFilter extends OncePerRequestFilter {
 
     public void setXSS_exclude(String exclude) {
         this.XSS_exclude = exclude;
+        //设置无需过滤的正则规则
         pattern = Pattern.compile(getRegStr(exclude));
     }
 
@@ -47,13 +48,11 @@ public class HttpContextFilter extends OncePerRequestFilter {
         if (StringUtils.isNotBlank(requestURI))
             requestURI = requestURI.replace(request.getContextPath(), "");
 
+//        request = pattern.matcher(requestURI).matches()?request:new EscapeScriptWrapper(request);
 
-        HttpServletRequest httpServletRequest =
-                pattern.matcher(requestURI).matches()?request:new EscapeScriptWrapper(request);
-
-        RequestResponseContext.setRequest(httpServletRequest);
+        RequestResponseContext.setRequest(request);
         RequestResponseContext.setResponse(response);
-        filterChain.doFilter(httpServletRequest, response);
+        filterChain.doFilter(request, response);
         RequestResponseContext.removeRequest();
         RequestResponseContext.removeResponse();
     }

@@ -45,6 +45,16 @@ public class ProductBean implements Serializable{
 
     public ProductBean() {}
 
+    public ProductBean(String keywords, String productDesc, String mainImage, String productName, Integer brandId, Integer catId, Integer shopId) {
+        this.keywords = keywords;
+        this.productDesc = productDesc;
+        this.mainImage = mainImage;
+        this.productName = productName;
+        this.brandId = brandId;
+        this.catId = catId;
+        this.shopId = shopId;
+    }
+
     public Integer getProductId() {
         return productId;
     }
@@ -163,5 +173,26 @@ public class ProductBean implements Serializable{
 
     public void setLastUpdateTime(String lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductBean{" +
+                "productId=" + productId +
+                ", shopId=" + shopId +
+                ", catId=" + catId +
+                ", brandId=" + brandId +
+                ", productName='" + productName + '\'' +
+                ", productSn='" + productSn + '\'' +
+                ", mainImage='" + mainImage + '\'' +
+                ", productDesc='" + productDesc + '\'' +
+                ", minPrice=" + minPrice +
+                ", maxPrice=" + maxPrice +
+                ", keywords='" + keywords + '\'' +
+                ", sort=" + sort +
+                ", status=" + status +
+                ", createTime='" + createTime + '\'' +
+                ", lastUpdateTime='" + lastUpdateTime + '\'' +
+                '}';
     }
 }
