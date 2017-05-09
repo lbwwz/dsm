@@ -14,7 +14,7 @@
         <result column="is_key_attr" property="isKey"/>
         <result column="is_must" property="isMust"/>
         <result column="status" property="status"/>
-        <collection property="attrValues" ofType="AttrValueBean" resultMap="AttrValueResult"/>
+        <collection property="skuList" ofType="AttrValueBean" resultMap="AttrValueResult"/>
     </resultMap>
 
     <!--ProductAttr属性名称——别名与字段之间映射-->
@@ -45,15 +45,15 @@
     <!--查询品类下可用的商品可用属性信息（含属性值）-->
     <select id="getAttrByCat" resultMap="productAttrResult" parameterType="int">
         SELECT *
-        FROM dsm_product_attribute_values v
-        LEFT OUTER JOIN dsm_product_attribute a ON a.attr_id = v.attr_id
+        FROM dsm_product_def_attribute_values v
+        LEFT OUTER JOIN dsm_product_def_attribute a ON a.attr_id = v.attr_id
         WHERE a.cat_id=#{catId} AND a.status=1 AND v.status=1
     </select>
 
     <!--查询品类下商品属性名（不含属性值）-->
     <select id="getAttrNameByCat" resultMap="ProductAttrNameResult" parameterType="java.util.Map">
         SELECT attr_id, cat_id, attr_name, sort_order, is_sale_attr, is_key_attr, is_must, status
-        FROM dsm_product_attribute
+        FROM dsm_product_def_attribute
         <trim prefix="WHERE" prefixOverrides="AND">
             cat_id=#{catId}
             <if test="status gte 0">
@@ -66,15 +66,15 @@
     <!--根据ID查询可用的商品属性信息-->
     <select id="getUsableAttrById" resultMap="productAttrResult" parameterType="int">
         SELECT *
-        FROM dsm_product_attribute_values v
-        LEFT OUTER JOIN dsm_product_attribute a ON a.attr_id = v.attr_id
+        FROM dsm_product_def_attribute_values v
+        LEFT OUTER JOIN dsm_product_def_attribute a ON a.attr_id = v.attr_id
         WHERE a.attr_id=#{catId} AND a.status=1 AND v.status=1
     </select>
 
     <!--根据ID查询商品属性名称-->
     <select id="getAttrNameById" resultMap="ProductAttrNameResult" parameterType="java.util.Map">
         SELECT attr_id, cat_id, attr_name, sort_order, is_sale_attr, is_key_attr, is_must, status
-        FROM dsm_product_attribute
+        FROM dsm_product_def_attribute
         <trim prefix="WHERE" prefixOverrides="AND">
             attr_id=#{attrId}
             <if test="status gte 0">
@@ -85,7 +85,7 @@
 
     <!--品类下添加一组商品属性-->
     <insert id="addAttr"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="attrId">
-        INSERT INTO dsm_product_attribute(attr_name, cat_id, is_sale_attr, is_key_attr, is_must)
+        INSERT INTO dsm_product_def_attribute(attr_name, cat_id, is_sale_attr, is_key_attr, is_must)
         VALUES
         <foreach collection="list" item="bean" index="index" separator="," >
             (#{bean.attrName},#{bean.catId},#{bean.isSale},#{bean.isKey},#{bean.isMust})
@@ -94,14 +94,14 @@
 
     <!--更新品类商品属性-->
     <update id="updateAttr" parameterType="ProductAttrBean">
-        UPDATE dsm_product_attribute
+        UPDATE dsm_product_def_attribute
         SET attr_name=#{attrName}, is_key_attr=#{isKey}, is_must=#{isMust}
         WHERE attr_id=#{attrId}
     </update>
 
     <!--更改品类下一组商品属性可用状态-->
     <update id="changeAttrStatus" parameterType="int">
-        UPDATE dsm_product_attribute
+        UPDATE dsm_product_def_attribute
         SET status=1-status
         WHERE attr_id=#{attrId}
     </update>
@@ -111,7 +111,7 @@
     <!--查询品类下商品属性的属性值-->
     <select id="getValuesByAttrId" resultMap="AttrValueResult" parameterType="java.util.Map">
         SELECT *
-        FROM dsm_product_attribute_values
+        FROM dsm_product_def_attribute_values
         <trim prefix="WHERE" prefixOverrides="AND">
             attr_id=#{attrId}
             <if test="status gte 0">
@@ -123,7 +123,7 @@
     <!--品类下根据属性值ID查询对应属性值信息-->
     <select id="getValueById" resultMap="AttrValueResult" parameterType="AttrValueBean">
         SELECT *
-        FROM dsm_product_attribute_values
+        FROM dsm_product_def_attribute_values
         <trim prefix="WHERE" prefixOverrides="AND">
             value_id=#{valueId}
             <if test="status gte 0">
@@ -134,7 +134,7 @@
 
     <!--品类下添加一组商品属性值-->
     <insert id="addAttrValues"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="atteId">
-        INSERT INTO dsm_product_attribute_values(name, attr_id, status, edit_date)
+        INSERT INTO dsm_product_def_attribute_values(name, attr_id, status, edit_date)
         VALUES
         <foreach collection="list" item="bean" index="index" separator="," >
             (#{bean.valueName},#{bean.attrId},#{bean.status},NOW())
@@ -143,14 +143,14 @@
 
     <!--品类下更新商品属性值-->
     <update id="updateAttrValue" parameterType="AttrValueBean">
-        UPDATE dsm_product_attribute_values
+        UPDATE dsm_product_def_attribute_values
         SET name=#{valueName}
         WHERE value_id=#{valueId}
     </update>
 
     <!--品类下更改一组商品属性值可用状态-->
     <update id="changeValueStatus" parameterType="int">
-        UPDATE dsm_product_attribute_values
+        UPDATE dsm_product_def_attribute_values
         SET status=1-status
         WHERE value_id=#{valueId}
     </update>

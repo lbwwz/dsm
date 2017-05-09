@@ -11,12 +11,12 @@ import java.io.Serializable;
  *         <p>
  *         图片信息的封装类
  */
-public class GoodsImageItem implements Serializable{
+public class ProductImageItem implements Serializable{
     private static final long serialVersionUID = -816821495265548426L;
     //图片id
     private Integer imgId;
     //商品id
-    private Integer goodsId;
+    private Integer productId;
     //图片链接
     private String imgUrl;
     //图片描述
@@ -30,7 +30,7 @@ public class GoodsImageItem implements Serializable{
     //排序
     private Integer imgSort;
 
-    public GoodsImageItem(){}
+    public ProductImageItem(){}
 
     public Integer getImgId() {
         return imgId;
@@ -40,12 +40,12 @@ public class GoodsImageItem implements Serializable{
         this.imgId = imgId;
     }
 
-    public Integer getGoodsId() {
-        return goodsId;
+    public Integer getProductId() {
+        return productId;
     }
 
-    public void setGoodsId(Integer goodsId) {
-        this.goodsId = goodsId;
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 
     public String getImgUrl() {

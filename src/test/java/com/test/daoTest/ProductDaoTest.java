@@ -31,6 +31,13 @@ public class ProductDaoTest extends BaseJunitTest{
 
     @Test
     public void getProductTest(){
-        System.out.println(productDao.getProduct(5));
+        System.out.println(productDao.getProductBaseInfo(5));
     }
+
+    @Test
+    public void getProductDetailInfoTest(){
+        System.out.println(productDao.getProductDetailInfo(1));
+    }
+
+
 }

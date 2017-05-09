@@ -17,6 +17,40 @@
         <result column="price_max" property="maxPrice"/>
         <result column="product_state" property="status"/>
     </resultMap>
+    <!-- 商品详情信息 -->
+    <resultMap id="productDetailResult" type="ProductDetail">
+        <id column="product_id" property="productId"/>
+        <result column="cat_id" property="catId"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="sort_order" property="sort"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_desc" property="productDesc"/>
+        <result column="price_min" property="minPrice"/>
+        <result column="price_max" property="maxPrice"/>
+        <result column="product_state" property="status"/>
+        <collection column="product_id" property="skuList" ofType="Sku"
+                     select="com.dsm.dao.IProductSkuDao.getSkuListByProductId">
+        </collection>
+        <collection column="product_id" property="baseAttrsInfo" ofType="ProductDetailAttrInfo"
+                    select="getProductBaseAttrInfo">
+        </collection>
+        <collection column="product_id" property="customerAttrsInfo" ofType="ProductDetailAttrInfo"
+                    select="getProductCustomAttrInfo">
+        </collection>
+    </resultMap>
+    <!-- 详情商品的属性 -->
+    <resultMap id="ProductDetailAttrInfoResult" type="ProductDetailAttrInfo">
+        <result column="baseAttr_id" property="baseAttrId"/>
+        <result column="customAttr_id" property="customAttrId"/>
+        <result column="product_id" property="productId"/>
+        <result column="attr_id" property="attrId"/>
+        <result column="attr_name" property="attrName"/>
+        <result column="value_id" property="valueId"/>
+        <result column="attr_alue" property="attrValue"/>
+        <result column="sort_order" property="sort"/>
+        <result column="status" property="status"/>
+    </resultMap>
 
     <insert id="addProductInfo" parameterType="ProductBean" useGeneratedKeys="true" keyProperty="productId">
         INSERT INTO
@@ -27,12 +61,35 @@
         #{mainImage}, NOW(), NOW());
     </insert>
 
-    <select id="getProduct" resultMap="productResult" parameterType="int">
-        SELECT * FROM dsm_product WHERE product_id=1;
+    <!--添加商品的基本属性-->
+    <insert id="addProductInfoList" parameterType="ProductBean" useGeneratedKeys="true" keyProperty="productId">
+        INSERT INTO
+        dsm_product(cat_id, product_sn, product_name, brand_id, shop_id, price_min, price_max, product_desc, main_img,
+        create_time, last_update)
+        VALUES
+        (#{catId}, #{productSn}, #{productName}, #{brandId}, #{shopId}, #{minPrice}, #{maxPrice}, #{productDesc},
+        #{mainImage}, NOW(), NOW());
+    </insert>
+
+
+
+    <select id="getProductBaseInfo" resultMap="productResult" parameterType="int">
+        SELECT * FROM dsm_product WHERE product_id=#{productId};
     </select>
 
-    <!--<select id="getProduct" resultMap="productResult" parameterType="int">-->
-        <!--SELECT * FROM dsm_product WHERE product_id=1;-->
-    <!--</select>-->
+    <select id="getProductDetailInfo" resultMap="productDetailResult" parameterType="int">
+        SELECT * FROM dsm_product WHERE product_id=#{productId};
+    </select>
+
+    <!--添加商品的自定义属性-->
+
+    <!--查询商品的自定义属性-->
+    <select id="getProductBaseAttrInfo" resultMap="productResult" parameterType="int">
+        SELECT * FROM dsm_product_bas_attr WHERE product_id=#{productId};
+    </select>
+    <!--查询商品的基本属性-->
+    <select id="getProductCustomAttrInfo" resultMap="productResult" parameterType="int">
+        SELECT * FROM dsm_product_custom_attr WHERE product_id=#{productId};
+    </select>
 
 </mapper>

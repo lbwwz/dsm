@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  有关商品sku的sql操作  -->
+<mapper namespace="com.dsm.dao.IProductSkuDao">
+    <!-- 商品的sku字段映射关系 -->
+    <resultMap id="skuResult" type="Sku">
+        <id column="sku_id" property="skuId"/>
+        <result column="product_id" property="productId"/>
+        <result column="properties" property="properties"/>
+        <result column="properties_name" property="propertiesName"/>
+        <result column="quantity" property="quantity"/>
+        <result column="sku_price" property="skuPrice"/>
+        <result column="shop_sn" property="shopSn"/>
+    </resultMap>
+    <!--插入一条sku信息-->
+    <insert id="addSkuItem" parameterType="Sku" useGeneratedKeys="true" keyProperty="skuId">
+        INSERT INTO
+        dsm_product_sku(product_id, properties, properties_name, sku_price, quantity, shop_sn, update_time, create_time)
+        VALUES
+        (#{productId}, #{properties}, #{propertiesName},#{skuPrice},#{quantity}, #{shopSn}, NOW(), NOW());
+    </insert>
+
+    <!--插入一组sku-->
+    <insert id="addSkuItemList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="skuId">
+        INSERT INTO
+        dsm_product_sku(product_id, properties, properties_name, sku_price, quantity, shop_sn, update_time, create_time)
+        VALUES
+        <foreach collection="list" item="bean" index="index" separator="," >
+            (#{bean.productId},#{bean.properties},#{bean.propertiesName}, #{bean.skuPrice}, #{bean.quantity},
+            #{bean.shopSn},NOW(),NOW())
+        </foreach>
+    </insert>
+
+    <select id="getSkuListByProductId" resultMap="skuResult" parameterType="int">
+        SELECT * FROM dsm_product_sku WHERE product_id=#{productId};
+    </select>
+
+</mapper>

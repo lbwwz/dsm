@@ -100,7 +100,6 @@ public interface IProductAttrDao {
     void reorder(List<String> order);
 
 
-
     /**
      * 根据商品的属性ID获取该属性下所有的初始属性值
      *
