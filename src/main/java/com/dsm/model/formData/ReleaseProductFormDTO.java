@@ -26,6 +26,8 @@ public class ReleaseProductFormDTO implements Serializable{
     private BigDecimal productMarketPrice;
     //搜索关键字
     private String keywords;
+    //商品简述
+    private String produceBrief;
     //基本属性
     private String[] baseAttrInfo;
 
@@ -85,6 +87,14 @@ public class ReleaseProductFormDTO implements Serializable{
 
     public void setKeywords(String keywords) {
         this.keywords = keywords;
+    }
+
+    public String getProduceBrief() {
+        return produceBrief;
+    }
+
+    public void setProduceBrief(String produceBrief) {
+        this.produceBrief = produceBrief;
     }
 
     public String[] getBaseAttrInfo() {
@@ -175,6 +185,7 @@ public class ReleaseProductFormDTO implements Serializable{
                 ", brand=" + brand +
                 ", productMarketPrice=" + productMarketPrice +
                 ", keywords='" + keywords + '\'' +
+                ", produceBrief='" + produceBrief + '\'' +
                 ", baseAttrInfo=" + Arrays.toString(baseAttrInfo) +
                 ", customBaseAttrName=" + Arrays.toString(customBaseAttrName) +
                 ", customBaseAttrValue=" + Arrays.toString(customBaseAttrValue) +

@@ -11,8 +11,6 @@
 
     <!--配置数据源-->
     <import resource="spring-dataSource.xml" />
-    <!--配置web相关的配置-->
-    <import resource="spring-servlet.xml"/>
     <!--配置shiro框架的基本信息-->
     <import resource="spring-shiro.xml"/>
 
@@ -35,6 +33,8 @@
           class="com.dsm.common.utils.configContext.ConfigContextFactory">
         <property name="JAVA_RS_DIR" value="src/main/resources/"/>
     </bean>
+
+
 
 </beans>
 

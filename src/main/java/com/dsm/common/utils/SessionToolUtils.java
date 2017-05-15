@@ -1,8 +1,12 @@
 package com.dsm.common.utils;
 
+import com.dsm.common.DsmConcepts;
 import com.dsm.model.seller.Shop;
 import com.dsm.model.user.User;
 import org.apache.shiro.SecurityUtils;
+
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,11 +20,33 @@ import org.apache.shiro.SecurityUtils;
 public class SessionToolUtils {
 
     public static Shop getShop(){
-        return (Shop)SecurityUtils.getSubject().getSession().getAttribute("shop");
+        return (Shop)SecurityUtils.getSubject().getSession().getAttribute(DsmConcepts.SESSION_SHOP);
     }
 
     public static User getUser(){
-        return (User)SecurityUtils.getSubject().getSession().getAttribute("user");
+        User user =  (User)SecurityUtils.getSubject().getSession().getAttribute(DsmConcepts.SESSION_USER);
+        return user== null?(User)SecurityUtils.getSubject().getSession().getAttribute(DsmConcepts.SESSION_ADMIN):user;
+
+    }
+
+    /**
+     * 检查用户是否登录
+     * @return 0：未登录；1：登录普通用户；2：登录管理员
+     */
+    public static int checkLogin(){
+        int type = 0;
+        if(SecurityUtils.getSubject().getSession().getAttribute(DsmConcepts.SESSION_USER)!=null){
+            type = 1;
+        }
+        if(SecurityUtils.getSubject().getSession().getAttribute(DsmConcepts.SESSION_ADMIN)!=null){
+            type = 2;
+        }
+        return type;
+    }
+
+
+    public static List<String> getUploadFile(HttpSession session){
+        return (List<String>) session.getAttribute(DsmConcepts.SESSION_UPLOAD_FILES);
     }
 
 }

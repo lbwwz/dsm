@@ -1,5 +1,6 @@
 package com.dsm.controller.user.seller;
 
+import com.dsm.common.DsmConcepts;
 import com.dsm.controller.common.BaseController;
 import com.dsm.model.BackMsg;
 import com.dsm.model.formData.ReleaseProductFormDTO;
@@ -91,25 +92,28 @@ public class SellerController extends BaseController {
     }
 
     /**
-     * 上传详情页商品图片
+     * 上传商品详情图片
      *
      * @param productImgUpload 图片文件集合
      */
     @ResponseBody
     @RequestMapping("/uploadProductImg")
     public List<BackMsg> uploadProductImg(@RequestParam MultipartFile[] productImgUpload) {
-        return fileUploadService.uploadFiles(productImgUpload, "/fileZone/" + getSessionUser().getId() + "/image/product");
+
+        return fileUploadService.uploadFilesWithSaveInfo(productImgUpload, "/fileZone/" + getSessionUser().getId() + "/image/product",
+                DsmConcepts.IMAGE_PRODUCT_TYPE);
     }
 
     /**
      * 商品图文详情图片上传
      *
-     * @param imgFile 图片文件集合
+     * @param imgFile
      */
     @ResponseBody
     @RequestMapping("/uploadDetailImg")
     public Map<String, Object> uploadDetailImg(@RequestParam MultipartFile imgFile) {
-        BackMsg backMsg = fileUploadService.uploadFile(imgFile, "/fileZone/" + getSessionUser().getId() + "/image/detail");
+        BackMsg backMsg = fileUploadService.uploadFileWithSaveInfo(imgFile, "/fileZone/" + getSessionUser().getId() + "/image/detail",
+                DsmConcepts.IMAGE_PRODUCT_DETAIL_TYPE);
         Map<String, Object> m = new HashMap<>();
         m.put("error", backMsg.getError());
         m.put("url", backMsg.getData());
@@ -119,17 +123,17 @@ public class SellerController extends BaseController {
     }
 
     /**
+     * 商品信息发布
      *
+     * @param releaseProductFormDTO 商品信息封装
+     * @param token 重复提交校验token
      */
-
     @ResponseBody
     @RequestMapping("/releaseProductInfo")
     public BackMsg releaseProductInfo(ReleaseProductFormDTO releaseProductFormDTO,String token){
         //校验提交的信息
 
 //        if (ServletToolUtils.checkRepeatSubmit(getRequest().getSession(), token, "token")) {
-
-
 
         //校验通过
         System.out.println(releaseProductFormDTO);

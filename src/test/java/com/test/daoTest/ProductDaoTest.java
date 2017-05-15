@@ -2,9 +2,14 @@ package com.test.daoTest;
 
 import com.dsm.dao.IProductDao;
 import com.dsm.model.product.ProductBean;
+import com.dsm.model.product.ProductDetail;
+import com.dsm.model.product.ProductDetailAttrInfo;
 import com.test.common.BaseJunitTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,11 +27,31 @@ public class ProductDaoTest extends BaseJunitTest{
 
     @Test
     public void addProductInfo(){
-        ProductBean productBean = new ProductBean("123","",
+        ProductBean productBean = new ProductBean("123",
                 "1.jpg","好吃点蛋卷",12,
                 14, 1);
 
         productDao.addProductInfo(productBean);
+    }
+    @Test
+    public void addProductCustomAttrListTest(){
+        ProductDetailAttrInfo info = new ProductDetailAttrInfo();
+
+        info.setProductId(1);
+        info.setAttrName("123");
+        info.setAttrValue("qwe");
+
+        List<ProductDetailAttrInfo> list = new ArrayList<>();
+        list.add(info);
+        info = new ProductDetailAttrInfo();
+
+        info.setProductId(1);
+        info.setAttrName("www");
+        info.setAttrValue("aaasssasas");
+        list.add(info);
+
+
+        productDao.addProductCustomAttrList(list);
     }
 
     @Test
@@ -36,7 +61,8 @@ public class ProductDaoTest extends BaseJunitTest{
 
     @Test
     public void getProductDetailInfoTest(){
-        System.out.println(productDao.getProductDetailInfo(1));
+        ProductDetail detail = productDao.getProductDetailInfo(1);
+        System.out.println(detail);
     }
 
 

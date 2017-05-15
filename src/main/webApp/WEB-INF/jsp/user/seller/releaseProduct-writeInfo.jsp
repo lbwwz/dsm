@@ -37,7 +37,7 @@
 	<jsp:include page="../../common/topNav.jsp" />
 	<div class="container pageLogo">
 	    <div class="row">
-	        <div class="col-xs-5"><a href="index.jsp"><img src="${pageContext.request.contextPath }/images/logo-seller.png"/></a></div>
+	        <div class="col-xs-5"><a href="index.jsp"><img src="${pageContext.request.contextPath }/images/logo-seller.png" alt=""/></a></div>
 	    </div>
 	</div>
 	
@@ -256,6 +256,16 @@
 							        </div>
 							        
 						      	</div>
+								<div class="form-group ">
+									<label class="col-xs-2 control-label">商品简述</label>
+									<div class="col-xs-4 ">
+										<textarea type="text" rows="4" name="produceBrief" class="form-control input-sm" placeholder="填写宝贝简述，字数100字以内"></textarea>
+									</div>
+									<div class="col-xs-6">
+										<p class="help-block" id="">（可以填写促销语，活动语等。）</p>
+									</div>
+
+								</div>
 					      	</div>
 					      	<!-- 宝贝基本属性 -->
 							<div class="baseAttrSetter">
@@ -624,12 +634,12 @@
 			var attrName = $(this).parents('.form-group ').find('label').attr("title");
 			var attrvalueName = $(this).find(":selected").text();
 			$(this).parents('.form-group ').find('input:hidden').val(
-					attrValueId == "" ? "" : attrId + "|" + attrName + ";" + attrValueId + "|" + (attrValueId == "#" ? "" : attrvalueName));
+					attrValueId == "" ? "" : attrId + "|" + attrName + "|" + attrValueId + "|" + (attrValueId == "#" ? "" : attrvalueName));
 			return false;
 		});
 
 		$(".baseAttrSetter").on('input','.aliasAttrValue',function(){
-			var $_submitInput = $(this).parents('.form-group ').find('input:hidden');
+			var $_submitInput = $(this).parents('.form-group ').find('input[name="baseAttrInfo"]');
 			$_submitInput.val($_submitInput.val().substring(0,$_submitInput.val().lastIndexOf("|")+1)+$.trim($(this).val()));
 		})
 		

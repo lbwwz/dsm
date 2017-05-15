@@ -23,7 +23,7 @@ public interface IProductSkuDao {
 
 
     /**
-     *
+     * 为商品添加一组sku
      */
     Integer addSkuItemList(List<Sku> skuList);
 

@@ -152,6 +152,11 @@ public class RedisServiceImpl implements IRedisService{
         return defaultValue;
     }
 
+    @Override
+    public String get(String key) {
+        return get(key,null);
+    }
+
     /**
      * 删除缓存
      *

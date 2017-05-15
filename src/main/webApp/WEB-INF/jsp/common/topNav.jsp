@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--首页顶栏--%>
-<link href="${rsRoot}/css/topNav.css" rel="stylesheet">
+<link href="${webRoot}/css/topNav.css" rel="stylesheet">
 <nav class="navbar navbar-default">
     <div class="container">
     <div class="row">

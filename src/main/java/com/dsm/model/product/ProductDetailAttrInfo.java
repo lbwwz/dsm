@@ -33,6 +33,22 @@ public class ProductDetailAttrInfo implements Serializable{
     //详情商品属性状态
     private int status;
 
+    public ProductDetailAttrInfo(){
+
+    }
+    public ProductDetailAttrInfo(Integer productId,Integer attrId,String attrName,Integer valueId,String attrValue){
+        this.productId = productId;
+        this.attrId = attrId;
+        this.attrName = attrName;
+        this.valueId = valueId;
+        this.attrValue = attrValue;
+    }
+    public ProductDetailAttrInfo(Integer productId,String attrName,String attrValue){
+        this.productId = productId;
+        this.attrName = attrName;
+        this.attrValue = attrValue;
+    }
+
     public Integer getBaseAttrId() {
         return baseAttrId;
     }

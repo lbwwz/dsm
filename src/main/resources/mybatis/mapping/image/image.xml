@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace必须是接口的全类名  -->
+<mapper namespace="com.dsm.dao.IImageDao">
+
+    <!--imageBean属性别名与字段之间映射-->
+    <resultMap type="ImageBean" id="imageResult">
+        <id column="img_id" property="imgId"/>
+        <result column="user_id" property="userId"/>
+        <result column="img_url" property="url"/>
+        <result column="img_desc" property="desc"/>
+        <result column="img_size" property="size"/>
+        <result column="img_type" property="type"/>
+        <result column="img_sort" property="sort"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!--添加图片-->
+    <insert id="addImage"  parameterType="ImageBean" useGeneratedKeys="true" keyProperty="imgId">
+        INSERT INTO dsm_images(user_id,img_url,img_desc,img_size,img_type,create_time)
+        values(#{userId},#{url},#{desc},#{size},#{type},Now())
+    </insert>
+
+    <!--删除某张图片-->
+    <delete id="deleteImage"  parameterType="int">
+        DELETE FROM dsm_images WHERE img_id=#{imgId};
+    </delete>
+
+
+</mapper>

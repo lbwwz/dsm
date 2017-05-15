@@ -126,15 +126,57 @@ public class ProductAttrBean implements Comparable<ProductAttrBean>,Serializable
 
 	@Override
 	public String toString() {
-		return "ProductAttrBean [catId=" + catId + ", attrId=" + attrId + ", attrName=" + attrName + ", attrSort="
-				+ attrSort + ", isSale=" + isSale + ", isKey=" + isKey + ", isMust=" + isMust + ", status=" + status
-				+ ", attrValues=" + attrValues + "]";
+		return "ProductAttrBean{" +
+				"attrId=" + attrId +
+				", catId=" + catId +
+				", attrName='" + attrName + '\'' +
+				", attrSort=" + attrSort +
+				", isSale=" + isSale +
+				", isKey=" + isKey +
+				", isMust=" + isMust +
+				", status=" + status +
+				", attrValues=" + attrValues +
+				'}';
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof ProductAttrBean)) return false;
 
-	/*
+		ProductAttrBean that = (ProductAttrBean) o;
+
+		if (attrId != that.attrId) return false;
+		if (catId != that.catId) return false;
+		if (attrName != null ? !attrName.equals(that.attrName) : that.attrName != null) return false;
+		if (attrSort != null ? !attrSort.equals(that.attrSort) : that.attrSort != null) return false;
+		if (isSale != null ? !isSale.equals(that.isSale) : that.isSale != null) return false;
+		if (isKey != null ? !isKey.equals(that.isKey) : that.isKey != null) return false;
+		if (isMust != null ? !isMust.equals(that.isMust) : that.isMust != null) return false;
+		if (status != null ? !status.equals(that.status) : that.status != null) return false;
+		return attrValues != null ? attrValues.equals(that.attrValues) : that.attrValues == null;
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = attrId;
+		result = 31 * result + catId;
+		result = 31 * result + (attrName != null ? attrName.hashCode() : 0);
+		result = 31 * result + (attrSort != null ? attrSort.hashCode() : 0);
+		result = 31 * result + (isSale != null ? isSale.hashCode() : 0);
+		result = 31 * result + (isKey != null ? isKey.hashCode() : 0);
+		result = 31 * result + (isMust != null ? isMust.hashCode() : 0);
+		result = 31 * result + (status != null ? status.hashCode() : 0);
+		result = 31 * result + (attrValues != null ? attrValues.hashCode() : 0);
+		return result;
+	}
+
+	/**
 	 * 重写 Comparable 接口的 compareTo 方法
-	 */
+	 * @param o 比较的对象
+	 * @return
+     */
 	@Override
 	public int compareTo(ProductAttrBean o) {
 		return this.attrSort-o.attrSort;

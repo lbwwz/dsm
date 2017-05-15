@@ -45,7 +45,7 @@
 #productImgUpload{ height:29.2px; width:100%; overflow: hidden; position:absolute; right:0; top:0; opacity: 0; 
 	filter:alpha(opacity=0); cursor:pointer; }
 .imgContainter{margin:-5px;border:2px dashed #ddd; min-height: 155px;}
-.imgItem{position: relative; width:128px; height:128px; border: 4px solid #eee; margin: 6px; float:left; text-align:center;}
+.imgItem{position: relative; width:120px; height:128px; border: 4px solid #eee; margin: 6px; float:left; text-align:center;}
 .imgMask{position:absolute; left:0; height: 30px;width:100%; background: #000; opacity: 0.5; filter:alpha(opacity=50);
 	display:none; padding: 5px 10px; text-align: left;}
 .imgMask a{display: inline-block; color:#fff; font-family: tahoma, arial, 'Hiragino Sans GB', 'Microsoft YaHei', 黑体, sans-serif;

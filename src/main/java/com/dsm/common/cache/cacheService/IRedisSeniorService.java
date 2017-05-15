@@ -13,7 +13,7 @@ import java.util.Set;
  *         <p>
  *         缓存中常用数据结构，关于 list, set, hset(map) 和 sortedSet 的操作接口
  */
-public interface IRedisSeniorService {
+public interface IRedisSeniorService{
 
     /********** list的相关操作 *********/
 

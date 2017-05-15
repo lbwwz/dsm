@@ -24,5 +24,12 @@ public class ProductServiceTest extends BaseJunitTest{
 
         productService.releaseProduct(null);
     }
+    @Test
+    public void getProductDetailTest(){
+
+        System.out.println(productService.getProductDetail(1));
+    }
+
+
 
 }

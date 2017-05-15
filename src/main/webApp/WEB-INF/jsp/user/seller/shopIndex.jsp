@@ -8,16 +8,16 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>D.S Mall-我是卖家</title>
 
-	<link href="${rsRoot}/css/bootstrap.min.css" rel="stylesheet">
-	<link href="${rsRoot}/css/non-responsive.css" rel="stylesheet">
+	<link href="${webRoot}/css/bootstrap.min.css" rel="stylesheet">
+	<link href="${webRoot}/css/non-responsive.css" rel="stylesheet">
 	<!-- 侧边栏菜单 -->
-	<link href="${rsRoot}/css/menuNav.css" rel="stylesheet">
+	<link href="${webRoot}/css/menuNav.css" rel="stylesheet">
 	<!-- style-seller 样式 -->
-	<link href="${rsRoot}/css/style-seller.css" rel="stylesheet">
-	<link href="${rsRoot}/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link href="${webRoot}/css/style-seller.css" rel="stylesheet">
+	<link href="${webRoot}/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-	<script src="${rsRoot}/js/jquery-1.11.3.min.js" type="text/javascript"></script>
-	<script src="${rsRoot}/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="${webRoot}/js/jquery-1.11.3.min.js" type="text/javascript"></script>
+	<script src="${webRoot}/js/bootstrap.min.js" type="text/javascript"></script>
 	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
 
@@ -25,7 +25,7 @@
 <jsp:include page="../../common/topNav.jsp" />
 	<div class="container pageLogo">
 	    <div class="row">
-	        <div class="col-xs-5"><a href="index.jsp"><img src="images/logo-seller.png"/></a></div>
+	        <div class="col-xs-5"><a href="index.jsp"><img src="/images/logo-seller.png"/></a></div>
 	    </div>
 	</div>
 	

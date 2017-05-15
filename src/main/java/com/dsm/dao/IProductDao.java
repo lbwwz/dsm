@@ -1,8 +1,6 @@
 package com.dsm.dao;
 
-import com.dsm.model.product.ProductBean;
-import com.dsm.model.product.ProductDetail;
-import com.dsm.model.product.ProductDetailAttrInfo;
+import com.dsm.model.product.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,36 +18,37 @@ import java.util.Map;
 @Component
 public interface IProductDao {
     /**
-     * 为商品表添加商品信息
+     * 为商品表添加商品基本信息
      */
     Integer addProductInfo(ProductBean bean);
 
-/**
-     * 为商品表添加商品信息
+    /**
+     * 添加商品详情信息
      */
-    Integer addProductInfoList(List<ProductBean> beans);
+    Integer addGraphicDetail(GraphicDetail detail);
 
+    /**
+     * 添加商品图片列表
+     */
+    Integer addProductList(List<ProductImageItem> imgs);
 
     /**
      * 根据商品id查询相关的商品信息
      * @param productId 商品Id
-     * @return
      */
     ProductBean getProductBaseInfo(Integer productId);
 
     /**
-     *
-     * @param productId
-     * @return
+     * 查询商品的详情信息
+     * @param productId 商品id
      */
     ProductDetail getProductDetailInfo(Integer productId);
 
     /**
-     * 添加商品的基本属性
+     * 为发布的商品添加基本属性
      * @param info 要添加的基本属性信息
-     * @return
      */
-    Integer addProductBaseAttrInfo(List<ProductDetailAttrInfo> info);
+    Integer addProductBaseAttrList(List<ProductDetailAttrInfo> info);
 
     /**
      * 获取商品的基本属性
@@ -63,7 +62,7 @@ public interface IProductDao {
      * @param info 要添加自定义属性信息
      * @return
      */
-    Integer addProductCustomAttrInfo(List<ProductDetailAttrInfo> info);
+    Integer addProductCustomAttrList(List<ProductDetailAttrInfo> info);
 
     /**
      * 获取商品的自定义属性

@@ -58,6 +58,13 @@ public interface IRedisService {
     String get(String key, String defaultValue);
 
     /**
+     * 获取缓存中的数据
+     * @param key
+     * @return 查询的结果，没有结果则为空
+     */
+    String get(String key);
+
+    /**
      * 删除缓存
      *
      * @param key 键

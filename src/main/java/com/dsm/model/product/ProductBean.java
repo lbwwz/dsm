@@ -2,6 +2,7 @@ package com.dsm.model.product;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 /**
  * 产品类的封装（用于卖家商品发布页面的信息封装）
@@ -13,41 +14,47 @@ import java.math.BigDecimal;
 public class ProductBean implements Serializable{
     private static final long serialVersionUID = -936896536518602212L;
     //产品ID
-    private Integer productId;
+    protected Integer productId;
     //店铺ID
-    private Integer shopId;
+    protected Integer shopId;
     //分类ID
-    private Integer catId;
+    protected Integer catId;
     //品牌ID
-    private Integer brandId;
+    protected Integer brandId;
     //商品名称
-    private String productName;
+    protected String productName;
     //商品编
-    private String productSn;
+    protected String productSn;
     //商品主图
-    private String mainImage;
-    //商品详情信息
-    private String productDesc;
+    protected String mainImage;
+    //商品简述
+    protected String productBrief;
     //商品的最小价格
-    private BigDecimal minPrice;
+    protected BigDecimal minPrice;
     //商品的最大价格
-    private BigDecimal maxPrice;
+    protected BigDecimal maxPrice;
     //商品的关键词
-    private String keywords;
+    protected String keywords;
     //商品排序，该字段仅用于店铺内显示的商品排序
-    private Integer sort;
+    protected Integer sort;
     //商品状态 0，草稿；1，上架；2，下架；3，禁售
-    private int status;
+    protected int status;
+    //是否精品
+    protected int isBest;
+    //是否新品
+    protected int isNew;
+    //是否热销
+    protected int isHot;
+
     //商品添加时间
-    private String createTime;
+    protected Timestamp createTime;
     //商品最后更新的时间
-    private String lastUpdateTime;
+    protected Timestamp lastUpdateTime;
 
     public ProductBean() {}
 
-    public ProductBean(String keywords, String productDesc, String mainImage, String productName, Integer brandId, Integer catId, Integer shopId) {
+    public ProductBean(String keywords, String mainImage, String productName, Integer brandId, Integer catId, Integer shopId) {
         this.keywords = keywords;
-        this.productDesc = productDesc;
         this.mainImage = mainImage;
         this.productName = productName;
         this.brandId = brandId;
@@ -111,12 +118,12 @@ public class ProductBean implements Serializable{
         this.mainImage = mainImage;
     }
 
-    public String getProductDesc() {
-        return productDesc;
+    public String getProductBrief() {
+        return productBrief;
     }
 
-    public void setProductDesc(String productDesc) {
-        this.productDesc = productDesc;
+    public void setProductBrief(String productBrief) {
+        this.productBrief = productBrief;
     }
 
     public BigDecimal getMinPrice() {
@@ -159,19 +166,43 @@ public class ProductBean implements Serializable{
         this.status = status;
     }
 
-    public String getCreateTime() {
+    public int getIsBest() {
+        return isBest;
+    }
+
+    public void setIsBest(int isBest) {
+        this.isBest = isBest;
+    }
+
+    public int getIsNew() {
+        return isNew;
+    }
+
+    public void setIsNew(int isNew) {
+        this.isNew = isNew;
+    }
+
+    public int getIsHot() {
+        return isHot;
+    }
+
+    public void setIsHot(int isHot) {
+        this.isHot = isHot;
+    }
+
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 
-    public String getLastUpdateTime() {
+    public Timestamp getLastUpdateTime() {
         return lastUpdateTime;
     }
 
-    public void setLastUpdateTime(String lastUpdateTime) {
+    public void setLastUpdateTime(Timestamp lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
     }
 
@@ -185,14 +216,16 @@ public class ProductBean implements Serializable{
                 ", productName='" + productName + '\'' +
                 ", productSn='" + productSn + '\'' +
                 ", mainImage='" + mainImage + '\'' +
-                ", productDesc='" + productDesc + '\'' +
                 ", minPrice=" + minPrice +
                 ", maxPrice=" + maxPrice +
                 ", keywords='" + keywords + '\'' +
                 ", sort=" + sort +
                 ", status=" + status +
-                ", createTime='" + createTime + '\'' +
-                ", lastUpdateTime='" + lastUpdateTime + '\'' +
+                ", isBest=" + isBest +
+                ", isNew=" + isNew +
+                ", isHot=" + isHot +
+                ", createTime=" + createTime +
+                ", lastUpdateTime=" + lastUpdateTime +
                 '}';
     }
 }

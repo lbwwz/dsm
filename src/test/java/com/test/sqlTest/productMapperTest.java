@@ -37,7 +37,6 @@ public class productMapperTest extends BaseMapperTest{
         bean.setMaxPrice(BigDecimal.valueOf(100));
         bean.setMinPrice(BigDecimal.valueOf(10));
         bean.setKeywords("123");
-        bean.setProductDesc("<img src='123'/>");
         session.insert(statement,bean);
     }
 }

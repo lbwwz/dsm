@@ -2,6 +2,7 @@ package com.dsm.service.interfaces;
 
 import com.dsm.model.BackMsg;
 import com.dsm.model.formData.ReleaseProductFormDTO;
+import com.dsm.model.product.ProductDetail;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,4 +24,5 @@ public interface IProductService {
      */
     BackMsg releaseProduct(ReleaseProductFormDTO dto);
 
+    ProductDetail getProductDetail(Integer productId);
 }

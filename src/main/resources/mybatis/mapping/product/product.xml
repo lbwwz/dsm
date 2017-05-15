@@ -11,11 +11,13 @@
         <result column="brand_id" property="brandId"/>
         <result column="sort_order" property="sort"/>
         <result column="product_name" property="productName"/>
-        <result column="product_desc" property="productDesc"/>
         <result column="main_img" property="mainImage"/>
         <result column="price_min" property="minPrice"/>
         <result column="price_max" property="maxPrice"/>
-        <result column="product_state" property="status"/>
+        <result column="product_status" property="status"/>
+        <result column="is_best" property="isBest"/>
+        <result column="is_new" property="isNew"/>
+        <result column="is_hot" property="isHot"/>
     </resultMap>
     <!-- 商品详情信息 -->
     <resultMap id="productDetailResult" type="ProductDetail">
@@ -25,10 +27,15 @@
         <result column="brand_id" property="brandId"/>
         <result column="sort_order" property="sort"/>
         <result column="product_name" property="productName"/>
-        <result column="product_desc" property="productDesc"/>
+        <result column="detail_text" property="detailText"/>
         <result column="price_min" property="minPrice"/>
         <result column="price_max" property="maxPrice"/>
-        <result column="product_state" property="status"/>
+        <result column="product_status" property="status"/>
+        <result column="is_best" property="isBest"/>
+        <result column="is_new" property="isNew"/>
+        <result column="is_hot" property="isHot"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="lastUpdateTime"/>
         <collection column="product_id" property="skuList" ofType="Sku"
                      select="com.dsm.dao.IProductSkuDao.getSkuListByProductId">
         </collection>
@@ -40,56 +47,101 @@
         </collection>
     </resultMap>
     <!-- 详情商品的属性 -->
-    <resultMap id="ProductDetailAttrInfoResult" type="ProductDetailAttrInfo">
+    <resultMap id="productDetailAttrInfoResult" type="ProductDetailAttrInfo">
         <result column="baseAttr_id" property="baseAttrId"/>
         <result column="customAttr_id" property="customAttrId"/>
         <result column="product_id" property="productId"/>
         <result column="attr_id" property="attrId"/>
         <result column="attr_name" property="attrName"/>
         <result column="value_id" property="valueId"/>
-        <result column="attr_alue" property="attrValue"/>
+        <result column="attr_value" property="attrValue"/>
         <result column="sort_order" property="sort"/>
         <result column="status" property="status"/>
     </resultMap>
 
+    <!-- 商品图片的属性映射 -->
+    <resultMap id="productImageItemResult" type="ProductImageItem">
+        <id column="img_id" property="imgId"/>
+        <result column="product_id" property="productId"/>
+        <result column="img_url" property="imgUrl"/>
+        <result column="is_main" property="isMain"/>
+        <result column="sort" property="sort"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+
+
+    <!--添加商品基本信息-->
     <insert id="addProductInfo" parameterType="ProductBean" useGeneratedKeys="true" keyProperty="productId">
         INSERT INTO
-        dsm_product(cat_id, product_sn, product_name, brand_id, shop_id, price_min, price_max, product_desc, main_img,
-        create_time, last_update)
+        dsm_product(cat_id, product_sn, product_name, brand_id, shop_id, price_min, price_max, main_img,
+        create_time, update_time)
         VALUES
-        (#{catId}, #{productSn}, #{productName}, #{brandId}, #{shopId}, #{minPrice}, #{maxPrice}, #{productDesc},
-        #{mainImage}, NOW(), NOW());
+        (#{catId}, #{productSn}, #{productName}, #{brandId}, #{shopId}, #{minPrice}, #{maxPrice},
+        #{mainImage}, NOW(), NOW())
     </insert>
 
-    <!--添加商品的基本属性-->
-    <insert id="addProductInfoList" parameterType="ProductBean" useGeneratedKeys="true" keyProperty="productId">
-        INSERT INTO
-        dsm_product(cat_id, product_sn, product_name, brand_id, shop_id, price_min, price_max, product_desc, main_img,
-        create_time, last_update)
-        VALUES
-        (#{catId}, #{productSn}, #{productName}, #{brandId}, #{shopId}, #{minPrice}, #{maxPrice}, #{productDesc},
-        #{mainImage}, NOW(), NOW());
+    <!-- 添加商品图文详情信息 -->
+    <insert id="addGraphicDetail" parameterType="GraphicDetail" useGeneratedKeys="true" keyProperty="detailId">
+        INSERT INTO dsm_product_graphic_detail(product_id, detail_text)  VALUES(#{productId}, #{detailText}，NOW(), NOW())
     </insert>
 
+    <!-- 添加商品图片列表 -->
+    <insert id="addProductList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="detailId">
+        INSERT INTO dsm_product_images(product_id, img_url,is_main) VALUES
+        <foreach collection="list" separator="," item="bean">
+            (#{bean.productId}, #{bean.imgUrl}, #{bean.isMain}, NOW())
+        </foreach>
+    </insert>
 
-
+    <!--查询商品基本信息-->
     <select id="getProductBaseInfo" resultMap="productResult" parameterType="int">
-        SELECT * FROM dsm_product WHERE product_id=#{productId};
+        SELECT
+            product_id, cat_id, product_sn, product_name, click_count, brand_id, product_number, shop_id,
+            price_min, price_max, shop_price, warn_number,product_brief, main_img, product_grade, product_status,
+            is_best, is_new, is_hot, update_time, create_time
+        FROM dsm_product  WHERE product_id=#{productId}
     </select>
 
+
+    <!--查询商品详细信息-->
     <select id="getProductDetailInfo" resultMap="productDetailResult" parameterType="int">
-        SELECT * FROM dsm_product WHERE product_id=#{productId};
+        SELECT
+            p.product_id, p.cat_id, p.product_sn, p.product_name, p.click_count, p.brand_id, p.product_number, p.shop_id,
+            p.price_min, p.price_max, p.shop_price, p.warn_number,p.product_brief, p.main_img, p.product_grade, p.product_status,
+            p.is_best, p.is_new, p.is_hot,d.detail_text, p.update_time,p.create_time
+        FROM dsm_product p LEFT JOIN dsm_product_graphic_detail d
+        ON p.product_id=d.product_id
+        HAVING p.product_id=1;
+    </select>
+
+    <!--添加商品的基础属性-->
+    <insert id="addProductBaseAttrList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="productId">
+        INSERT INTO dsm_product_base_attr(product_id, attr_id, attr_name, value_id, attr_value,create_time, update_time)
+        VALUES
+        <foreach collection="list" separator="," item="bean">
+            (#{productId}, #{attrId}, #{attrName}, #{valueId}, #{attrValue}, NOW(), NOW())
+        </foreach>
+    </insert>
+
+    <!--查询商品的基础属性-->
+    <select id="getProductBaseAttrInfo" resultMap="productDetailAttrInfoResult" parameterType="int">
+        SELECT * FROM dsm_product_base_attr WHERE product_id=#{productId}
     </select>
 
     <!--添加商品的自定义属性-->
+    <insert id="addProductCustomAttrList" parameterType="java.util.List"  useGeneratedKeys="true" keyProperty="productId">
+        INSERT INTO dsm_product_custom_attr(product_id, attr_name, attr_value,create_time, update_time)
+        VALUES
+        <foreach collection="list" separator="," item="bean">
+            (#{bean.productId}, #{bean.attrName}, #{bean.attrValue}, NOW(), NOW())
+        </foreach>
+    </insert>
 
     <!--查询商品的自定义属性-->
-    <select id="getProductBaseAttrInfo" resultMap="productResult" parameterType="int">
-        SELECT * FROM dsm_product_bas_attr WHERE product_id=#{productId};
-    </select>
-    <!--查询商品的基本属性-->
-    <select id="getProductCustomAttrInfo" resultMap="productResult" parameterType="int">
-        SELECT * FROM dsm_product_custom_attr WHERE product_id=#{productId};
+    <select id="getProductCustomAttrInfo" resultMap="productDetailAttrInfoResult" parameterType="int">
+        SELECT * FROM dsm_product_custom_attr WHERE product_id=#{productId}
     </select>
 
 </mapper>

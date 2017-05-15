@@ -3,7 +3,7 @@
 <Configuration status="warn" monitorInterval="1800" strict="true">
     <properties>
         <!--优先级从高到低依次为：OFF、FATAL、ERROR、WARN、INFO、DEBUG、TRACE、ALL -->
-        <property name="LOG_LEVEL">${log4j2.LOG_LEVEL}</property><!-- 日志输出级别 -->
+        <property name="LOG_LEVEL">INFO</property><!-- 日志输出级别 -->
         <property name="FILE_SIZE">500MB</property><!--日志切割的最小单位 -->
 
         <property name="LOG_HOME">/opt/java/logs/dsm/</property>
@@ -12,7 +12,7 @@
         <property name="FILE_OUT_NAME">dsm_output</property>
         <property name="FILE_Error_NAME">dsm_error</property>
 
-        <property name="LOG_PATTERN">%d{%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %class{36} %L %M - %msg%xEx%n</property>
+        <property name="LOG_PATTERN">%date[%-5level] %logger{36}:%line: %msg%n</property>
         <property name="ROLLING_OUT_NAME">${LOG_HOME}/%d{yyyy-MM-dd}/${FILE_OUT_NAME}-%d{yyyy-MM-dd-HH}.log.gz</property>
         <property name="ROLLING_ERROR_NAME">${LOG_HOME}/%d{yyyy-MM-dd}/${FILE_Error_NAME}-%d{yyyy-MM-dd}-%i.log.gz</property>
         <property name="Log_MAX_CNT">3000</property><!-- 保留日志文件数量 -->

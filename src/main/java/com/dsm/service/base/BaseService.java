@@ -15,7 +15,7 @@ public class BaseService {
     /**
      * 事务超时相应时间限制
      */
-    protected final long timeOut = 5000;
+    protected static final long timeOut = 5000;
 
     /**
      * 获取 sessionUser 对象

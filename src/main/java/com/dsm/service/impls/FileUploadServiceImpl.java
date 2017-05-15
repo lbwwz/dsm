@@ -3,14 +3,20 @@ package com.dsm.service.impls;
 import com.dsm.common.DsmConcepts;
 import com.dsm.common.UploadConfigContext;
 import com.dsm.common.utils.EncryptUtils;
+import com.dsm.common.utils.SessionToolUtils;
 import com.dsm.common.utils.StringHandleUtils;
+import com.dsm.dao.IImageDao;
 import com.dsm.model.BackMsg;
+import com.dsm.model.ImageBean;
 import com.dsm.service.base.BaseService;
 import com.dsm.service.interfaces.IFileUploadService;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -20,17 +26,20 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Created by Lbwwz on 2016/8/9.
- *
+ * <p/>
  * 文件上传操作的具体实现
  */
 @Service("IFileUploadService")
 public class FileUploadServiceImpl extends BaseService implements IFileUploadService {
 
+    private static Logger logger = LoggerFactory.getLogger(FileUploadServiceImpl.class);
 
+
+    @Resource
+    private IImageDao iImageDao;
 
     /**
      * 文件上传的实际根路径
@@ -38,7 +47,7 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
     private static final String ROOT_PATH;
 
     /**
-     * 文件上传的WEB根路径
+     * 文件的WEB根路径
      */
     private static final String WEB_PATH;
 
@@ -58,6 +67,15 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
 
     @Override
     public BackMsg uploadFile(MultipartFile file, String savePath, Function<String, String> fileNameHandler) {
+        return uploadFileWithSaveInfo(file, savePath, fileNameHandler, -1);
+    }
+
+    @Override
+    public BackMsg uploadFileWithSaveInfo(MultipartFile file, String savePath, int saveUploadDataInfoType) {
+        return uploadFileWithSaveInfo(file, savePath, defaultFileNameHandler, saveUploadDataInfoType);
+    }
+
+    public BackMsg uploadFileWithSaveInfo(MultipartFile file, String savePath, Function<String, String> fileNameHandler, int saveUploadDataInfoType) {
         //非空校验
         if (file.isEmpty()) {
             return new BackMsg(1, "", "文件上传中发生异常，请稍后重试");
@@ -79,35 +97,41 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
                 return new BackMsg(DsmConcepts.SIZE_WARRING, fileName,
                         fileName + " 大小超过：" + UploadConfigContext.getMaxSize(fileType) / (1024 * 1024) + "m");
             } else {
-
                 try {
                     //上传文件，这里不必处理IO流关闭的问题，因为FileUtils.copyInputStreamToFile()方法内部会自动把用到的IO流关掉
                     String fileNewName = fileNameHandler.apply(fileName);
 
                     FileUtils.copyInputStreamToFile(file.getInputStream(),
                             new File(ROOT_PATH + savePath, fileNewName));
-                    return new BackMsg(0, WEB_PATH + savePath + fileNewName, fileName + "上传成功");
+
+                    //保存文件信息
+                    return SaveInfoByFileType(savePath + fileNewName, fileType, fileName, file.getSize(), saveUploadDataInfoType);
+
                 } catch (IOException e) {
-                    System.out.println("文件流获取失败！");
-                    e.printStackTrace();
+                    logger.error("文件写入失败：{}\n{}", e, e.getMessage());
+                    return new BackMsg(1, "", "文件上传中发生异常，请稍后重试");
                 }
             }
         }
-        return null;
+
     }
 
     @Override
     public BackMsg uploadFile(String base64File, String savePath, Function<String, String> pathHandler) {
+        return uploadFileWithSaveInfo(base64File, savePath, pathHandler, -1);
+    }
 
-        if(base64File.split(",").length<2){
-            return new BackMsg(1,"","数据提交异常！");
+    @Override
+    public BackMsg uploadFileWithSaveInfo(String base64File, String savePath, Function<String, String> pathHandler, int saveUploadDataInfoType) {
+        if (base64File.split(",").length < 2) {
+            return new BackMsg(1, "", "数据提交异常！");
         }
+        savePath = packPath(savePath);
         String fileType = base64File.split(",")[0].split(":")[1];
         byte[] fileByte = EncryptUtils.decodeBase64(base64File.split(",")[1]);
 
         //获取文件的输入流
         InputStream is = new ByteArrayInputStream(fileByte);
-
 
         //校验上传该类型文件的大小
         try {
@@ -118,21 +142,23 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
 
                 try {
                     //上传文件，这里不必处理IO流关闭的问题，因为FileUtils.copyInputStreamToFile()方法内部会自动把用到的IO流关掉
-                    String fileNewName = pathHandler.apply(getSessionUser().getId()+"");
-
+                    String fileNewName = pathHandler.apply(getSessionUser().getId() + "");
                     FileUtils.copyInputStreamToFile(is,
                             new File(ROOT_PATH + savePath, fileNewName));
-                    return new BackMsg(0, WEB_PATH + savePath + fileNewName, "上传成功!");
+
+                    //保存文件信息
+                    return SaveInfoByFileType(savePath + fileNewName, fileType, "", is.available(), saveUploadDataInfoType);
+
                 } catch (IOException e) {
-                    System.out.println("文件流获取失败！");
-                    e.printStackTrace();
+                    logger.error("文件写入失败：{}\n{}", e, e.getMessage());
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
-        return null;
+        return new BackMsg(1, "", "文件上传中发生异常，请稍后重试");
     }
+
 
     @Override
     public List<BackMsg> uploadFiles(MultipartFile[] files, String savePath) {
@@ -140,7 +166,19 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
     }
 
     @Override
-    public List<BackMsg> uploadFiles(MultipartFile[] files, String savePath, BiFunction<String,Integer,String> fileNameHandler) {
+    public List<BackMsg> uploadFiles(MultipartFile[] files, String savePath, BiFunction<String, Integer, String> fileNameHandler) {
+        return uploadFilesWithSaveInfo(files, savePath, fileNameHandler, -1);
+    }
+
+    @Override
+    public List<BackMsg> uploadFilesWithSaveInfo(MultipartFile[] files, String savePath, int saveUploadDataInfoType) {
+        return uploadFilesWithSaveInfo(files, savePath, defaultFilesNameHandler, saveUploadDataInfoType);
+    }
+
+
+    @Override
+    public List<BackMsg> uploadFilesWithSaveInfo(MultipartFile[] files, String savePath,
+                                                 BiFunction<String, Integer, String> fileNameHandler, int saveUploadDataInfoType) {
         if (files == null) {
             return null;
         }
@@ -154,7 +192,8 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
         String fileNewName;
 
         List<BackMsg> fileReturnList = new ArrayList<>();
-        for (int i = 0;i<files.length;i++) {
+        BackMsg msg;
+        for (int i = 0; i < files.length; i++) {
             //非空校验
             if (files[i].isEmpty()) {
                 fileReturnList.add(new BackMsg(BackMsg.ERROR, "", "文件上传中发生异常，请稍后重试"));
@@ -175,36 +214,46 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
                 } else {
                     try {
                         //上传文件，这里不必处理IO流关闭的问题，因为FileUtils.copyInputStreamToFile()方法内部会自动把用到的IO流关掉
-                        fileNewName = fileNameHandler.apply(fileName,i);
+                        fileNewName = fileNameHandler.apply(fileName, i);
                         FileUtils.copyInputStreamToFile(files[i].getInputStream(),
                                 new File(ROOT_PATH + savePath, fileNewName));
-                        fileReturnList.add(new BackMsg(BackMsg.CORRECT, WEB_PATH + savePath + fileNewName, fileName + "上传成功"));
+
+                        msg = SaveInfoByFileType(savePath + fileNewName, fileType, fileName, files[i].getSize(), saveUploadDataInfoType);
+
+                        if (msg != null) {
+                            fileReturnList.add(msg);
+                        }
                     } catch (IOException e) {
-                        System.out.println("文件流获取失败！");
-                        e.printStackTrace();
+                        logger.error("文件写入失败：{}\n{}", e, e.getMessage());
                     }
                 }
             }
         }
+
         return fileReturnList;
     }
 
-    @Override
-    public List<String> uploadFilesWithoutMsg(MultipartFile[] files, String savePath, BiFunction<String, Integer, String> pathHandler) {
-        List<BackMsg> listMsg = uploadFiles(files,savePath,pathHandler);
+    /**
+     * 单一文件文件名处理内部类
+     * 默认的文件名处理操作的内部类 -实现函数接口{@link Function}
+     */
+    final Function<String, String> defaultFileNameHandler = fileName -> {
+        String fileExt = StringHandleUtils.getFileExt(fileName);
 
-        return listMsg.stream().filter(msg -> msg.getError() == BackMsg.CORRECT)
-                .map(BackMsg::getData).collect(Collectors.toCollection(ArrayList::new));
-    }
+        return EncryptUtils.encryptMD5(fileName + System.currentTimeMillis()) +
+                "_" + new Random().nextInt(10000) + "." + fileExt;
 
-    @Override
-    public List<String> uploadFilesWithoutMsg(MultipartFile[] files, String savePath){
-        List<BackMsg> listMsg = uploadFiles(files,savePath,defaultFilesNameHandler);
+    };
 
-        return listMsg.stream().filter(msg -> msg.getError() == BackMsg.CORRECT)
-                .map(BackMsg::getData).collect(Collectors.toCollection(ArrayList::new));
-    }
-
+    /**
+     * 文件列表文件名处理内部类
+     * 默认的文件名处理操作的内部类 -实现函数接口{@link BiFunction}
+     */
+    final BiFunction<String, Integer, String> defaultFilesNameHandler = (fileName, index) -> {
+        String fileExt = StringHandleUtils.getFileExt(fileName);
+        return EncryptUtils.encryptMD5(fileName + System.currentTimeMillis()) + "_" +
+                new Random().nextInt(10000) + "_" + "index" + "." + fileExt;
+    };
 
     /**
      * 校验某一类型的文件拓展名是否是合法的上传文件
@@ -240,24 +289,40 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
 
     }
 
-
     /**
-     * 单一文件文件名处理内部类
-     * 默认的文件名处理操作的内部类 -实现函数接口{@link Function}
+     * 根据保存的图片类型，将上传文件的信息保存到用户相应的数据库中
+     *
+     * @param fileUrl                保存路径
+     * @param fileType               文件类型
+     * @param fileName               文件名
+     * @param fileSize               图片大小
+     * @param saveUploadDataInfoType 图片类型，0：一般图片，1：商品图片，2：商品详情图，3：广告图；小于0表示不保存图片
+     * @return msg信息封装
      */
-    final Function<String, String> defaultFileNameHandler = fileName -> {
-        String fileExt = StringHandleUtils.getFileExt(fileName);
-        return EncryptUtils.encryptMD5(fileName + System.currentTimeMillis())
-                + "_" + new Random().nextInt(10000) + "." + fileExt;
-    };
+    private BackMsg SaveInfoByFileType(String fileUrl, String fileType, String fileName, long fileSize, int saveUploadDataInfoType) {
+        if (saveUploadDataInfoType < 0) {//不保存图片到用户图片库
+            return new BackMsg(BackMsg.CORRECT, WEB_PATH + fileUrl, fileName + "上传成功");
+        }
+        if (SessionToolUtils.checkLogin() == DsmConcepts.IS_USER_LOGIN)  //普通用户
+            try {
+                //如果是图片，保存当前用户上传图片的信息
+                if (fileType.contains("image")) {
+                    iImageDao.addImage(new ImageBean(SessionToolUtils.getUser().getId(), WEB_PATH + fileUrl, null, fileSize, saveUploadDataInfoType));
+                }
+                return new BackMsg(BackMsg.CORRECT, WEB_PATH + fileUrl, fileName + "上传成功");
+                //其他。。。
+            } catch (Exception ex) {
+                //发生异常，回滚该上传的文件
+                if (!new File(ROOT_PATH + fileUrl).delete()) {
+                    logger.warn("\n{}信息录入失败! {}回滚删除异常：\n{}", fileType, ROOT_PATH + fileUrl, ex);
+                } else {
+                    logger.warn("\n{}信息录入失败! {}回滚删除成功：\n{}", fileType, ROOT_PATH + fileUrl, ex);
+                }
+                return new BackMsg(BackMsg.ERROR, null, fileName + "上传失败");
+            }
+        else if (SessionToolUtils.checkLogin() == DsmConcepts.IS_ADMIN_LOGIN) {   //  管理员用户
 
-    /**
-     * 文件列表文件名处理内部类
-     * 默认的文件名处理操作的内部类 -实现函数接口{@link BiFunction}
-     */
-    final BiFunction<String,Integer, String> defaultFilesNameHandler = (fileName,index) -> {
-        String fileExt = StringHandleUtils.getFileExt(fileName);
-        return EncryptUtils.encryptMD5(fileName + System.currentTimeMillis())
-                + "_" + new Random().nextInt(10000) +index+ "." + fileExt;
-    };
+        }
+        return null;
+    }
 }

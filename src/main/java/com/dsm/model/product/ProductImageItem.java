@@ -1,6 +1,7 @@
 package com.dsm.model.product;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,25 +13,17 @@ import java.io.Serializable;
  *         图片信息的封装类
  */
 public class ProductImageItem implements Serializable{
-    private static final long serialVersionUID = -816821495265548426L;
-    //图片id
+    private static final long serialVersionUID = -1908995726273257700L;
     private Integer imgId;
-    //商品id
     private Integer productId;
-    //图片链接
     private String imgUrl;
-    //图片描述
-    private String imgDesc;
-    //是否主图
-    private Integer isMain;
-    //图片类型
-    private Integer type;
-    //图片状态
-    private Integer status;
-    //排序
-    private Integer imgSort;
+    private int isMain;
+    private Integer sort;
+    private String status;
+    private Timestamp createTime;
 
-    public ProductImageItem(){}
+    public ProductImageItem() {
+    }
 
     public Integer getImgId() {
         return imgId;
@@ -56,43 +49,35 @@ public class ProductImageItem implements Serializable{
         this.imgUrl = imgUrl;
     }
 
-    public String getImgDesc() {
-        return imgDesc;
-    }
-
-    public void setImgDesc(String imgDesc) {
-        this.imgDesc = imgDesc;
-    }
-
-    public Integer getIsMain() {
+    public int getIsMain() {
         return isMain;
     }
 
-    public void setIsMain(Integer isMain) {
+    public void setIsMain(int isMain) {
         this.isMain = isMain;
     }
 
-    public Integer getType() {
-        return type;
+    public Integer getSort() {
+        return sort;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public Integer getImgSort() {
-        return imgSort;
+    public Timestamp getCreateTime() {
+        return createTime;
     }
 
-    public void setImgSort(Integer imgSort) {
-        this.imgSort = imgSort;
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
     }
 }

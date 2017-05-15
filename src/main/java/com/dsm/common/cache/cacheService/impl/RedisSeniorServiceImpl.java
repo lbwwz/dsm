@@ -1,5 +1,6 @@
 package com.dsm.common.cache.cacheService.impl;
 
+import com.dsm.common.cache.cacheDatabase.RedisDataSource;
 import com.dsm.common.cache.cacheService.IRedisSeniorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import redis.clients.jedis.ScanParams;
 import redis.clients.jedis.ScanResult;
 import redis.clients.jedis.ShardedJedis;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -21,11 +23,14 @@ import java.util.*;
  *         redis中的高级存储操作，关于 list, set, hset(map) 和 sortedSet 的操作
  */
 @Service("IRedisSeniorService")
-public class RedisSeniorServiceImpl extends RedisServiceImpl implements IRedisSeniorService {
+public class RedisSeniorServiceImpl implements IRedisSeniorService {
     /**
      * 日志类
      */
     private static Logger logger = LoggerFactory.getLogger(RedisSeniorServiceImpl.class);
+    @Resource
+    private RedisDataSource redisDataSource;
+
 
 
     /********** list的相关操作 *********/
@@ -699,6 +704,40 @@ public class RedisSeniorServiceImpl extends RedisServiceImpl implements IRedisSe
             returnResource(shardedJedis);
         }
         return null;
+    }
+
+    /**
+     * 释放jedis
+     *
+     * @param shardedJedis 需要释放的jedis对象
+     */
+    private void returnResource(ShardedJedis shardedJedis) {
+        try {
+            redisDataSource.closeJedis(shardedJedis);
+        } catch (Exception e) {
+            logger.error("returnResource error.", e);
+        }
+    }
+
+
+    /**
+     * 设置redis缓存过期
+     */
+    private long expire(String key, int seconds) {
+        if (key == null || key.equals("")) {
+            return 0;
+        }
+
+        ShardedJedis shardedJedis = null;
+        try {
+            return (shardedJedis = redisDataSource.getResource()).expire(key, seconds);
+        } catch (Exception ex) {
+            logger.error("EXPIRE error[key=" + key + " seconds=" + seconds
+                    + "]" + ex.getMessage(), ex);
+        } finally {
+            returnResource(shardedJedis);
+        }
+        return 0;
     }
 
 }

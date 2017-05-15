@@ -14,7 +14,7 @@
         <result column="is_key_attr" property="isKey"/>
         <result column="is_must" property="isMust"/>
         <result column="status" property="status"/>
-        <collection property="skuList" ofType="AttrValueBean" resultMap="AttrValueResult"/>
+        <collection property="attrValues" ofType="AttrValueBean" resultMap="AttrValueResult"/>
     </resultMap>
 
     <!--ProductAttr属性名称——别名与字段之间映射-->
