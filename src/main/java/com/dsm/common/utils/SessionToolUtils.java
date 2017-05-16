@@ -1,7 +1,6 @@
 package com.dsm.common.utils;
 
 import com.dsm.common.DsmConcepts;
-import com.dsm.model.seller.Shop;
 import com.dsm.model.user.User;
 import org.apache.shiro.SecurityUtils;
 
@@ -19,9 +18,6 @@ import java.util.List;
  */
 public class SessionToolUtils {
 
-    public static Shop getShop(){
-        return (Shop)SecurityUtils.getSubject().getSession().getAttribute(DsmConcepts.SESSION_SHOP);
-    }
 
     public static User getUser(){
         User user =  (User)SecurityUtils.getSubject().getSession().getAttribute(DsmConcepts.SESSION_USER);

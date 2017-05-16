@@ -19,10 +19,16 @@ public class ProductImageItem implements Serializable{
     private String imgUrl;
     private int isMain;
     private Integer sort;
-    private String status;
+    private Integer status;
     private Timestamp createTime;
 
     public ProductImageItem() {
+    }
+
+    public ProductImageItem(Integer productId,String imgUrl,int isMain) {
+        this.productId = productId;
+        this.imgUrl = imgUrl;
+        this.isMain = isMain;
     }
 
     public Integer getImgId() {
@@ -65,11 +71,11 @@ public class ProductImageItem implements Serializable{
         this.sort = sort;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -79,5 +85,18 @@ public class ProductImageItem implements Serializable{
 
     public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductImageItem{" +
+                "imgId=" + imgId +
+                ", productId=" + productId +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", isMain=" + isMain +
+                ", sort=" + sort +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                '}';
     }
 }

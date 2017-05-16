@@ -1,8 +1,8 @@
 package com.test.other;
 
-import com.dsm.common.utils.chineseSplit.dic.Dictionary;
 import com.dsm.common.utils.EncryptUtils;
 import com.dsm.common.utils.StringHandleUtils;
+import com.dsm.common.utils.chineseSplit.dic.Dictionary;
 import com.dsm.common.utils.configContext.ConfigContext;
 import com.dsm.common.utils.configContext.ConfigContextFactory;
 import com.dsm.model.user.User;
@@ -206,7 +206,6 @@ public class UtilTest {
     }
 
     public static void main(String[] args) {
-
         ClassLoader load = Dictionary.class.getClassLoader();
         InputStream is = load.getResourceAsStream("redis.properties");
         if(is == null){
@@ -214,5 +213,6 @@ public class UtilTest {
         }
         System.out.println(is);
     }
+
 
 }

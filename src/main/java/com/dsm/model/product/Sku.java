@@ -32,6 +32,14 @@ public class Sku {
     public Sku() {
     }
 
+    public Sku(int productId, String propertiesName, int quantity, BigDecimal skuPrice, String shopSn) {
+        this.productId = productId;
+        this.propertiesName = propertiesName;
+        this.quantity = quantity;
+        this.skuPrice = skuPrice;
+        this.shopSn = shopSn;
+    }
+
     public int getSkuId() {
         return skuId;
     }

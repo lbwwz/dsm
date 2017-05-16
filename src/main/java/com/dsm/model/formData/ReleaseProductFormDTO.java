@@ -39,9 +39,9 @@ public class ReleaseProductFormDTO implements Serializable{
     //sku商品价格
     private BigDecimal[] productPrice;
     //sku商品数量
-    private String[] productCount;
+    private Integer[] productCount;
     //sku商品的商家自定义编码
-    private String[] customProductNum;
+    private String[] customProductNo;
     //商品图片
     private String[] imgItem;
     //商品图
@@ -137,20 +137,20 @@ public class ReleaseProductFormDTO implements Serializable{
         this.productPrice = productPrice;
     }
 
-    public String[] getProductCount() {
+    public Integer[] getProductCount() {
         return productCount;
     }
 
-    public void setProductCount(String[] productCount) {
+    public void setProductCount(Integer[] productCount) {
         this.productCount = productCount;
     }
 
-    public String[] getCustomProductNum() {
-        return customProductNum;
+    public String[] getCustomProductNo() {
+        return customProductNo;
     }
 
-    public void setCustomProductNum(String[] customProductNum) {
-        this.customProductNum = customProductNum;
+    public void setCustomProductNo(String[] customProductNo) {
+        this.customProductNo = customProductNo;
     }
 
     public String[] getImgItem() {
@@ -192,7 +192,7 @@ public class ReleaseProductFormDTO implements Serializable{
                 ", property=" + Arrays.toString(property) +
                 ", productPrice=" + Arrays.toString(productPrice) +
                 ", productCount=" + Arrays.toString(productCount) +
-                ", customProductNum=" + Arrays.toString(customProductNum) +
+                ", customProductNo=" + Arrays.toString(customProductNo) +
                 ", imgItem=" + Arrays.toString(imgItem) +
                 ", mainImgItem='" + mainImgItem + '\'' +
                 ", detailContent='" + detailContent + '\'' +

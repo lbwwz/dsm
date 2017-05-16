@@ -25,6 +25,11 @@ public class GraphicDetail implements Serializable{
 
     }
 
+    public GraphicDetail(Integer productId,String detailText){
+        this.productId = productId;
+        this.detailText = detailText;
+    }
+
     public Integer getDetailId() {
         return detailId;
     }

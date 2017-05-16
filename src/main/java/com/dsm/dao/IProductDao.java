@@ -30,7 +30,7 @@ public interface IProductDao {
     /**
      * 添加商品图片列表
      */
-    Integer addProductList(List<ProductImageItem> imgs);
+    Integer addProductImageList(List<ProductImageItem> imgs);
 
     /**
      * 根据商品id查询相关的商品信息
@@ -43,6 +43,14 @@ public interface IProductDao {
      * @param productId 商品id
      */
     ProductDetail getProductDetailInfo(Integer productId);
+
+
+    /**
+     * 查询商品的图片信息
+     * @param productId 商品id
+     */
+    ProductDetail getProductImageList(Integer productId);
+
 
     /**
      * 为发布的商品添加基本属性

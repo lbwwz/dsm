@@ -281,7 +281,7 @@
 							        </label>
 							        <div class="col-xs-4 selectBox">
 							        	<div class="select-param">
-						        			<select class="form-control input-sm" class="baseAttrValue"
+						        			<select class="form-control input-sm" class="baseAttrValue" <c:if test="${productAttrBean.isMust == 1 }">required</c:if>>
 													<%--<c:if test="${productAttrBean.isMust == 1 }">required</c:if>--%>>
 					                        	<option value="">--请选择--</option>
 					                       		<c:forEach items="${productAttrBean.attrValues }" var="attrValue">
@@ -897,7 +897,7 @@
 		 						var oldAttr = $(oTr).find("input[type='hidden']").val().split(";");
 		 						for(var j = 0; j<saleAttrCount; j++){
 		 							if(j == inputSaleIndex)
-		 								newVal += attrId+":"+valueId+":"+attrName+":"+valueName+";"
+		 								newVal += attrId+"|"+valueId+"|"+attrName+"|"+valueName+";"
 	 								else
 	 									newVal += oldAttr[j]+";";
 		 						}
@@ -982,7 +982,7 @@
 				$(this).attr("signData",allSignDataArr[i]);
 				$(this).find("input:eq(1)").attr("name","productPrice");
 				$(this).find("input:eq(2)").attr("name","productCount");
-				$(this).find("input:eq(3)").attr("name","customProductNum");
+				$(this).find("input:eq(3)").attr("name","customProductNo");
 				var value = "";
 				for(var j = 0; j<saleAttrCount; j++){
 					var valueName = $(this).find("td:eq("+j+")").text();

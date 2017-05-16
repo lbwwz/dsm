@@ -1,9 +1,7 @@
 package com.test.daoTest;
 
 import com.dsm.dao.IProductDao;
-import com.dsm.model.product.ProductBean;
-import com.dsm.model.product.ProductDetail;
-import com.dsm.model.product.ProductDetailAttrInfo;
+import com.dsm.model.product.*;
 import com.test.common.BaseJunitTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +59,23 @@ public class ProductDaoTest extends BaseJunitTest{
 
     @Test
     public void getProductDetailInfoTest(){
-        ProductDetail detail = productDao.getProductDetailInfo(1);
+        ProductDetail detail = productDao.getProductDetailInfo(15);
         System.out.println(detail);
+    }
+
+    @Test
+    public void addProductListTest() {
+
+        List<ProductImageItem> imageList = new ArrayList<>();
+
+        imageList.add(new ProductImageItem(1,"11111",1));
+        imageList.add(new ProductImageItem(1,"222",0));
+        productDao.addProductImageList(imageList);
+    }
+
+    @Test
+    public void addGraphicDetailTest() {
+        productDao.addGraphicDetail(new GraphicDetail(1,null));
     }
 
 
