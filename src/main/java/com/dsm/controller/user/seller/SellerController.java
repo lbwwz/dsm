@@ -137,11 +137,11 @@ public class SellerController extends BaseController {
 
         //校验通过
 //        System.out.println(JSONObject.toJSONString(releaseProductFormDTO));
-        BackMsg msg = productService.releaseProduct(releaseProductFormDTO);
+//        BackMsg msg = productService.releaseProduct(releaseProductFormDTO);
 //        }else{
 //
 //        }
-        return msg;
+        return null;
 
     }
 //

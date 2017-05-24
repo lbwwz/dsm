@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,8 +28,13 @@ public class CategoryServiceImpl  implements ICategoryService{
     @Override
     public boolean addCategoryList(List<CategoryBean> beans) {
         try{
-            if(beans.size()>0 && categoryDao.addCategoryList(beans)>0)
+            if(beans.size()>0 && categoryDao.addCategoryList(beans)>0){
+                if(beans.get(0).getParentId()!=0){
+                    //如果更新
+                }
                 return true;
+            }
+
         }catch (Exception ex){
             ex.printStackTrace();
         }
@@ -96,5 +102,27 @@ public class CategoryServiceImpl  implements ICategoryService{
         //反转集合中元素的顺序，使顺序由上级到下级
         Collections.reverse(catalogBeans);
         return catalogBeans;
+    }
+
+    @Override
+    public List<CategoryBean> getCatalogNavList(int catId){
+        return categoryDao.getCategoryNavList(catId);
+    }
+
+    @Override
+    public List<CategoryBean> getLeafCateLogList(int catId) {
+
+        List<CategoryBean> categoryList = categoryDao.getTreeCategoryList(catId);
+        Set<Integer> pIdSet = categoryList.stream().map(CategoryBean::getParentId).collect(Collectors.toSet());
+
+        Iterator<CategoryBean> it = categoryList.iterator();
+        while(it.hasNext()){
+            if(pIdSet.contains(it.next().getCatId())){
+                it.remove();
+            }
+        }
+
+
+        return categoryList;
     }
 }

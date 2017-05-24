@@ -45,13 +45,12 @@ public class HttpContextFilter extends OncePerRequestFilter {
 
         RequestResponseContext.setResponse(response);
         String requestURI = request.getRequestURI();
-        if (StringUtils.isNotBlank(requestURI))
+        if (StringUtils.isNotBlank(requestURI)){
             requestURI = requestURI.replace(request.getContextPath(), "");
-
+        }
         request = pattern.matcher(requestURI).matches()?request:new EscapeScriptWrapper(request);
 
         RequestResponseContext.setRequest(request);
-        RequestResponseContext.setResponse(response);
         filterChain.doFilter(request, response);
         RequestResponseContext.removeRequest();
         RequestResponseContext.removeResponse();

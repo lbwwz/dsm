@@ -47,14 +47,12 @@ public class ProductDaoTest extends BaseJunitTest{
         info.setAttrName("www");
         info.setAttrValue("aaasssasas");
         list.add(info);
-
-
         productDao.addProductCustomAttrList(list);
     }
 
     @Test
     public void getProductTest(){
-        System.out.println(productDao.getProductBaseInfo(5));
+        System.out.println(productDao.getProductBaseInfoById(1));
     }
 
     @Test
@@ -78,5 +76,14 @@ public class ProductDaoTest extends BaseJunitTest{
         productDao.addGraphicDetail(new GraphicDetail(1,null));
     }
 
+
+    @Test
+    public void getPageByCategoryWithWeightedTest() {
+        System.out.println(productDao.getPageByCategoryWithWeighted(1,2,2,"0.05","1","1","1","0"));
+    }
+    @Test
+    public void getPageByCategoryByPriceTest() {
+        System.out.println(productDao.getPageByCategoryByPrice(1,0,2,1));
+    }
 
 }

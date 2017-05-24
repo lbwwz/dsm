@@ -1,6 +1,7 @@
 package com.dsm.dao;
 
 import com.dsm.model.product.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public interface IProductDao {
      * 根据商品id查询相关的商品信息
      * @param productId 商品Id
      */
-    ProductBean getProductBaseInfo(Integer productId);
+    ProductBean getProductBaseInfoById(Integer productId);
 
     /**
      * 查询商品的详情信息
@@ -89,4 +90,12 @@ public interface IProductDao {
      */
     List<ProductBean> getProductByKey(Map<String,Object> keyParams);
 
+
+
+    List<ProductBean> getPageByCategoryWithWeighted(@Param("catId")Integer catId, @Param("start")int start,
+                                                    @Param("offset")int offset,  @Param("queryWeight")String ... queryWeight);
+
+
+    List<ProductBean> getPageByCategoryByPrice(@Param("catId")Integer catId, @Param("start")int start,
+                                               @Param("offset")int offset, @Param("sortType")int sortType);
 }

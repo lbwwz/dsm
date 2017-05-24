@@ -64,4 +64,21 @@ public interface ICategoryDao {
      */
     Integer changeStatus(Integer catId);
 
+
+    /**
+     * 获取该类目所在的父层级列表信息
+     *
+     * @param catId 类目id
+     * @return 层级目录信息列表
+     */
+    List<CategoryBean> getCategoryNavList(Integer catId);
+
+
+    /**
+     * 获取该类目子目录结构列表信息
+     *
+     * @param catId 类目id
+     * @return 层级目录信息列表
+     */
+    List<CategoryBean> getTreeCategoryList(Integer catId);
 }

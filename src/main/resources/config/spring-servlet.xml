@@ -21,20 +21,20 @@
 
     <!-- 默认访问跳转到首页(即定义无需Controller的url<->view直接映射) -->
     <!--<mvc:view-controller path="/" view-name="forward:/index.jsp"/>-->
-    <context:property-placeholder location="classpath:/dsm.properties" ignore-unresolvable="true"/>
+
     <!--配置项目内静态文件的过滤-->
     <!--suppress SpringModelInspection -->
-    <mvc:resources mapping="/js/**" location="${static.url}/js/"/>
+    <mvc:resources mapping="/js/**" location="/resources/js/"/>
     <!--suppress SpringModelInspection -->
-    <mvc:resources mapping="/css/**" location="${static.url}/css/"/>
+    <mvc:resources mapping="/css/**" location="/resources/css/"/>
     <!--suppress SpringModelInspection -->
-    <mvc:resources mapping="/images/**" location="${static.url}/images/"/>
+    <mvc:resources mapping="/images/**" location="/resources/images/"/>
     <!--suppress SpringModelInspection -->
-    <mvc:resources mapping="/font-awesome/**" location="${static.url}/font-awesome/"/>
+    <mvc:resources mapping="/font-awesome/**" location="/resources/font-awesome/"/>
     <!--suppress SpringModelInspection -->
-    <mvc:resources mapping="/fonts/**" location="${static.url}/fonts/"/>
+    <mvc:resources mapping="/fonts/**" location="/resources/fonts/"/>
     <!--suppress SpringModelInspection -->
-    <mvc:resources mapping="/bower_components/font-awesome/**" location="${static.url}/bower_components/font-awesome/"/>
+    <mvc:resources mapping="/bower_components/**" location="/resources/bower_components/"/>
     <!--配置图片存储地址对应的虚拟路径-->
     <!--suppress SpringModelInspection -->
     <mvc:resources mapping="/fileBase/**" location="/fileBase/**"/>
@@ -46,7 +46,7 @@
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <!--排除所有的静态资源-->
-            <mvc:exclude-mapping path="${static.url}/**"/>
+            <mvc:exclude-mapping path="/resources/**"/>
             <mvc:exclude-mapping path="/images/**"/>
             <mvc:exclude-mapping path="/js/**"/>
             <mvc:exclude-mapping path="/css/**"/>

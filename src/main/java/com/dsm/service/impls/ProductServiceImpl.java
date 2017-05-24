@@ -9,6 +9,7 @@ import com.dsm.dao.IProductSkuDao;
 import com.dsm.model.BackMsg;
 import com.dsm.model.formData.ReleaseProductFormDTO;
 import com.dsm.model.product.*;
+import com.dsm.service.interfaces.ICategoryService;
 import com.dsm.service.interfaces.IProductService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -209,6 +210,43 @@ public class ProductServiceImpl implements IProductService {
             return productDetail;
         }
     }
+
+    @Resource
+    private ICategoryService categoryService;
+
+    @Override
+    public List<ProductBean> getProductListByCat(Integer catId, int pageIndex, int num, int selectFlag) {
+       String[] queryWeight = getQueryFlagInfo(selectFlag);
+        //这里可以考虑使用缓存
+
+        //根据权重排序，分页查询相关的商品信息
+        List<ProductBean> list = productDao.getPageByCategoryWithWeighted(catId,pageIndex*num,num,queryWeight);
+
+
+//        return list;
+        return null;
+    }
+
+    /**
+     * 使用哪种权值排序
+     * @param selectFlag 0：默认；1：热度（点击量）；2：信用（好评分数）；3：价格（由低到高）；4：价格（由高到低）
+     * @return
+     */
+    private String[] getQueryFlagInfo(int selectFlag) {
+        switch (selectFlag){
+            case DsmConcepts.SEARCH_SORT_DEFAULT :
+                break;
+            case DsmConcepts.SEARCH_SORT_HOT :
+                break;
+            case DsmConcepts.SEARCH_SORT_PRICE_TO_SMALL :
+                break;
+            case DsmConcepts.SEARCH_SORT_PRICE_TO_LARGE :
+                break;
+
+        }
+        return  null;
+    }
+
 
     /**
      * 校验基本信息是否符合商品添加的相关要求

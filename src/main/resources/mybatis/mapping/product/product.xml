@@ -12,8 +12,8 @@
         <result column="sort_order" property="sort"/>
         <result column="product_name" property="productName"/>
         <result column="main_img" property="mainImage"/>
-        <result column="price_min" property="minPrice"/>
-        <result column="price_max" property="maxPrice"/>
+        <result column="min_price" property="minPrice"/>
+        <result column="max_price" property="maxPrice"/>
         <result column="product_status" property="status"/>
         <result column="is_best" property="isBest"/>
         <result column="is_new" property="isNew"/>
@@ -28,8 +28,8 @@
         <result column="sort_order" property="sort"/>
         <result column="product_name" property="productName"/>
         <result column="detail_text" property="detailText"/>
-        <result column="price_min" property="minPrice"/>
-        <result column="price_max" property="maxPrice"/>
+        <result column="min_price" property="minPrice"/>
+        <result column="max_price" property="maxPrice"/>
         <result column="product_status" property="status"/>
         <result column="is_best" property="isBest"/>
         <result column="is_new" property="isNew"/>
@@ -73,8 +73,6 @@
         <result column="create_time" property="createTime"/>
     </resultMap>
 
-
-
     <!--添加商品基本信息-->
     <insert id="addProductInfo" parameterType="ProductBean" useGeneratedKeys="true" keyProperty="productId">
         INSERT INTO
@@ -99,30 +97,6 @@
         </foreach>
     </insert>
 
-    <!--查询商品基本信息-->
-    <select id="getProductBaseInfo" resultMap="productResult" parameterType="int">
-        SELECT
-            product_id, cat_id, product_sn, product_name, click_count, brand_id, product_number, shop_id,
-            price_min, price_max, shop_price, warn_number,product_brief, main_img, product_grade, product_status,
-            is_best, is_new, is_hot, update_time, create_time
-        FROM dsm_product  WHERE product_id=#{productId}
-    </select>
-
-
-    <!--查询商品详细信息-->
-    <select id="getProductDetailInfo" resultMap="productDetailResult" parameterType="int">
-        SELECT
-            p.product_id, p.cat_id, p.product_sn, p.product_name, p.click_count, p.brand_id, p.product_number, p.shop_id,
-            p.price_min, p.price_max, p.shop_price, p.warn_number,p.product_brief, p.main_img, p.product_grade, p.product_status,
-            p.is_best, p.is_new, p.is_hot,d.detail_text, p.update_time,p.create_time
-        FROM dsm_product p LEFT JOIN dsm_product_graphic_detail d
-        ON p.product_id=d.product_id
-        HAVING p.product_id=#{productId};
-    </select>
-
-
-
-
     <!--添加商品的基础属性-->
     <insert id="addProductBaseAttrList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="productId">
         INSERT INTO dsm_product_base_attr(product_id, attr_id, attr_name, value_id, attr_value,create_time, update_time)
@@ -131,11 +105,6 @@
             (#{bean.productId}, #{bean.attrId}, #{bean.attrName}, #{bean.valueId}, #{bean.attrValue}, NOW(), NOW())
         </foreach>
     </insert>
-
-    <!--查询商品的基础属性-->
-    <select id="getProductBaseAttrInfo" resultMap="productDetailAttrInfoResult" parameterType="int">
-        SELECT * FROM dsm_product_base_attr WHERE product_id=#{productId}
-    </select>
 
     <!--添加商品的自定义属性-->
     <insert id="addProductCustomAttrList" parameterType="java.util.List"  useGeneratedKeys="true" keyProperty="productId">
@@ -146,13 +115,92 @@
         </foreach>
     </insert>
 
-    <!--查询商品的自定义属性-->
-    <select id="getProductCustomAttrInfo" resultMap="productDetailAttrInfoResult" parameterType="int">
-        SELECT * FROM dsm_product_custom_attr WHERE product_id=#{productId}
+
+
+    <!--根据商品id查询商品基本信息-->
+    <select id="getProductBaseInfoById" resultMap="productResult" parameterType="int">
+        SELECT
+            product_id, cat_id, product_sn, product_name, click_count, brand_id, product_number, shop_id,
+            min_price, max_price, shop_price, warn_number,product_brief, main_img, product_grade, product_status,
+            is_best, is_new, is_hot
+        FROM vdsm_user_product_base  WHERE product_id=#{productId} AND product_status=1
+
+
     </select>
 
+    <!--根据类目ID查询商品的基本信息列表-->
+    <select id="getProductBaseInfoByCatId" resultMap="productResult" parameterType="int">
+        SELECT product_id, cat_id, product_sn, product_name, click_count, brand_id, product_number, shop_id,
+            price_min, price_max, shop_price, warn_number,product_brief, main_img, product_grade, product_status,
+            is_best, is_new, is_hot
+        FROM dsm_product  WHERE catId=#{productId} AND status=1
+    </select>
+
+    <!--按照分类分页查询商品列表（依据权重）-->
+    <select id="getPageByCategoryWithWeighted" resultMap="productResult">
+        SELECT a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.product_number, a.shop_id,
+            a.price_min, a.price_max, a.shop_price, a.warn_number, a.product_brief, a.main_img, a.product_grade, a.product_status,
+            a.is_best, a.is_new, a.is_hot
+        FROM dsm_product a,
+            (
+                SELECT product_id FROM dsm_product
+                WHERE dsm_product.product_status=1 AND FIND_IN_SET(cat_id,fn_getChildCatList(#{0}))
+                ORDER BY fn_calculateSearchWeight(click_count,is_hot,is_new,is_best,0,#{3[0]},#{3[1]},#{3[2]},#{3[3]},#{3[4]}) DESC LIMIT #{1},#{2}
+            ) b
+        WHERE a.product_id=b.product_id;
+    </select>
+
+    <!--按照分类 依据商品的价格查询商品列表 -->
+    <select id="getPageByCategoryByPrice" resultMap="productResult">
+        SELECT * FROM vdsm_user_product_base a,
+        (
+            SELECT product_id FROM vdsm_user_product_base
+            WHERE product_status=1 AND FIND_IN_SET(cat_id,fn_getChildCatList(#{catId}))
+            ORDER BY
+            <choose>
+                <when test="sortType == 0">
+                    min_price
+                </when>
+                <otherwise>
+                    max_price DESC
+                </otherwise>
+            </choose>
+            LIMIT #{start}, #{offset}
+
+        ) b
+        WHERE a.product_id=b.product_id
+    </select>
+
+
+
+    <!--查询商品详细信息-->
+    <select id="getProductDetailInfo" resultMap="productDetailResult" parameterType="int">
+        SELECT
+            p.product_id, p.cat_id, p.product_sn, p.product_name, p.click_count, p.brand_id, p.product_number, p.shop_id,
+            p.min_price, p.max_price, p.shop_price, p.warn_number,p.product_brief, p.main_img, p.product_grade, p.product_status,
+            p.is_best, p.is_new, p.is_hot,d.detail_text, p.update_time,p.create_time
+        FROM vdsm_user_product_base p LEFT JOIN dsm_product_graphic_detail d
+        ON p.product_id=d.product_id
+        HAVING p.product_id=#{productId} AND p.product_status=1;
+    </select>
+
+    <!--查询商品的基础属性-->
+    <select id="getProductBaseAttrInfo" resultMap="productDetailAttrInfoResult" parameterType="int">
+        SELECT baseAttr_id, product_id, attr_id, attr_name, value_id, attr_value,sort_order,create_time,update_time
+        FROM dsm_product_base_attr WHERE product_id=#{productId} AND status=1;
+    </select>
+
+    <!--查询商品的自定义属性-->
+    <select id="getProductCustomAttrInfo" resultMap="productDetailAttrInfoResult" parameterType="int">
+        SELECT customAttr_id, product_id, attr_name, attr_value,sort_order,create_time,update_time
+        FROM dsm_product_custom_attr WHERE product_id=#{productId} AND status=1
+    </select>
+
+    <!--查询商品的图片列表-->
     <select id="getProductImageList" resultMap="productImageItemResult" parameterType="int">
         SELECT * FROM dsm_product_images WHERE product_id=#{productId}
     </select>
+
+
 
 </mapper>

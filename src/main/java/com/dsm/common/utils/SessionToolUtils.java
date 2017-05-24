@@ -41,8 +41,6 @@ public class SessionToolUtils {
     }
 
 
-    public static List<String> getUploadFile(HttpSession session){
-        return (List<String>) session.getAttribute(DsmConcepts.SESSION_UPLOAD_FILES);
-    }
+
 
 }

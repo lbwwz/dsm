@@ -2,7 +2,10 @@ package com.dsm.service.interfaces;
 
 import com.dsm.model.BackMsg;
 import com.dsm.model.formData.ReleaseProductFormDTO;
+import com.dsm.model.product.ProductBean;
 import com.dsm.model.product.ProductDetail;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,4 +28,8 @@ public interface IProductService {
     BackMsg releaseProduct(ReleaseProductFormDTO dto);
 
     ProductDetail getProductDetail(Integer productId);
+
+    List<ProductBean> getProductListByCat(Integer catId,int pageIndex,int num,int SelectFlag);
+
+
 }

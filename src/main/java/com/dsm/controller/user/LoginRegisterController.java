@@ -1,5 +1,6 @@
 package com.dsm.controller.user;
 
+import com.dsm.common.DsmConcepts;
 import com.dsm.common.utils.EncryptUtils;
 import com.dsm.common.utils.ServletToolUtils;
 import com.dsm.common.utils.ValidateUtils;
@@ -96,7 +97,7 @@ public class LoginRegisterController extends BaseController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public BackMsg login(String loginName, String password, @RequestParam(value = "isRemember", defaultValue = "0") String isRemember[]) {
 
-        String lastAccessUrl = (String) getSession().getAttribute("lastAccessUrl");
+        String lastAccessUrl = (String) getSession().getAttribute(DsmConcepts.LAST_ACCESS_URL);
         lastAccessUrl = lastAccessUrl == null ? getWebRoot() : lastAccessUrl;
         BackMsg backMsg;
         //校验是否已经登录

@@ -25,9 +25,6 @@
         <!--jedis 版本-->
         <jedis.version>2.9.0</jedis.version>
 
-        <!--业务配置-->
-        <log4j2.LOG_LEVEL>INFO</log4j2.LOG_LEVEL>
-        <static.url>/resources</static.url>
     </properties>
 
     <build>

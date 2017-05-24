@@ -50,6 +50,8 @@
         WHERE cat_id=#{catId}
     </select>
 
+
+
     <!--更新一条类目-->
     <update id="updateCategory" parameterType="CategoryBean">
         UPDATE dsm_category
@@ -80,16 +82,15 @@
         UPDATE dsm_category SET status=1-status WHERE cat_id=#{catId}
     </update>
 
-    <!--插入一条信息数据-->
-    <insert id="addIdentifyInfo" parameterType="IdentifyInfo" useGeneratedKeys="true" keyProperty="identityId">
-        INSERT INTO dsm_user_identify_info(user_id, user_realName, user_idCardNum, identification_image)
-        values (#{userId},#{realName},#{idCardNum},#{imageUrl})
-    </insert>
+    <select id="getCategoryNavList" resultMap="categoryResult" parameterType="int">
+        SELECT * FROM dsm_category WHERE FIND_IN_SET(cat_id,fn_getParentCatList(#{catId}))
+    </select>
 
-    <!--删除某条物流地址信息(触发器中将级联删除location中的地址信息)-->
-    <delete id="deleteShippingAddress" parameterType="int">
-        DELETE FROM dsm_shipping_address WHERE address_id=#{addressId}
-    </delete>
+    <!-- 获取树状结构的类目信息 -->
+    <select id="getTreeCategoryList" resultMap="categoryResult" parameterType="int">
+        SELECT * FROM dsm_category WHERE FIND_IN_SET(cat_id,fn_getChildCatList(#{catId}))
+    </select>
+
 
 
 </mapper>

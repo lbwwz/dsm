@@ -35,7 +35,7 @@
 
 
     <!-- Spring MVC配置 ====================================== -->
-    <!--设置进入servlet的请求编码-->
+    <!-- 设置servlet的请求编码 -->
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -53,7 +53,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     <!-- 设置servlet编码结束 -->
-
 
     <!-- 配置Shiro过滤器,先让Shiro过滤系统接收到的请求 -->
     <!-- 这里filter-name必须对应 spring-applicationContext.xml 中定义的<bean id="shiroFilter"/> -->
@@ -79,7 +78,7 @@
         <!--设置 xss 校验的排除请求-->
         <init-param>
             <param-name>XSS_exclude</param-name>
-            <param-value>/;/js/*;/css/*;/images/*;/fonts/*;/font-awesome/*;/front-lib/*</param-value>
+            <param-value>/;/js/*;/css/*;/images/*;/fonts/*;/font-awesome/*;/front-lib/*;/bower_components/*;/fileBase/*</param-value>
         </init-param>
     </filter>
     <filter-mapping>

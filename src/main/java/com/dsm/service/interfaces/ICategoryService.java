@@ -61,5 +61,17 @@ public interface ICategoryService {
      * @param catId 目录ID
      * @return 所有上级目录信息列表
      */
+    @Deprecated
     List<CategoryBean> getLevelCatalog(int catId);
+
+
+    /**
+     * 根据目录ID获取目录的所有链式上级目录
+     *
+     * @param catId 目录ID
+     * @return 该目录和上级目录所在的层级信息（getLevelCatalog的代替方法）
+     */
+    List<CategoryBean> getCatalogNavList(int catId);
+
+    List<CategoryBean> getLeafCateLogList(int catId);
 }
