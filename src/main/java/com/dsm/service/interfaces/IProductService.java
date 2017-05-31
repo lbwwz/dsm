@@ -29,7 +29,15 @@ public interface IProductService {
 
     ProductDetail getProductDetail(Integer productId);
 
-    List<ProductBean> getProductListByCat(Integer catId,int pageIndex,int num,int SelectFlag);
+    /**
+     * 条件查询类目下的商品列表
+     * @param catId 类目
+     * @param pageIndex 页面index
+     * @param num 每页商品数量
+     * @param sortType 排序规则 0：默认；1：热度（点击量）；2：信用（好评分数）；3：价格（由低到高）；4：价格（由高到低）
+     * @return 商品列表信息
+     */
+    List<ProductBean> getProductListByCat(Integer catId,int pageIndex,int num,int sortType);
 
 
 }

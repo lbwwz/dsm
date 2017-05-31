@@ -1,7 +1,5 @@
 package com.dsm.service.interfaces;
 
-import com.dsm.model.BackMsg;
-import com.dsm.model.formData.ReleaseProductFormDTO;
 import com.dsm.model.product.AttrValueBean;
 import com.dsm.model.product.ProductAttrBean;
 
@@ -84,5 +82,5 @@ public interface IProductAttrService {
     boolean changeAttrValueStatus(Integer valueId);
 
 
-
+    List<ProductAttrBean> getKeyAttrList(Integer catId);
 }

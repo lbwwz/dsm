@@ -82,6 +82,7 @@
         UPDATE dsm_category SET status=1-status WHERE cat_id=#{catId}
     </update>
 
+    <!-- 获取当前类目所在的类目级 -->
     <select id="getCategoryNavList" resultMap="categoryResult" parameterType="int">
         SELECT * FROM dsm_category WHERE FIND_IN_SET(cat_id,fn_getParentCatList(#{catId}))
     </select>

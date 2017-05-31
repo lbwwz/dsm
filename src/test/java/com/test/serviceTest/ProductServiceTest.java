@@ -90,6 +90,13 @@ public class ProductServiceTest extends BaseJunitTest {
         System.out.println(productService.getProductDetail(1));
     }
 
+
+    @Test
+    public void getProductListByCatTest() {
+
+        System.out.println(productService.getProductListByCat(1,0,2,0));
+    }
+
 //    @Resource
 //    private
 

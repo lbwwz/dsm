@@ -26,9 +26,9 @@
         <div id="search_box" class="col-xs-7">
             <form class="form-inline" style="margin:0;">
                 <div class="input-group col-xs-12">
-                    <input id="search" name="search" class="form-control input-lg" type="search" placeholder="商品搜索" />
+                    <input id="search" name="search" class="form-control input-md" type="search" placeholder="商品搜索" />
                     <span id="search_btn" class="input-group-btn">
-                    <button class="btn btn-info btn-lg" type="button">搜索</button>
+                    <button class="btn btn-info btn-md" type="button">搜索</button>
                     </span> </div>
             </form>
         </div>

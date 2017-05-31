@@ -179,7 +179,7 @@ public class ProductAttrBean implements Comparable<ProductAttrBean>,Serializable
      */
 	@Override
 	public int compareTo(ProductAttrBean o) {
-		return this.attrSort-o.attrSort;
+		return this.attrSort-o.getAttrSort();
 	}
 
 

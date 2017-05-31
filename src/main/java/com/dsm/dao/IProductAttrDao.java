@@ -131,6 +131,10 @@ public interface IProductAttrDao {
      */
     Integer changeValueStatus(Integer valueId);
 
-
-
+    /**
+     * 查询叶子类目下的key属性信息
+     * @param catId 类目ID
+     * @return 属性列表
+     */
+    List<ProductAttrBean> getKeyAttrInfoList(Integer catId);
 }

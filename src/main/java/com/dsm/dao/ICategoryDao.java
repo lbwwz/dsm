@@ -1,6 +1,7 @@
 package com.dsm.dao;
 
 import com.dsm.model.product.CategoryBean;
+import com.dsm.model.product.ProductAttrBean;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -81,4 +82,7 @@ public interface ICategoryDao {
      * @return 层级目录信息列表
      */
     List<CategoryBean> getTreeCategoryList(Integer catId);
+
+
+
 }

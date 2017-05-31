@@ -13,7 +13,7 @@ import java.util.Map;
  * Date: 2017/2/27
  *
  * @author : Lbwwz
- *         <p>
+ *         <p/>
  *         商品操作的dao
  */
 @Component
@@ -35,12 +35,14 @@ public interface IProductDao {
 
     /**
      * 根据商品id查询相关的商品信息
+     *
      * @param productId 商品Id
      */
     ProductBean getProductBaseInfoById(Integer productId);
 
     /**
      * 查询商品的详情信息
+     *
      * @param productId 商品id
      */
     ProductDetail getProductDetailInfo(Integer productId);
@@ -48,6 +50,7 @@ public interface IProductDao {
 
     /**
      * 查询商品的图片信息
+     *
      * @param productId 商品id
      */
     ProductDetail getProductImageList(Integer productId);
@@ -55,12 +58,14 @@ public interface IProductDao {
 
     /**
      * 为发布的商品添加基本属性
+     *
      * @param info 要添加的基本属性信息
      */
     Integer addProductBaseAttrList(List<ProductDetailAttrInfo> info);
 
     /**
      * 获取商品的基本属性
+     *
      * @param productId productId
      * @return
      */
@@ -68,6 +73,7 @@ public interface IProductDao {
 
     /**
      * 为发布的商品添加自定义属性
+     *
      * @param info 要添加自定义属性信息
      * @return
      */
@@ -75,6 +81,7 @@ public interface IProductDao {
 
     /**
      * 获取商品的自定义属性
+     *
      * @param productId
      * @return
      */
@@ -83,19 +90,37 @@ public interface IProductDao {
 
     /**
      * 根据关键字查询相关的商品信息
+     *
      * @param keyParams 查询信息封装
-     *              ├── start: 查询页面起点
-     *              └── num: 查询的数量
+     *                  ├── start: 查询页面起点
+     *                  └── num: 查询的数量
      * @return 商品信息
      */
-    List<ProductBean> getProductByKey(Map<String,Object> keyParams);
+    List<ProductBean> getProductByKey(Map<String, Object> keyParams);
 
 
+    /**
+     * 类目下分页查询商品列表数据 —— 按照自定义的权重查询
+     *
+     * @param catId       类目ID
+     * @param start       起点
+     * @param offset      偏移量
+     * @param queryWeight 权重数组
+     * @return
+     */
+    List<ProductBean> getPageByCategoryWithWeighted(@Param("catId") Integer catId, @Param("start") int start,
+                                                    @Param("offset") int offset, @Param("queryWeight") String... queryWeight);
 
-    List<ProductBean> getPageByCategoryWithWeighted(@Param("catId")Integer catId, @Param("start")int start,
-                                                    @Param("offset")int offset,  @Param("queryWeight")String ... queryWeight);
 
-
-    List<ProductBean> getPageByCategoryByPrice(@Param("catId")Integer catId, @Param("start")int start,
-                                               @Param("offset")int offset, @Param("sortType")int sortType);
+    /**
+     * 类目下分页查询商品列表数据 —— 按照类目依据价格的分页查找
+     *
+     * @param catId    类目ID
+     * @param start    起点
+     * @param offset   偏移量
+     * @param sortType 排序方法: 0：价格从小到达；1：价格从大到小
+     * @return 一页商品的数据
+     */
+    List<ProductBean> getPageByCategoryByPrice(@Param("catId") Integer catId, @Param("start") int start,
+                                               @Param("offset") int offset, @Param("sortType") int sortType);
 }

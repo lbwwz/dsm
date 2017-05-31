@@ -9,7 +9,6 @@ import com.dsm.dao.IProductSkuDao;
 import com.dsm.model.BackMsg;
 import com.dsm.model.formData.ReleaseProductFormDTO;
 import com.dsm.model.product.*;
-import com.dsm.service.interfaces.ICategoryService;
 import com.dsm.service.interfaces.IProductService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -205,44 +204,68 @@ public class ProductServiceImpl implements IProductService {
             ProductDetail productDetail = productDao.getProductDetailInfo(productId);
             if (productDetail != null) {
                 //设置商品的缓存时间为20分钟过
-                redisService.set("productDetail_" + productId, JSONObject.toJSONString(productDetail), 1200);
+                redisService.set("productDetail_" + productId, JSONObject.toJSONString(productDetail), 600);
             }
             return productDetail;
         }
     }
 
-    @Resource
-    private ICategoryService categoryService;
 
+
+    @Transactional(timeout = 10000)
     @Override
-    public List<ProductBean> getProductListByCat(Integer catId, int pageIndex, int num, int selectFlag) {
-       String[] queryWeight = getQueryFlagInfo(selectFlag);
-        //这里可以考虑使用缓存
+    public List<ProductBean> getProductListByCat(Integer catId, int pageIndex, int num, int sortType) {
+        if(catId== null){
+            return null;
+        }
+        try {
+            //这里可以考虑使用缓存
+            String productList = redisService.get("productList_" + catId + "_" + pageIndex + "_" + sortType);
 
-        //根据权重排序，分页查询相关的商品信息
-        List<ProductBean> list = productDao.getPageByCategoryWithWeighted(catId,pageIndex*num,num,queryWeight);
+            if (StringUtils.isNoneBlank(productList)) {
+                return JSONObject.parseArray(productList, ProductBean.class);
+            }
+            //缓存中不存在
+            List<ProductBean> list;
 
+            if (sortType < 3) { //默认排序和点击排序
+                String[] queryWeight = getQueryTypeInfo(sortType);
+                //根据权重排序，分页查询相关的商品信息
+                list = productDao.getPageByCategoryWithWeighted(catId, pageIndex * num, num, queryWeight);
+            } else {
+                if (sortType == DsmConcepts.SEARCH_SORT_PRICE_TO_LARGE) {
+                    list = productDao.getPageByCategoryByPrice(catId, pageIndex * num, num, 0);
+                } else {
+                    list = productDao.getPageByCategoryByPrice(catId, pageIndex * num, num, 1);
+                }
+            }
+            if (list != null && list.size() > 0) {
+                //设置商品的缓存时间为15分钟
+                redisService.set("productList_"+catId+"_" + pageIndex+"_"+sortType, JSONObject.toJSONString(list), 900);
+            }
+            return list;
+        } catch (Exception ex) {
+            logger.error("类目查询商品信息失败：{}", ex.getMessage());
+        }
 
-//        return list;
         return null;
     }
 
     /**
      * 使用哪种权值排序
-     * @param selectFlag 0：默认；1：热度（点击量）；2：信用（好评分数）；3：价格（由低到高）；4：价格（由高到低）
+     * @param sortType 0：默认；1：热度（点击量）；2：信用（好评分数）；3：价格（由低到高）；4：价格（由高到低）
      * @return
      */
-    private String[] getQueryFlagInfo(int selectFlag) {
-        switch (selectFlag){
+    private String[] getQueryTypeInfo(int sortType) {
+        switch (sortType){
             case DsmConcepts.SEARCH_SORT_DEFAULT :
-                break;
+                return new String[]{"0.05","1","1","1","0"};
             case DsmConcepts.SEARCH_SORT_HOT :
+                return new String[]{"1","0","0","0","0"};
+            case DsmConcepts.SEARCH_SORT_PRICE_TO_LARGE :
                 break;
             case DsmConcepts.SEARCH_SORT_PRICE_TO_SMALL :
                 break;
-            case DsmConcepts.SEARCH_SORT_PRICE_TO_LARGE :
-                break;
-
         }
         return  null;
     }

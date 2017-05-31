@@ -1,4 +1,4 @@
-package com.dsm.controller.home;
+package com.dsm.controller;
 
 import com.dsm.controller.common.BaseController;
 import org.springframework.stereotype.Controller;

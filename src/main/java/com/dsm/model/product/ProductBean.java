@@ -17,6 +17,8 @@ public class ProductBean implements Serializable{
     protected Integer productId;
     //店铺ID
     protected Integer shopId;
+    //店铺名称
+    protected String shopName;
     //分类ID
     protected Integer catId;
     //品牌ID
@@ -76,6 +78,14 @@ public class ProductBean implements Serializable{
 
     public void setShopId(Integer shopId) {
         this.shopId = shopId;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 
     public Integer getCatId() {
@@ -211,11 +221,13 @@ public class ProductBean implements Serializable{
         return "ProductBean{" +
                 "productId=" + productId +
                 ", shopId=" + shopId +
+                ", shopName='" + shopName + '\'' +
                 ", catId=" + catId +
                 ", brandId=" + brandId +
                 ", productName='" + productName + '\'' +
                 ", productSn='" + productSn + '\'' +
                 ", mainImage='" + mainImage + '\'' +
+                ", productBrief='" + productBrief + '\'' +
                 ", minPrice=" + minPrice +
                 ", maxPrice=" + maxPrice +
                 ", keywords='" + keywords + '\'' +

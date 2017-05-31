@@ -74,4 +74,7 @@ public interface ICategoryService {
     List<CategoryBean> getCatalogNavList(int catId);
 
     List<CategoryBean> getLeafCateLogList(int catId);
+
+
+
 }

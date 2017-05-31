@@ -1,4 +1,4 @@
-package com.dsm.controller.home;
+package com.dsm.controller;
 
 import com.dsm.model.address.CityBean;
 import com.dsm.model.address.DistrictBean;

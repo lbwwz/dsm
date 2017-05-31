@@ -9,11 +9,11 @@
         <id column="attr_id" property="attrId"/>
         <result column="cat_id" property="catId"/>
         <result column="attr_name" property="attrName"/>
-        <result column="sort_order" property="attrSort"/>
+        <result column="attr_sort" property="attrSort"/>
         <result column="is_sale_attr" property="isSale"/>
         <result column="is_key_attr" property="isKey"/>
         <result column="is_must" property="isMust"/>
-        <result column="status" property="status"/>
+        <result column="attr_status" property="status"/>
         <collection property="attrValues" ofType="AttrValueBean" resultMap="AttrValueResult"/>
     </resultMap>
 
@@ -22,11 +22,11 @@
         <id column="attr_id" property="attrId"/>
         <result column="cat_id" property="catId"/>
         <result column="attr_name" property="attrName"/>
-        <result column="sort_order" property="attrSort"/>
+        <result column="attr_sort" property="attrSort"/>
         <result column="is_sale_attr" property="isSale"/>
         <result column="is_key_attr" property="isKey"/>
         <result column="is_must" property="isMust"/>
-        <result column="status" property="status"/>
+        <result column="attr_status" property="status"/>
     </resultMap>
 
     <!--AttrValue 属性名与字段之间的映射-->
@@ -35,9 +35,8 @@
         <id column="value_id" property="valueId"/>
         <result column="name" property="valueName"/>
         <result column="attr_id" property="attrId"/>
-        <result column="cat_id" property="catId"/>
-        <result column="sort_order" property="valueSort"/>
-        <result column="status" property="status"/>
+        <result column="value_sort" property="valueSort"/>
+        <result column="value_status" property="status"/>
     </resultMap>
 
     <!--======== 属性的相关操作 ========-->
@@ -45,9 +44,9 @@
     <!--查询品类下可用的商品可用属性信息（含属性值）-->
     <select id="getAttrByCat" resultMap="productAttrResult" parameterType="int">
         SELECT *
-        FROM dsm_product_def_attribute_values v
-        LEFT OUTER JOIN dsm_product_def_attribute a ON a.attr_id = v.attr_id
-        WHERE a.cat_id=#{catId} AND a.status=1 AND v.status=1
+        FROM dsm_product_def_attribute a
+        LEFT OUTER JOIN dsm_product_def_attribute_values v ON a.attr_id = v.attr_id
+        WHERE a.cat_id=#{catId} AND a.attr_status=1 AND v.value_status=1
     </select>
 
     <!--查询品类下商品属性名（不含属性值）-->
@@ -57,30 +56,38 @@
         <trim prefix="WHERE" prefixOverrides="AND">
             cat_id=#{catId}
             <if test="status gte 0">
-                AND status=#{status}
+                AND attr_status=#{status}
             </if>
         </trim>
     </select>
 
 
-    <!--根据ID查询可用的商品属性信息-->
+    <!--根据类目ID查询可用的商品属性信息-->
     <select id="getUsableAttrById" resultMap="productAttrResult" parameterType="int">
         SELECT *
-        FROM dsm_product_def_attribute_values v
-        LEFT OUTER JOIN dsm_product_def_attribute a ON a.attr_id = v.attr_id
-        WHERE a.attr_id=#{catId} AND a.status=1 AND v.status=1
+        FROM dsm_product_def_attribute a
+        LEFT OUTER JOIN dsm_product_def_attribute_values v ON a.attr_id = v.attr_id
+        WHERE a.attr_id=#{catId} AND a.attr_status=1 AND v.value_status=1
     </select>
 
     <!--根据ID查询商品属性名称-->
     <select id="getAttrNameById" resultMap="ProductAttrNameResult" parameterType="java.util.Map">
-        SELECT attr_id, cat_id, attr_name, sort_order, is_sale_attr, is_key_attr, is_must, status
+        SELECT attr_id, cat_id, attr_name, sort_order, is_sale_attr, is_key_attr, is_must, attr_status
         FROM dsm_product_def_attribute
         <trim prefix="WHERE" prefixOverrides="AND">
             attr_id=#{attrId}
             <if test="status gte 0">
-                AND status=#{status}
+                AND attr_status=#{status}
             </if>
         </trim>
+    </select>
+
+    <select id="getKeyAttrInfoList" resultMap="productAttrResult" parameterType="int">
+        SELECT *
+        FROM dsm_product_def_attribute a
+        LEFT OUTER JOIN dsm_product_def_attribute_values v ON a.attr_id = v.attr_id
+        WHERE a.is_key_attr=1 AND a.cat_id=#{catId}
+        ORDER BY attr_sort DESC
     </select>
 
     <!--品类下添加一组商品属性-->
@@ -102,7 +109,7 @@
     <!--更改品类下一组商品属性可用状态-->
     <update id="changeAttrStatus" parameterType="int">
         UPDATE dsm_product_def_attribute
-        SET status=1-status
+        SET attr_status=1-attr_status
         WHERE attr_id=#{attrId}
     </update>
 
@@ -133,7 +140,7 @@
     </select>
 
     <!--品类下添加一组商品属性值-->
-    <insert id="addAttrValues"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="atteId">
+    <insert id="addAttrValues"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="attrId">
         INSERT INTO dsm_product_def_attribute_values(name, attr_id, status, edit_date)
         VALUES
         <foreach collection="list" item="bean" index="index" separator="," >

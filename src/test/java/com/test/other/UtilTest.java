@@ -214,5 +214,11 @@ public class UtilTest {
         System.out.println(is);
     }
 
+    @Test
+    public void test16(){
+        String a = "123_231%";
+        System.out.println(Arrays.toString(a.split("%")));
+    }
+
 
 }

@@ -75,6 +75,7 @@ public class ProductDetail extends ProductBean implements Serializable{
         return "ProductDetail{" +
                 "productId=" + productId +
                 ", shopId=" + shopId +
+                ", shopName='" + shopName + '\'' +
                 ", catId=" + catId +
                 ", brandId=" + brandId +
                 ", productName='" + productName + '\'' +

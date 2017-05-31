@@ -31,8 +31,9 @@ public class DsmConcepts {
 
     public static final int SEARCH_SORT_DEFAULT=0;      //查找排序——默认
     public static final int SEARCH_SORT_HOT=1;          //查找排序——点击量
-    public static final int SEARCH_SORT_PRICE_TO_LARGE=2;   //查找排序——价格从低到高
-    public static final int SEARCH_SORT_PRICE_TO_SMALL=3;   //查找排序——价格从高到低
+    public static final int SEARCH_SORT_CREDIT=2;          //查找排序——信用（商品好评率）
+    public static final int SEARCH_SORT_PRICE_TO_LARGE=3;   //查找排序——价格从低到高
+    public static final int SEARCH_SORT_PRICE_TO_SMALL=4;   //查找排序——价格从高到低
     /***** 业务相关编号 end *****/
 
     /*****  业务名称 start  *****/

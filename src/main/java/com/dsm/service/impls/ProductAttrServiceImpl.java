@@ -139,5 +139,13 @@ public class ProductAttrServiceImpl implements IProductAttrService {
         }
     }
 
+    @Override
+    public List<ProductAttrBean> getKeyAttrList(Integer catId) {
+        if(catId<1){
+            return null;
+        }
+        return productAttrDao.getKeyAttrInfoList(catId);
+    }
+
 
 }

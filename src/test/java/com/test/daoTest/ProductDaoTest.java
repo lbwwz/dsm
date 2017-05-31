@@ -79,11 +79,11 @@ public class ProductDaoTest extends BaseJunitTest{
 
     @Test
     public void getPageByCategoryWithWeightedTest() {
-        System.out.println(productDao.getPageByCategoryWithWeighted(1,2,2,"0.05","1","1","1","0"));
+        System.out.println(productDao.getPageByCategoryWithWeighted(1,0,6,"0.05","1","1","1","0"));
     }
     @Test
     public void getPageByCategoryByPriceTest() {
-        System.out.println(productDao.getPageByCategoryByPrice(1,0,2,1));
+        System.out.println(productDao.getPageByCategoryByPrice(1,0,12,0));
     }
 
 }
