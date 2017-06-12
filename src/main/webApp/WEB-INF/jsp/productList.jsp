@@ -132,7 +132,9 @@
     <div class="row productList_panel">
         <c:forEach items="${productList}" var="productItem">
         <div class="item_box" >
+            <a href="${webRoot}/item.html?id=${productItem.productId}" target="_blank">
             <img class="item_image"  src="${productItem.mainImage}"  alt="${productItem.productName}">
+            </a>
             <div class="item_info">
                 <p class="item_sale">￥<strong>${sortType==4?productItem.maxPrice:productItem.minPrice}</strong><font style="font-size:12px;float:right">123人付款</font></p>
                 <div class="item_name"><a href="javascript:;">${productItem.productName}</a></div>
@@ -198,11 +200,11 @@
 <script type="text/javascript">
     $(document).ready(function(){
 
-        /* 类目下选择标签 */
+        /* 类目下的条件筛选和排序操作 */
         $("[id^='select_'] dd").add(".selected").add(".sortButton").click(function () {
             var url = window.location.href;
             var param;
-            if($(this).attr("class") == "sortButton"){
+            if($(this).attr("class") == "sortButton"){  //条件排序
                 param = "sort="+$(this).attr("type_data");
                 if(url.split("sort=").length==1){
                     window.location.href = url+"&"+param;
@@ -212,45 +214,23 @@
                 //操作排序内容
 
             }else if($(this).attr("class") == "selected"){
-console.log(123)
-            }else{
-                window.location.href = url.split("ev=").join("ev="+$(this).attr("attr_id")+"_"+$(this).attr("value_id")+"%40")
+                param = $(this).attr("attr_id")+"_"+$(this).attr("value_id");
+
+                if(url.indexOf(param+"%40")!=-1){
+                    window.location.href = url.split(param+"%40").join("");
+                }else{
+                    window.location.href = url.split(param).join("");
+                }
+            }else{      //属性筛选（增加）
+                param = "ev="+$(this).attr("attr_id")+"_"+$(this).attr("value_id");
+                if(url.split("ev=").length==1){
+                    window.location.href = url+"&"+param;
+                }else{
+                    window.location.href = url.split("ev=").join("ev="+$(this).attr("attr_id")+"_"+$(this).attr("value_id")+"%40")
+                }
+
             }
-
-//            var index = $(this).attr("attr_id");
-//            $(this).addClass("selected").siblings().removeClass("selected");
-//            if ($(this).hasClass("select_all")) {
-//                $("#select"+index).remove();
-//            } else {
-//                var copyThis = $(this).clone();
-//                if ($("#selected"+index).length > 0) {
-//                    $("#selected"+index+" a").html($(this).parents("dl").find("dt").text()+$(this).text());
-//                } else {
-//                    copyThis.find("a").text($(this).parents("dl").find("dt").text()+$(this).text());
-//                    $(".select_result dl").append(copyThis.attr("id","selected"+index));
-//                }
-//            }
-//            if ($("[id^=selected]").length == 0 ) {
-//                $(".select_no").show();
-//            } else {
-//                $(".select_no").hide();
-//
-//            }
-//            searchByAttrInfo();
         });
-
-        $(".select_result").on("click","[id^=selected]", function () {
-            var attrId = $(this).attr("attr_id");
-            $(this).remove();
-            $("#select_"+attrId+" .select_all").addClass("selected").siblings().removeClass("selected");
-
-            if ($("[id^=selected]").length == 0 ) {
-                $(".select_no").show();
-            }
-            searchByAttrInfo();
-        });
-
-
 
 
         //价格排序的tab
@@ -279,24 +259,5 @@ console.log(123)
 
     }
 
-
-//    function searchByAttrInfo(){
-//        var attrConditions = [];
-//        var $_objList = $(".select_result .selected");
-//        for(var i =0; i < $_objList.length; i++){
-//            attrConditions.push($($_objList[i]).attr("attr_id")+":"+$($_objList[i]).attr("value_id"))
-//        }
-//
-//        var catId = window.location.href.substring(window.location.href.lastIndexOf("\/")+1);
-//        $.ajax({
-//            type:"post",
-//            url:"/category/searchByAttrInfo",
-//            traditional: true,
-//            data:{catId:catId,attrConditions:attrConditions},
-//            success:function(data){
-//
-//            }
-//        })
-//    }
 
 </script>

@@ -12,10 +12,7 @@ import org.springframework.beans.BeanUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -218,6 +215,14 @@ public class UtilTest {
     public void test16(){
         String a = "123_231%";
         System.out.println(Arrays.toString(a.split("%")));
+    }
+
+    @Test
+    public void test17(){
+
+        UUID uuid = UUID.randomUUID();
+        System.out.println(".{"+uuid.toString()+"}");
+
     }
 
 

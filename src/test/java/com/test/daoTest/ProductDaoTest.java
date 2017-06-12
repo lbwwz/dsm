@@ -79,11 +79,29 @@ public class ProductDaoTest extends BaseJunitTest{
 
     @Test
     public void getPageByCategoryWithWeightedTest() {
-        System.out.println(productDao.getPageByCategoryWithWeighted(1,0,6,"0.05","1","1","1","0"));
+
+        BaseAttrBean bean1 = new BaseAttrBean(1,"",21,null,1);
+        BaseAttrBean bean2 = new BaseAttrBean(1,"",4,null,1);
+        List<BaseAttrBean> list = new ArrayList<>();
+        list.add(bean1);
+        list.add(bean2);
+        list = list.subList(0,0);
+        System.out.println(productDao.getPageByCategoryWithWeightValue(1,0,6,list,"0.05","1","1","1","0"));
     }
     @Test
     public void getPageByCategoryByPriceTest() {
-        System.out.println(productDao.getPageByCategoryByPrice(1,0,12,0));
+        System.out.println(productDao.getPageByCategoryWithPrice(1,0,12,0, null));
     }
+
+    @Test
+    public void getPageByCategoryByPriceNewTest() {
+        System.out.println(productDao.getPageByCategoryWithPriceNew(1,1500,1, null));
+    }
+
+    @Test
+    public void getPageByCategoryWithWeightValueNewTest() {
+        System.out.println(productDao.getPageByCategoryWithWeightValueNew(1,1500,null,"0.05","1","1","1","0"));
+    }
+
 
 }

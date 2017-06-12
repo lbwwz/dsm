@@ -94,7 +94,7 @@ public class ProductServiceTest extends BaseJunitTest {
     @Test
     public void getProductListByCatTest() {
 
-        System.out.println(productService.getProductListByCat(1,0,2,0));
+        System.out.println(productService.getProductListByCat(1,0,2,3, "12_12@1_4"));
     }
 
 //    @Resource

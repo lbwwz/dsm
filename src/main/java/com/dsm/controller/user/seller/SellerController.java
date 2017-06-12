@@ -98,7 +98,7 @@ public class SellerController extends BaseController {
      */
     @ResponseBody
     @RequestMapping("/uploadProductImg")
-    public List<BackMsg> uploadProductImg(@RequestParam MultipartFile[] productImgUpload) {
+    public List<BackMsg<String>> uploadProductImg(@RequestParam MultipartFile[] productImgUpload) {
 
         return fileUploadService.uploadFilesWithSaveInfo(productImgUpload, "/fileZone/" + getSessionUser().getId() + "/image/product",
                 DsmConcepts.IMAGE_PRODUCT_TYPE);

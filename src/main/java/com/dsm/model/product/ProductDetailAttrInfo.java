@@ -1,6 +1,7 @@
 package com.dsm.model.product;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,6 +29,11 @@ public class ProductDetailAttrInfo implements Serializable{
     private Integer valueId;
     //固有属性对定的属性值
     private String attrValue;
+
+    /*针对销售属性的属性值*/
+    private Set<AttrValueBean> saleAttrValues;
+
+
     //排序
     private Integer sort;
     //详情商品属性状态
@@ -47,6 +53,11 @@ public class ProductDetailAttrInfo implements Serializable{
         this.productId = productId;
         this.attrName = attrName;
         this.attrValue = attrValue;
+    }
+    public ProductDetailAttrInfo(Integer attrId,String attrName,Set<AttrValueBean> saleAttrValues){
+        this.attrId = attrId;
+        this.attrName = attrName;
+        this.saleAttrValues = saleAttrValues;
     }
 
     public Integer getBaseAttrId() {
@@ -121,6 +132,14 @@ public class ProductDetailAttrInfo implements Serializable{
         this.status = status;
     }
 
+    public Set<AttrValueBean> getSaleAttrValues() {
+        return saleAttrValues;
+    }
+
+    public void setSaleAttrValues(Set<AttrValueBean> saleAttrValues) {
+        this.saleAttrValues = saleAttrValues;
+    }
+
     @Override
     public String toString() {
         return "ProductDetailAttrInfo{" +
@@ -131,6 +150,7 @@ public class ProductDetailAttrInfo implements Serializable{
                 ", attrName='" + attrName + '\'' +
                 ", valueId=" + valueId +
                 ", attrValue='" + attrValue + '\'' +
+                ", saleAttrValues=" + saleAttrValues +
                 ", sort=" + sort +
                 ", status=" + status +
                 '}';

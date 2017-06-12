@@ -117,16 +117,16 @@ public class AccountController extends BaseController {
 
         String errorMsg = checkIdentifyInfo(identifyInfoDTO);
         if (!StringUtils.isEmpty(errorMsg)) {
-            return new BackMsg(1,null,errorMsg);
+            return new BackMsg<>(1,null,errorMsg);
         }
-        BackMsg backMsg = null;
+        BackMsg backMsg;
         //校验信息重复提交
         if (ServletToolUtils.checkRepeatSubmit(getSession(), idCheckToken, "idCheckToken")) {
 
             identifyInfoDTO.setUserId(sessionUser.getId());
             int promotedType = sessionUser.getPromotedType();
             if (promotedType > 2) {   //已认证
-                backMsg = new BackMsg(1, "", "您已经完成了身份认证，无需继续修改信息！");
+                backMsg = new BackMsg<>(1, "", "您已经完成了身份认证，无需继续修改信息！");
             } else {        //认证中
 
                 if (promotedType == 0) {
@@ -136,14 +136,14 @@ public class AccountController extends BaseController {
                     //更新信息
                     errorMsg = iIdentifyInfoService.updateIdentifyInfo(identifyInfoDTO);
                 }
-            }
-            if(StringUtils.isNotEmpty(errorMsg)){
-                backMsg = new BackMsg(BackMsg.ERROR,null,errorMsg);
-            }else{
-                backMsg = new BackMsg(BackMsg.CORRECT,"/user/idAuthentication","提交成功！");
+                if(StringUtils.isNotEmpty(errorMsg)){
+                    backMsg = new BackMsg<>(BackMsg.ERROR,null,errorMsg);
+                }else{
+                    backMsg = new BackMsg<>(BackMsg.CORRECT,"/user/idAuthentication","提交成功！");
+                }
             }
         }else{
-            backMsg = new BackMsg(BackMsg.ERROR,null,"请勿重复提交！");
+            backMsg = new BackMsg<>(BackMsg.ERROR,null,"请勿重复提交！");
         }
         return backMsg;
     }
@@ -233,9 +233,9 @@ public class AccountController extends BaseController {
             //更新session中的User信息
             resetSessionAttribute("user", userService.queryUserById(userId));
         } else {
-            return new BackMsg(1, "", "请不要重复提交信息");
+            return new BackMsg<>(1, "", "请不要重复提交信息");
         }
-        return new BackMsg(0, "/userHome/personalInfo?isSuccess=1", "信息修改成功");
+        return new BackMsg<>(0, "/userHome/personalInfo?isSuccess=1", "信息修改成功");
     }
 
 
@@ -263,7 +263,7 @@ public class AccountController extends BaseController {
 
         User user = ((User) getSession().getAttribute("user"));
 
-        BackMsg backMsg = fileUploadService.uploadFile(headImgInput, "/headImages",
+        BackMsg<String> backMsg = fileUploadService.uploadFile(headImgInput, "/headImages",
                 fileName -> user.getId() + "." + StringHandleUtils.getFileExt(fileName));
 
         //上传成功
@@ -322,11 +322,11 @@ public class AccountController extends BaseController {
             if (ServletToolUtils.checkRepeatSubmit(getRequest(), "token", "token")) {
                 shippingAddressService.submitConsigneeAddressInfo(formData);
 
-                backMsg = new BackMsg(0, "/userHome/shippingAddress?isSuccess=1", "保存信息成功！");
+                backMsg = new BackMsg<>(0, "/userHome/shippingAddress?isSuccess=1", "保存信息成功！");
             }
 
         } else {
-            backMsg = new BackMsg(1, "", errorMsg);
+            backMsg = new BackMsg<>(1, "", errorMsg);
         }
         return backMsg;
     }
@@ -398,9 +398,9 @@ public class AccountController extends BaseController {
         //执行删除操作，删除成功返回空对象，失败则返回相应的错误信息
         errorMsg = shippingAddressService.deleteShippingAddress(addressId);
         if (StringUtils.isEmpty(errorMsg)) {
-            backMsg = new BackMsg(0, "/userHome/shippingAddress", "");
+            backMsg = new BackMsg<>(0, "/userHome/shippingAddress", "");
         } else {
-            backMsg = new BackMsg(1, "", errorMsg);
+            backMsg = new BackMsg<>(1, "", errorMsg);
         }
         return backMsg;
     }
@@ -417,9 +417,9 @@ public class AccountController extends BaseController {
         BackMsg backMsg;
 
         if (shippingAddressService.resetDefaultAddress(addressId)) {
-            backMsg = new BackMsg(0, "", "设置默认地址成功！");
+            backMsg = new BackMsg<>(0, "", "设置默认地址成功！");
         } else {
-            backMsg = new BackMsg(0, "", "设置失败，请稍后再试！");
+            backMsg = new BackMsg<>(0, "", "设置失败，请稍后再试！");
         }
         return backMsg;
     }

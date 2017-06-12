@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.dsm.common.DsmConcepts;
 import com.dsm.common.cache.cacheService.IRedisService;
 import com.dsm.common.utils.SessionToolUtils;
+import com.dsm.controller.utils.ParamUtils;
 import com.dsm.dao.IProductDao;
 import com.dsm.dao.IProductSkuDao;
 import com.dsm.model.BackMsg;
@@ -18,9 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -193,34 +192,83 @@ public class ProductServiceImpl implements IProductService {
         if (productId == null) {
             return null;
         }
+        ProductDetail productDetail;
         /**
          * 先在redis中查询商品信息，若不存在再到数据库查询并将结果放到缓存中
          */
         String productDetailInfo = redisService.get("productDetail_" + productId);
 
         if (StringUtils.isNoneBlank(productDetailInfo)) {
-            return JSONObject.parseObject(productDetailInfo, ProductDetail.class);
+            productDetail = JSONObject.parseObject(productDetailInfo, ProductDetail.class);
         } else {
-            ProductDetail productDetail = productDao.getProductDetailInfo(productId);
+            productDetail = productDao.getProductDetailInfo(productId);
             if (productDetail != null) {
                 //设置商品的缓存时间为20分钟过
                 redisService.set("productDetail_" + productId, JSONObject.toJSONString(productDetail), 600);
             }
-            return productDetail;
         }
+        /**
+         * 操作将sku信息转换成相应的销售属性列表集
+         */
+        if(productDetail != null){
+            productDetail.setSaleAttrInfo(formatSkuListToSaleAttrList(productDetail.getSkuList()));
+
+        }
+
+
+        return productDetail;
     }
 
+    /**
+     * 将sku对象结果集转换为销售属性信息列表
+     * @param skuList
+     * @return
+     */
+    private List<ProductDetailAttrInfo> formatSkuListToSaleAttrList(List<Sku> skuList){
 
+        List<ProductDetailAttrInfo> saleAttrInfoList = new ArrayList<>(skuList.get(0).getPropertiesName().split(";").length);
+        String[] itemInfoList,tempList;
+        for(int i = 0; i<skuList.size();i++){
+            itemInfoList = skuList.get(i).getPropertiesName().split(";");
+
+            if (i == 0){
+                for(String itemInfo : itemInfoList){
+                    tempList = itemInfo.split("\\|");
+                    if(tempList.length != 4){
+                        logger.error("录入的sku信息异常，skuId为{}",skuList.get(i).getSkuId());
+                        return null;
+                    }
+                    Set<AttrValueBean> attrValueSet = new HashSet<>();
+                    attrValueSet.add(new AttrValueBean(Integer.parseInt(tempList[1]),tempList[3]));
+                    saleAttrInfoList.add(new ProductDetailAttrInfo(Integer.parseInt(tempList[0]),tempList[2],attrValueSet));
+                }
+            }else{
+                for(int j=0; j<itemInfoList.length; j++){
+                    tempList = itemInfoList[j].split("\\|");
+                    if(tempList.length != 4){
+                        logger.error("录入的sku信息异常，skuId为{}",skuList.get(i).getSkuId());
+                        return null;
+                    }
+                    saleAttrInfoList.get(j).getSaleAttrValues().add(new AttrValueBean(Integer.parseInt(tempList[1]),tempList[3]));
+                }
+            }
+        }
+        return saleAttrInfoList;
+    }
+
+//    public void
 
     @Transactional(timeout = 10000)
     @Override
-    public List<ProductBean> getProductListByCat(Integer catId, int pageIndex, int num, int sortType) {
+    public List<ProductBean> getProductListByCat(Integer catId, int pageIndex, int num, int sortType, String ev) {
         if(catId== null){
             return null;
         }
         try {
+            List<BaseAttrBean> attrBeans = ParamUtils.formatAttrSelectParamToBean(ev);//抛出非法参数异常
+
             //这里可以考虑使用缓存
-            String productList = redisService.get("productList_" + catId + "_" + pageIndex + "_" + sortType);
+            String productList = redisService.get("productList_" + catId + "_" + pageIndex + "_" + sortType +"_"+ev);
 
             if (StringUtils.isNoneBlank(productList)) {
                 return JSONObject.parseArray(productList, ProductBean.class);
@@ -231,25 +279,35 @@ public class ProductServiceImpl implements IProductService {
             if (sortType < 3) { //默认排序和点击排序
                 String[] queryWeight = getQueryTypeInfo(sortType);
                 //根据权重排序，分页查询相关的商品信息
-                list = productDao.getPageByCategoryWithWeighted(catId, pageIndex * num, num, queryWeight);
+                list = productDao.getPageByCategoryWithWeightValueNew(catId, DsmConcepts.LIST_PAGE_DEFAULT_NUM*DsmConcepts.LIST_PAGE_SIZE, attrBeans, queryWeight);
             } else {
                 if (sortType == DsmConcepts.SEARCH_SORT_PRICE_TO_LARGE) {
-                    list = productDao.getPageByCategoryByPrice(catId, pageIndex * num, num, 0);
+                    list = productDao.getPageByCategoryWithPriceNew(catId, DsmConcepts.LIST_PAGE_DEFAULT_NUM*DsmConcepts.LIST_PAGE_SIZE, 0,attrBeans);
                 } else {
-                    list = productDao.getPageByCategoryByPrice(catId, pageIndex * num, num, 1);
+                    list = productDao.getPageByCategoryWithPriceNew(catId, DsmConcepts.LIST_PAGE_DEFAULT_NUM*DsmConcepts.LIST_PAGE_SIZE, 1,attrBeans);
                 }
             }
             if (list != null && list.size() > 0) {
-                //设置商品的缓存时间为15分钟
-                redisService.set("productList_"+catId+"_" + pageIndex+"_"+sortType, JSONObject.toJSONString(list), 900);
+                //设置商品列表的缓存时间为15分钟
+                redisService.set("productList_"+catId+"_" + pageIndex+"_"+sortType +"_*"+ev, JSONObject.toJSONString(list), 900);
+
+                //查询分页数据
+                int length = list.size(),start =pageIndex*num, end = Math.min((start+num),length);
+                if(start<=end && end<=length){
+                    list = list.subList(pageIndex*num,end);
+                }
             }
+
             return list;
-        } catch (Exception ex) {
+        }catch (IllegalArgumentException iex){
+            logger.error(iex.getMessage());
+            throw new IllegalArgumentException(iex.getMessage());
+        }catch (Exception ex) {
             logger.error("类目查询商品信息失败：{}", ex.getMessage());
         }
-
         return null;
     }
+
 
     /**
      * 使用哪种权值排序

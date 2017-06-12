@@ -1,5 +1,7 @@
 package com.dsm.controller;
 
+import com.dsm.common.DsmConcepts;
+import com.dsm.model.BackMsg;
 import com.dsm.model.product.*;
 import com.dsm.service.interfaces.ICategoryService;
 import com.dsm.service.interfaces.IProductAttrService;
@@ -49,7 +51,9 @@ public class CategoryController {
      */
     @RequestMapping(value="/list.html")
     public String showProductListPage(@RequestParam(value = "cat") Integer catId,String ev,
-                                      @RequestParam(value = "sort",defaultValue = "0")Integer sortType,Map<String, Object> m){
+                                      @RequestParam(value = "sort",defaultValue = "0")Integer sortType,
+                                      @RequestParam(value = "page",defaultValue = "0")Integer page,
+                                      Map<String, Object> m){
         System.out.println(catId);
 
         //查询类目层级
@@ -64,9 +68,10 @@ public class CategoryController {
             //剩余可选的属性列信息
             m.put("selectAttrList",attrBeans);
             //查询按照综合排序查询默认的商品列表
-            m.put("productList",productService.getProductListByCat(catId,0,15,sortType));
+            m.put("productList",productService.getProductListByCat(catId,page, DsmConcepts.LIST_PAGE_DEFAULT_NUM,sortType,ev));
         } catch (Exception e) {
             logger.error(e.getMessage());
+            m.put("errorMsg",e.getMessage());
         }
         m.put("sortType",sortType);
 
@@ -82,6 +87,8 @@ public class CategoryController {
      * @throws Exception
      */
     private List<BaseAttrBean> getSelectedAttrList(List<ProductAttrBean> attrBeans, String ev) throws Exception {
+
+
         List<BaseAttrBean> list = null;
         if(StringUtils.isNoneBlank(ev)){
             //ev 属性项
@@ -132,6 +139,8 @@ public class CategoryController {
     }
 
 
+
+
     @ResponseBody
     @RequestMapping(value="/searchByAttrInfo",method = RequestMethod.POST)
     public List<ProductBean> searchByAttrInfo(Integer catId,String[] attrConditions){
@@ -149,8 +158,15 @@ public class CategoryController {
 
 
     @ResponseBody
-    @RequestMapping("getProductList")
-    public List<ProductBean> getProductList(Integer catId, Integer pageIndex, @RequestParam(defaultValue = "0")int sortType){
-        return productService.getProductListByCat(catId,pageIndex,20,sortType);
+    @RequestMapping("searchProductList")
+    public BackMsg getProductList(Integer catId, Integer pageIndex, @RequestParam(defaultValue = "0")int sortType,String ev){
+
+        try{
+            return new BackMsg<>(DsmConcepts.CORRECT,
+                    productService.getProductListByCat(catId, pageIndex, 20, sortType, ev), "");
+        }catch (Exception ex){
+            return new BackMsg<>(DsmConcepts.ERROR,null,ex.getMessage());
+        }
+
     }
 }

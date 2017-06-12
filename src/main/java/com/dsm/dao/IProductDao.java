@@ -106,21 +106,49 @@ public interface IProductDao {
      * @param start       起点
      * @param offset      偏移量
      * @param queryWeight 权重数组
+     * @param attrBeans   多选属性筛选条件list
      * @return
      */
-    List<ProductBean> getPageByCategoryWithWeighted(@Param("catId") Integer catId, @Param("start") int start,
-                                                    @Param("offset") int offset, @Param("queryWeight") String... queryWeight);
+    @Deprecated
+    List<ProductBean> getPageByCategoryWithWeightValue(@Param("catId") Integer catId, @Param("start") int start, @Param("offset") int offset,
+                                                       @Param("attrBeans") List<BaseAttrBean> attrBeans, @Param("queryWeight") String... queryWeight);
+
+    /**
+     * 类目下分页查询商品列表数据 —— 按照自定义的权重查询
+     *
+     * @param catId       类目ID
+     * @param totalNum    查询总数
+     * @param queryWeight 权重数组
+     * @param attrBeans   多选属性筛选条件list
+     * @return
+     */
+    List<ProductBean> getPageByCategoryWithWeightValueNew(@Param("catId") Integer catId, @Param("totalNum") int totalNum,
+                                                          @Param("attrBeans") List<BaseAttrBean> attrBeans, @Param("queryWeight") String... queryWeight);
+
+    /**
+     * 类目下分页查询商品列表数据 —— 按照类目依据价格的分页查找
+     *
+     * @param catId     类目ID
+     * @param start     起点
+     * @param offset    偏移量
+     * @param sortType  排序方法: 0：价格从小到达；1：价格从大到小
+     * @param attrBeans 多选属性筛选条件list
+     * @return 一页商品的数据
+     */
+    @Deprecated
+    List<ProductBean> getPageByCategoryWithPrice(@Param("catId") Integer catId, @Param("start") int start, @Param("offset") int offset,
+                                                 @Param("sortType") int sortType, @Param("attrBeans") List<BaseAttrBean> attrBeans);
 
 
     /**
      * 类目下分页查询商品列表数据 —— 按照类目依据价格的分页查找
      *
-     * @param catId    类目ID
-     * @param start    起点
-     * @param offset   偏移量
-     * @param sortType 排序方法: 0：价格从小到达；1：价格从大到小
+     * @param catId     类目ID
+     * @param totalNum  查询总数
+     * @param sortType  排序方法: 0：价格从小到达；1：价格从大到小
+     * @param attrBeans 多选属性筛选条件list
      * @return 一页商品的数据
      */
-    List<ProductBean> getPageByCategoryByPrice(@Param("catId") Integer catId, @Param("start") int start,
-                                               @Param("offset") int offset, @Param("sortType") int sortType);
+    List<ProductBean> getPageByCategoryWithPriceNew(@Param("catId") Integer catId, @Param("totalNum") int totalNum,
+                                                    @Param("sortType") int sortType, @Param("attrBeans") List<BaseAttrBean> attrBeans);
 }

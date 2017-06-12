@@ -6,7 +6,9 @@ import com.dsm.common.utils.chineseSplit.core.Lexeme;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 关于字符串处理工具类
@@ -67,6 +69,19 @@ public class StringHandleUtils {
             e.printStackTrace();
         }
         return words;
+    }
+
+    public static Map<String,String> formatPropertiesToMap(String properties){
+        Map<String,String> m = new HashMap<>();
+
+        String[] itemList = properties.split(",");
+        String[] temp;
+        for(String item : itemList){
+            temp = item.split(":");
+            m.put(temp[0],temp[1]);
+        }
+
+        return  m;
     }
 
 }

@@ -22,7 +22,7 @@ public interface IFileUploadService {
      * @param backMsgList {@link BackMsg}信息对象列表
      * @return file url list
      */
-    static List<String> getUpLoadUrlList(List<BackMsg> backMsgList) {
+    static List<String> getUpLoadUrlList(List<BackMsg<String>> backMsgList) {
         return backMsgList.stream().filter(msg -> msg.getError() == BackMsg.CORRECT)
                 .map(BackMsg::getData).collect(Collectors.toCollection(ArrayList::new));
     }
@@ -34,7 +34,7 @@ public interface IFileUploadService {
      * @param savePath 上传文件的保存目录
      * @return 文件上传结果封装，成功返回其对应的文件url
      */
-    BackMsg uploadFile(MultipartFile file, String savePath);
+    BackMsg<String> uploadFile(MultipartFile file, String savePath);
 
     /**
      * 上传单个文件，返回文件的url
@@ -45,7 +45,7 @@ public interface IFileUploadService {
      *                    <p>关于两个泛型参数，前一个参数表示传入类型（原文件名），后一个表示返回参数类型（新的文件名）<p/>
      * @return 文件上传结果封装，成功返回其对应的文件url结果信息
      */
-    BackMsg uploadFile(MultipartFile file, String savePath, Function<String, String> PathHandler);
+    BackMsg<String> uploadFile(MultipartFile file, String savePath, Function<String, String> PathHandler);
 
     /**
      * 上传单个文件，并将该条上传记录保存
@@ -54,7 +54,7 @@ public interface IFileUploadService {
      * @param savePath 上传文件的保存目录
      * @return 文件上传结果封装，成功返回其对应的文件url结果信息
      */
-    BackMsg uploadFileWithSaveInfo(MultipartFile file, String savePath, int saveUploadDataInfoType);
+    BackMsg<String> uploadFileWithSaveInfo(MultipartFile file, String savePath, int saveUploadDataInfoType);
 
     /**
      * 上传base64编码的文件
@@ -64,7 +64,7 @@ public interface IFileUploadService {
      * @param pathHandler 文件名设置方式
      * @return 文件上传结果封装，成功返回其对应的文件url结果信息
      */
-    BackMsg uploadFile(String base64File, String savePath, Function<String, String> pathHandler);
+    BackMsg<String> uploadFile(String base64File, String savePath, Function<String, String> pathHandler);
 
     /**
      * 上传base64编码的文件，并将该条上传记录保存
@@ -75,7 +75,7 @@ public interface IFileUploadService {
      * @param saveUploadDataInfoType type：0，一般图片；1：商品图片；2：商品详情图片，3：广告图片
      * @return 文件上传结果封装，成功返回其对应的文件url结果信息
      */
-    BackMsg uploadFileWithSaveInfo(String base64File, String savePath, Function<String, String> pathHandler, int saveUploadDataInfoType);
+    BackMsg<String> uploadFileWithSaveInfo(String base64File, String savePath, Function<String, String> pathHandler, int saveUploadDataInfoType);
 
     /**
      * 多文件上传，返回文件的url信息列表
@@ -84,7 +84,7 @@ public interface IFileUploadService {
      * @param savePath 上传文件的保存目录
      * @return 文件上传结果封装，成功返回该组文件url列表结果信息
      */
-    List<BackMsg> uploadFiles(MultipartFile[] files, String savePath);
+    List<BackMsg<String>> uploadFiles(MultipartFile[] files, String savePath);
 
 
     /**
@@ -95,7 +95,7 @@ public interface IFileUploadService {
      * @param saveUploadDataInfoType type：0，一般图片；1：商品图片；2：商品详情图片，3：广告图片
      * @return 文件上传结果封装，成功返回其对应的文件url结果信息
      */
-    List<BackMsg> uploadFilesWithSaveInfo(MultipartFile[] files, String savePath, int saveUploadDataInfoType);
+    List<BackMsg<String>> uploadFilesWithSaveInfo(MultipartFile[] files, String savePath, int saveUploadDataInfoType);
 
     /**
      * 上传多个文件，返回文件的url信息列表
@@ -111,7 +111,7 @@ public interface IFileUploadService {
      *                    <p/>
      * @return 文件上传结果封装集合，成功返回其对应的文件url
      */
-    List<BackMsg> uploadFiles(MultipartFile[] files, String savePath, BiFunction<String, Integer, String> pathHandler);
+    List<BackMsg<String>> uploadFiles(MultipartFile[] files, String savePath, BiFunction<String, Integer, String> pathHandler);
 
 
     /**
@@ -120,5 +120,5 @@ public interface IFileUploadService {
      * @param saveUploadDataInfoType type：0，一般图片；1：商品图片；2：商品详情图片，3：广告图片
      * @return 文件上传结果封装，成功返回其对应的文件url结果信息
      */
-    List<BackMsg> uploadFilesWithSaveInfo(MultipartFile[] files, String savePath, BiFunction<String, Integer, String> fileNameHandler, int saveUploadDataInfoType);
+    List<BackMsg<String>> uploadFilesWithSaveInfo(MultipartFile[] files, String savePath, BiFunction<String, Integer, String> fileNameHandler, int saveUploadDataInfoType);
 }

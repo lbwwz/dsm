@@ -4,7 +4,7 @@ package com.dsm.model;
  * 操作后的信息返回对象
  * Created by Lbwwz on 2016/8/8.
  */
-public class BackMsg {
+public class BackMsg<T> {
 
     public static final int CORRECT = 0;
     public static final int ERROR = 1;
@@ -19,7 +19,7 @@ public class BackMsg {
      * 执行操作后返回的数据
      * -有时候也用来作为一类异常指示符下的错误区分信息
      */
-    private String data;
+    private T data;
 
     /**
      * 对应异常信息显示的message
@@ -29,13 +29,13 @@ public class BackMsg {
     public BackMsg() {
     }
 
-    public BackMsg(int error,String data, String message) {
+    public BackMsg(int error,T data, String message) {
         this.error = error;
         this.data = data;
         this.message = message;
     }
 
-    public void set(int error,String data, String message) {
+    public void set(int error,T data, String message) {
         this.error = error;
         this.data = data;
         this.message = message;
@@ -49,11 +49,11 @@ public class BackMsg {
         this.error = error;
     }
 
-    public String getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(T data) {
         this.data = data;
     }
 

@@ -1,6 +1,9 @@
 package com.dsm.model.product;
 
+import com.dsm.common.utils.StringHandleUtils;
+
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * 某个商品的的SKU属性
@@ -16,6 +19,8 @@ public class Sku {
     // sku的销售属性的ID组合字符串（颜色，大小，等等，可通过类目API获取某类目下的销售属性）,格式是p1:v1;p2:v2(对应数据库中的数据ID)
     // 用于反映一项sku确定的商品的具体信息
     private String properties;
+
+    private Map<String,String> jsonProperties;
 
     //表示SKU销售属性ID和对应中文名
     private String propertiesName;
@@ -96,6 +101,18 @@ public class Sku {
         this.shopSn = shopSn;
     }
 
+    public Map<String, String> getJsonProperties() {
+        return StringHandleUtils.formatPropertiesToMap(properties);
+    }
+
+    public void setJsonProperties(Map<String, String> jsonProperties) {
+        this.jsonProperties = jsonProperties;
+    }
+
+    //    public Map<String, String> getJsonProperties() {
+//        return StringHandleUtils.formatPropertiesToMap(properties);
+//    }
+
     @Override
     public String toString() {
         return "Sku{" +
@@ -108,4 +125,6 @@ public class Sku {
                 ", shopSn='" + shopSn + '\'' +
                 '}';
     }
+
+
 }

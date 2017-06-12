@@ -54,7 +54,7 @@ public class IdentifyInfoServiceImpl implements IIdentifyInfoService {
         String imageUrls = "", errorMag = null;
         try {
             //上传图片，命名：*_1表示正面，*_2表示背面
-            List<BackMsg> MsgList = fileUploadService.uploadFiles(files, "/idImages",
+            List<BackMsg<String>> MsgList = fileUploadService.uploadFiles(files, "/idImages",
                     (fileName, index) -> info.getUserId() + "_" + (index + 1) + "." + StringHandleUtils.getFileExt(fileName));
 
             for (BackMsg msg : MsgList) {
@@ -133,7 +133,7 @@ public class IdentifyInfoServiceImpl implements IIdentifyInfoService {
 
             String faceImg = null, backImg = null;
             if (info.getIdImageFace() != null) {
-                BackMsg msg = fileUploadService.uploadFile(info.getIdImageFace(), "/idImages",
+                BackMsg<String> msg = fileUploadService.uploadFile(info.getIdImageFace(), "/idImages",
                         (fileName) -> info.getUserId() + "_" + 1 + "." + StringHandleUtils.getFileExt(fileName));
                 if (msg.getError() == BackMsg.ERROR) {
                     return msg.getMessage();
@@ -141,7 +141,7 @@ public class IdentifyInfoServiceImpl implements IIdentifyInfoService {
                 faceImg = msg.getData();
             }
             if (info.getIdImageBack() != null) {
-                BackMsg msg = fileUploadService.uploadFile(info.getIdImageBack(), "/idImages",
+                BackMsg<String> msg = fileUploadService.uploadFile(info.getIdImageBack(), "/idImages",
                         (fileName) -> info.getUserId() + "_" + 2 + "." + StringHandleUtils.getFileExt(fileName));
                 if (msg.getError() == BackMsg.ERROR) {
                     return msg.getMessage();

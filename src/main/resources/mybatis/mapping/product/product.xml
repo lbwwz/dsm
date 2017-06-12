@@ -13,6 +13,7 @@
         <result column="sort_order" property="sort"/>
         <result column="product_name" property="productName"/>
         <result column="main_img" property="mainImage"/>
+        <result column="product_brief" property="productBrief"/>
         <result column="min_price" property="minPrice"/>
         <result column="max_price" property="maxPrice"/>
         <result column="product_status" property="status"/>
@@ -29,6 +30,7 @@
         <result column="brand_id" property="brandId"/>
         <result column="sort_order" property="sort"/>
         <result column="product_name" property="productName"/>
+        <result column="product_brief" property="productBrief"/>
         <result column="detail_text" property="detailText"/>
         <result column="min_price" property="minPrice"/>
         <result column="max_price" property="maxPrice"/>
@@ -78,11 +80,10 @@
     <!--添加商品基本信息-->
     <insert id="addProductInfo" parameterType="ProductBean" useGeneratedKeys="true" keyProperty="productId">
         INSERT INTO
-        dsm_product(cat_id, product_sn, product_name, brand_id, shop_id, price_min, price_max, main_img,
+        dsm_product(cat_id, product_sn, product_name, brand_id, shop_id, , main_img, product_brief
         create_time, update_time)
         VALUES
-        (#{catId}, #{productSn}, #{productName}, #{brandId}, #{shopId}, #{minPrice}, #{maxPrice},
-        #{mainImage}, NOW(), NOW())
+            (#{catId}, #{productSn}, #{productName}, #{brandId}, #{shopId}, #{mainImage},{productBrief} NOW(), NOW())
     </insert>
 
     <!-- 添加商品图文详情信息 -->
@@ -138,47 +139,128 @@
         FROM dsm_product  WHERE catId=#{productId} AND status=1
     </select>
 
-    <!--按照分类分页查询商品列表（依据权重）-->
-    <select id="getPageByCategoryWithWeighted" resultMap="productResult">
-        SELECT
-            a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.product_number, a.shop_id, a.shop_name,
-            a.min_price, a.max_price, a.shop_price, a.warn_number, a.product_brief, a.main_img, a.product_grade, a.product_status,
-            a.is_best, a.is_new, a.is_hot
-        FROM vdsm_user_product_base a,
+    <select id="getPageByCategoryWithWeightValueNew" resultMap="productResult">
+        <!--不含属性筛选-->
+        <if test="attrBeans == null or attrBeans.size() == 0">
+            SELECT
+                a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.product_number, a.shop_id, a.shop_name,
+                a.min_price, a.max_price, a.shop_price, a.warn_number, a.product_brief, a.main_img, a.product_grade, a.product_status,
+                a.is_best, a.is_new, a.is_hot
+            FROM vdsm_user_product_base a,
             (
                 SELECT product_id, fn_calculateSearchWeight(click_count,is_hot,is_new,is_best,0,#{queryWeight[0]},
-                        #{queryWeight[1]},#{queryWeight[2]},#{queryWeight[3]},#{queryWeight[4]}) WeightValue
+                    #{queryWeight[1]},#{queryWeight[2]},#{queryWeight[3]},#{queryWeight[4]}) weightValue
                 FROM vdsm_user_product_base
                 WHERE vdsm_user_product_base.product_status=1 AND FIND_IN_SET(cat_id,fn_getChildCatList(#{catId}))
-                ORDER BY WeightValue
-                DESC LIMIT #{start},#{offset}
+                ORDER BY weightValue
+                DESC LIMIT 0,#{totalNum}
             ) b
-        WHERE a.product_id=b.product_id ORDER BY b.WeightValue ;
+            WHERE a.product_id=b.product_id ORDER BY b.weightValue DESC ;
+        </if>
+        <if test="attrBeans != null and attrBeans.size() != 0">
+            SELECT vdsm_user_product_base.product_id, fn_calculateSearchWeight(click_count,is_hot,is_new,is_best,0,#{queryWeight[0]},
+                #{queryWeight[1]},#{queryWeight[2]},#{queryWeight[3]},#{queryWeight[4]})  weightValue
+            FROM
+            (
+                SELECT a.product_id
+                FROM
+                (
+                    SELECT product_id FROM dsm_product WHERE dsm_product.product_status=1 AND FIND_IN_SET(cat_id,fn_getChildCatList(1))
+                    UNION ALL
+                    SELECT  product_id FROM dsm_product_base_attr WHERE STATUS=1  GROUP BY product_id
+                    <!--筛选条件循环-->
+                    <foreach collection="attrBeans" item="bean" index="index" open="HAVING" separator="and" >
+                        FIND_IN_SET(#{bean.valueId},GROUP_CONCAT(value_id))
+                    </foreach>
+                ) a
+                GROUP BY a.product_id HAVING COUNT(*) > 1
+            ) p LEFT OUTER JOIN vdsm_user_product_base ON p.product_id=vdsm_user_product_base.product_id
+            WHERE vdsm_user_product_base.product_status=1 ORDER BY WeightValue DESC LIMIT 0,#{totalNum}
+        </if>
     </select>
 
-    <!--按照分类 依据商品的价格查询商品列表 -->
-    <select id="getPageByCategoryByPrice" resultMap="productResult">
+    <!--按照分类分页查询商品列表（依据权重）-->
+    <select id="getPageByCategoryWithWeightValue" resultMap="productResult">
+        <!--不含属性筛选-->
+        <if test="attrBeans == null or attrBeans.size() == 0">
         SELECT
             a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.product_number, a.shop_id, a.shop_name,
             a.min_price, a.max_price, a.shop_price, a.warn_number, a.product_brief, a.main_img, a.product_grade, a.product_status,
             a.is_best, a.is_new, a.is_hot
         FROM vdsm_user_product_base a,
         (
-            SELECT product_id FROM vdsm_user_product_base
-            WHERE product_status=1 AND FIND_IN_SET(cat_id,fn_getChildCatList(#{catId}))
-            ORDER BY
-            <choose>
-                <when test="sortType == 0">
-                    min_price
-                </when>
-                <otherwise>
-                    max_price DESC
-                </otherwise>
-            </choose>
-            LIMIT #{start}, #{offset}
-
+            SELECT product_id, fn_calculateSearchWeight(click_count,is_hot,is_new,is_best,0,#{queryWeight[0]},
+                #{queryWeight[1]},#{queryWeight[2]},#{queryWeight[3]},#{queryWeight[4]}) weightValue
+            FROM vdsm_user_product_base
+            WHERE vdsm_user_product_base.product_status=1 AND FIND_IN_SET(cat_id,fn_getChildCatList(#{catId}))
+            ORDER BY weightValue
+            DESC LIMIT #{start},#{offset}
         ) b
-        WHERE a.product_id=b.product_id
+        WHERE a.product_id=b.product_id ORDER BY b.weightValue DESC ;
+        </if>
+        <!--含有属性筛选-->
+        <if test="attrBeans != null and attrBeans.size() > 0">
+            SELECT
+                a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.product_number, a.shop_id, a.shop_name,
+                a.min_price, a.max_price, a.shop_price, a.warn_number, a.product_brief, a.main_img, a.product_grade, a.product_status,
+                a.is_best, a.is_new, a.is_hot
+            FROM vdsm_user_product_base a,
+            (
+                SELECT vdsm_user_product_base.product_id, fn_calculateSearchWeight(click_count,is_hot,is_new,is_best,0,#{queryWeight[0]},
+                      #{queryWeight[1]},#{queryWeight[2]},#{queryWeight[3]},#{queryWeight[4]}) weightValue
+                FROM
+                (
+                    SELECT a.product_id
+                    FROM
+                    (
+                        SELECT product_id FROM dsm_product
+                        WHERE dsm_product.product_status=1 AND FIND_IN_SET(cat_id,fn_getChildCatList(#{catId}))
+                        UNION ALL
+                        SELECT  product_id FROM dsm_product_base_attr
+                        WHERE STATUS=1
+                        GROUP BY product_id
+                        <!--筛选条件循环-->
+                        <foreach collection="attrBeans" item="bean" index="index" open="HAVING" separator="and" >
+                            FIND_IN_SET(#{bean.valueId},GROUP_CONCAT(value_id))
+                        </foreach>
+                    ) a
+                    GROUP BY a.product_id
+                    HAVING COUNT(*) > 1
+                ) p
+                LEFT OUTER JOIN vdsm_user_product_base
+                ON p.product_id=vdsm_user_product_base.product_id
+                WHERE vdsm_user_product_base.product_status=1
+                ORDER BY WeightValue DESC
+                LIMIT #{start},#{offset}
+            ) b
+            WHERE a.product_id=b.product_id ORDER BY b.weightValue DESC;
+        </if>
+    </select>
+
+
+    <select id="getPageByCategoryWithPriceNew" resultMap="productResult">
+        SELECT
+            p.product_id, cat_id, product_sn, product_name, click_count, brand_id, product_number, shop_id, shop_name,
+            min_price, max_price, shop_price, warn_number,product_brief, main_img, product_grade, product_status,
+            is_best, is_new, is_hot
+        FROM
+        (
+            SELECT a.product_id
+            FROM
+            (
+                SELECT product_id FROM dsm_product WHERE dsm_product.product_status=1 AND FIND_IN_SET(cat_id,fn_getChildCatList(#{catId}))
+                UNION ALL
+                SELECT  product_id FROM dsm_product_base_attr WHERE STATUS=1 GROUP BY product_id
+                <!--筛选条件循环-->
+                <if test="attrBeans != null and attrBeans.size() != 0">
+                    <foreach collection="attrBeans" item="bean" index="index" open="HAVING" separator="and" >
+                        FIND_IN_SET(#{bean.valueId},GROUP_CONCAT(value_id))
+                    </foreach>
+                </if>
+            ) a
+            GROUP BY a.product_id HAVING COUNT(*) > 1
+        ) p LEFT OUTER JOIN vdsm_user_product_base ON p.product_id=vdsm_user_product_base.product_id
+        WHERE vdsm_user_product_base.product_status=1
         ORDER BY
         <choose>
             <when test="sortType == 0">
@@ -188,7 +270,106 @@
                 max_price DESC
             </otherwise>
         </choose>
+        LIMIT 0,#{totalNum}
     </select>
+
+    <!--按照分类 依据商品的价格查询商品列表 -->
+    <select id="getPageByCategoryWithPrice" resultMap="productResult">
+        <!--不含属性筛选-->
+        <if test="attrBeans == null or attrBeans.size() == 0">
+            SELECT
+                a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.product_number, a.shop_id, a.shop_name,
+                a.min_price, a.max_price, a.shop_price, a.warn_number, a.product_brief, a.main_img, a.product_grade, a.product_status,
+                a.is_best, a.is_new, a.is_hot
+            FROM vdsm_user_product_base a,
+            (
+                SELECT product_id FROM vdsm_user_product_base
+                WHERE product_status=1 AND FIND_IN_SET(cat_id,fn_getChildCatList(#{catId}))
+                ORDER BY
+                <choose>
+                    <when test="sortType == 0">
+                        min_price
+                    </when>
+                    <otherwise>
+                        max_price DESC
+                    </otherwise>
+                </choose>
+                LIMIT #{start}, #{offset}
+            ) b
+            WHERE a.product_id=b.product_id
+            ORDER BY
+            <choose>
+                <when test="sortType == 0">
+                    min_price
+                </when>
+                <otherwise>
+                    max_price DESC
+                </otherwise>
+            </choose>
+        </if>
+        <!--含有属性筛选条件-->
+        <if test="attrBeans != null and attrBeans.size() > 0">
+            SELECT
+                a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.product_number, a.shop_id, a.shop_name,
+                a.min_price, a.max_price, a.shop_price, a.warn_number, a.product_brief, a.main_img, a.product_grade, a.product_status,
+                a.is_best, a.is_new, a.is_hot
+            FROM vdsm_user_product_base a,
+            (
+                SELECT vdsm_user_product_base.product_id,
+                <choose>
+                    <when test="sortType == 0">
+                        vdsm_user_product_base.min_price min_price
+                    </when>
+                    <otherwise>
+                        vdsm_user_product_base.min_price max_price max_price
+                    </otherwise>
+                </choose>
+                FROM
+                (
+                    SELECT a.product_id
+                    FROM
+                    (
+                        SELECT product_id FROM dsm_product
+                        WHERE dsm_product.product_status=1 AND FIND_IN_SET(cat_id,fn_getChildCatList(#{catId}))
+                        UNION ALL
+                        SELECT  product_id FROM dsm_product_base_attr
+                        WHERE STATUS=1
+                        GROUP BY product_id
+                        <!--筛选条件循环-->
+                        <foreach collection="attrBeans" item="bean" index="index" open="HAVING" separator="and" >
+                            FIND_IN_SET(#{bean.valueId},GROUP_CONCAT(value_id))
+                        </foreach>
+                    ) a
+                    GROUP BY a.product_id
+                    HAVING COUNT(*) > 1
+                ) p LEFT OUTER JOIN vdsm_user_product_base
+                ON p.product_id=vdsm_user_product_base.product_id
+                WHERE vdsm_user_product_base.product_status=1
+                ORDER BY
+                <choose>
+                    <when test="sortType == 0">
+                        min_price
+                    </when>
+                    <otherwise>
+                        max_price DESC
+                    </otherwise>
+                </choose>
+                LIMIT #{start}, #{offset}
+            ) b
+            WHERE a.product_id=b.product_id
+            ORDER BY
+            <choose>
+                <when test="sortType == 0">
+                    min_price
+                </when>
+                <otherwise>
+                    max_price DESC
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+    <!--含有属性筛选-->
+
 
     <!--查询商品详细信息-->
     <select id="getProductDetailInfo" resultMap="productDetailResult" parameterType="int">

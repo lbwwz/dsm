@@ -34,6 +34,11 @@ public class DsmConcepts {
     public static final int SEARCH_SORT_CREDIT=2;          //查找排序——信用（商品好评率）
     public static final int SEARCH_SORT_PRICE_TO_LARGE=3;   //查找排序——价格从低到高
     public static final int SEARCH_SORT_PRICE_TO_SMALL=4;   //查找排序——价格从高到低
+
+
+    //默认每页查询的商品数量
+    public static final int LIST_PAGE_DEFAULT_NUM = 15;
+    public static final int LIST_PAGE_SIZE = 100;
     /***** 业务相关编号 end *****/
 
     /*****  业务名称 start  *****/
@@ -42,6 +47,7 @@ public class DsmConcepts {
     public static final String LAST_ACCESS_URL ="lastAccessUrl"; //上页路径
 
     /***** 业务名称 end *****/
+
 
 
 

@@ -60,25 +60,25 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
     }
 
     @Override
-    public BackMsg uploadFile(MultipartFile file, String savePath) {
+    public BackMsg<String> uploadFile(MultipartFile file, String savePath) {
         return uploadFile(file, savePath, defaultFileNameHandler);
     }
 
 
     @Override
-    public BackMsg uploadFile(MultipartFile file, String savePath, Function<String, String> fileNameHandler) {
+    public BackMsg<String> uploadFile(MultipartFile file, String savePath, Function<String, String> fileNameHandler) {
         return uploadFileWithSaveInfo(file, savePath, fileNameHandler, -1);
     }
 
     @Override
-    public BackMsg uploadFileWithSaveInfo(MultipartFile file, String savePath, int saveUploadDataInfoType) {
+    public BackMsg<String> uploadFileWithSaveInfo(MultipartFile file, String savePath, int saveUploadDataInfoType) {
         return uploadFileWithSaveInfo(file, savePath, defaultFileNameHandler, saveUploadDataInfoType);
     }
 
-    public BackMsg uploadFileWithSaveInfo(MultipartFile file, String savePath, Function<String, String> fileNameHandler, int saveUploadDataInfoType) {
+    public BackMsg<String> uploadFileWithSaveInfo(MultipartFile file, String savePath, Function<String, String> fileNameHandler, int saveUploadDataInfoType) {
         //非空校验
         if (file.isEmpty()) {
-            return new BackMsg(1, "", "文件上传中发生异常，请稍后重试");
+            return new BackMsg<>(1, "", "文件上传中发生异常，请稍后重试");
         }
 
         savePath = packPath(savePath);
@@ -89,12 +89,12 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
 
         //检查文件的拓展名是否合法
         if (checkExts(fileType, fileName)) {
-            return new BackMsg(DsmConcepts.EXT_WARRING, fileName,
+            return new BackMsg<>(DsmConcepts.EXT_WARRING, fileName,
                     fileName + " 类型异常，请上传" + UploadConfigContext.getAllowExts(fileType) + "类型的文件");
         } else {
             //校验上传该类型文件的大小
             if (file.getSize() > UploadConfigContext.getMaxSize(fileType)) {
-                return new BackMsg(DsmConcepts.SIZE_WARRING, fileName,
+                return new BackMsg<>(DsmConcepts.SIZE_WARRING, fileName,
                         fileName + " 大小超过：" + UploadConfigContext.getMaxSize(fileType) / (1024 * 1024) + "m");
             } else {
                 try {
@@ -109,7 +109,7 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
 
                 } catch (IOException e) {
                     logger.error("文件写入失败：{}\n{}", e, e.getMessage());
-                    return new BackMsg(1, "", "文件上传中发生异常，请稍后重试");
+                    return new BackMsg<>(1, "", "文件上传中发生异常，请稍后重试");
                 }
             }
         }
@@ -117,14 +117,14 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
     }
 
     @Override
-    public BackMsg uploadFile(String base64File, String savePath, Function<String, String> pathHandler) {
+    public BackMsg<String> uploadFile(String base64File, String savePath, Function<String, String> pathHandler) {
         return uploadFileWithSaveInfo(base64File, savePath, pathHandler, -1);
     }
 
     @Override
-    public BackMsg uploadFileWithSaveInfo(String base64File, String savePath, Function<String, String> pathHandler, int saveUploadDataInfoType) {
+    public BackMsg<String> uploadFileWithSaveInfo(String base64File, String savePath, Function<String, String> pathHandler, int saveUploadDataInfoType) {
         if (base64File.split(",").length < 2) {
-            return new BackMsg(1, "", "数据提交异常！");
+            return new BackMsg<>(1, null, "数据提交异常！");
         }
         savePath = packPath(savePath);
         String fileType = base64File.split(",")[0].split(":")[1];
@@ -136,7 +136,7 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
         //校验上传该类型文件的大小
         try {
             if (is.available() > UploadConfigContext.getMaxSize(fileType)) {
-                return new BackMsg(DsmConcepts.SIZE_WARRING, "",
+                return new BackMsg<>(DsmConcepts.SIZE_WARRING, "",
                         "大小超过：" + UploadConfigContext.getMaxSize(fileType) / (1024 * 1024) + "m");
             } else {
 
@@ -156,29 +156,29 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-        return new BackMsg(1, "", "文件上传中发生异常，请稍后重试");
+        return new BackMsg<>(1, "", "文件上传中发生异常，请稍后重试");
     }
 
 
     @Override
-    public List<BackMsg> uploadFiles(MultipartFile[] files, String savePath) {
+    public List<BackMsg<String>> uploadFiles(MultipartFile[] files, String savePath) {
         return uploadFiles(files, savePath, defaultFilesNameHandler);
     }
 
     @Override
-    public List<BackMsg> uploadFiles(MultipartFile[] files, String savePath, BiFunction<String, Integer, String> fileNameHandler) {
+    public List<BackMsg<String>> uploadFiles(MultipartFile[] files, String savePath, BiFunction<String, Integer, String> fileNameHandler) {
         return uploadFilesWithSaveInfo(files, savePath, fileNameHandler, -1);
     }
 
     @Override
-    public List<BackMsg> uploadFilesWithSaveInfo(MultipartFile[] files, String savePath, int saveUploadDataInfoType) {
+    public List<BackMsg<String>> uploadFilesWithSaveInfo(MultipartFile[] files, String savePath, int saveUploadDataInfoType) {
         return uploadFilesWithSaveInfo(files, savePath, defaultFilesNameHandler, saveUploadDataInfoType);
     }
 
 
     @Override
-    public List<BackMsg> uploadFilesWithSaveInfo(MultipartFile[] files, String savePath,
-                                                 BiFunction<String, Integer, String> fileNameHandler, int saveUploadDataInfoType) {
+    public List<BackMsg<String>> uploadFilesWithSaveInfo(MultipartFile[] files, String savePath,
+                                                         BiFunction<String, Integer, String> fileNameHandler, int saveUploadDataInfoType) {
         if (files == null) {
             return null;
         }
@@ -191,12 +191,12 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
         //上传保存的新文件名
         String fileNewName;
 
-        List<BackMsg> fileReturnList = new ArrayList<>();
-        BackMsg msg;
+        List<BackMsg<String>> fileReturnList = new ArrayList<>();
+        BackMsg<String> msg;
         for (int i = 0; i < files.length; i++) {
             //非空校验
             if (files[i].isEmpty()) {
-                fileReturnList.add(new BackMsg(BackMsg.ERROR, "", "文件上传中发生异常，请稍后重试"));
+                fileReturnList.add(new BackMsg<>(BackMsg.ERROR, "", "文件上传中发生异常，请稍后重试"));
                 continue;
             }
 
@@ -204,12 +204,12 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
             fileName = files[i].getOriginalFilename();
             //检查文件的拓展名是否合法
             if (checkExts(fileType, fileName)) {
-                fileReturnList.add(new BackMsg(DsmConcepts.EXT_WARRING, fileName,
+                fileReturnList.add(new BackMsg<>(DsmConcepts.EXT_WARRING, fileName,
                         fileName + " 类型异常，请上传" + UploadConfigContext.getAllowExts(fileType) + "类型的文件"));
             } else {
                 //校验上传该类型文件的大小
                 if (files[i].getSize() > UploadConfigContext.getMaxSize(fileType)) {
-                    fileReturnList.add(new BackMsg(DsmConcepts.SIZE_WARRING, fileName,
+                    fileReturnList.add(new BackMsg<>(DsmConcepts.SIZE_WARRING, fileName,
                             fileName + " 大小超过：" + UploadConfigContext.getMaxSize(fileType) / (1024 * 1024) + "m"));
                 } else {
                     try {
@@ -299,9 +299,9 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
      * @param saveUploadDataInfoType 图片类型，0：一般图片，1：商品图片，2：商品详情图，3：广告图；小于0表示不保存图片
      * @return msg信息封装
      */
-    private BackMsg SaveInfoByFileType(String fileUrl, String fileType, String fileName, long fileSize, int saveUploadDataInfoType) {
+    private BackMsg<String> SaveInfoByFileType(String fileUrl, String fileType, String fileName, long fileSize, int saveUploadDataInfoType) {
         if (saveUploadDataInfoType < 0) {//不保存图片到用户图片库
-            return new BackMsg(BackMsg.CORRECT, WEB_PATH + fileUrl, fileName + "上传成功");
+            return new BackMsg<>(BackMsg.CORRECT, WEB_PATH + fileUrl, fileName + "上传成功");
         }
         if (SessionToolUtils.checkLogin() == DsmConcepts.IS_USER_LOGIN)  //普通用户
             try {
@@ -309,7 +309,7 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
                 if (fileType.contains("image")) {
                     iImageDao.addImage(new ImageBean(SessionToolUtils.getUser().getId(), WEB_PATH + fileUrl, null, fileSize, saveUploadDataInfoType));
                 }
-                return new BackMsg(BackMsg.CORRECT, WEB_PATH + fileUrl, fileName + "上传成功");
+                return new BackMsg<>(BackMsg.CORRECT, WEB_PATH + fileUrl, fileName + "上传成功");
                 //其他。。。
             } catch (Exception ex) {
                 //发生异常，回滚该上传的文件
@@ -318,7 +318,7 @@ public class FileUploadServiceImpl extends BaseService implements IFileUploadSer
                 } else {
                     logger.warn("\n{}信息录入失败! {}回滚删除成功：\n{}", fileType, ROOT_PATH + fileUrl, ex);
                 }
-                return new BackMsg(BackMsg.ERROR, null, fileName + "上传失败");
+                return new BackMsg<>(BackMsg.ERROR, null, fileName + "上传失败");
             }
         else if (SessionToolUtils.checkLogin() == DsmConcepts.IS_ADMIN_LOGIN) {   //  管理员用户
 

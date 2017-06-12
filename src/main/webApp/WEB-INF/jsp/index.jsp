@@ -38,7 +38,7 @@
     <div class="row">
         <ul class="nav nav-tabs">
             <li class="pitch_on"><a href="#">首页</a></li>
-            <li><a href="#">手机</a></li>
+            <li><a href="${webRoot}/list.html?cat=14">手机</a></li>
             <li><a href="#">单反相机</a></li>
             <li><a href="#">个人PC</a></li>
             <li><a href="#">智能3C</a></li>

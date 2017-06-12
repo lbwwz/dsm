@@ -25,6 +25,10 @@ public class ProductDetail extends ProductBean implements Serializable{
     private List<ProductDetailAttrInfo> customerAttrsInfo;
     //商品sku
     private List<Sku> skuList;
+    //商品销售属性
+    private List<ProductDetailAttrInfo> saleAttrInfo;
+
+    //商品的销售属性集合
 
     public ProductDetail() {
     }
@@ -68,6 +72,14 @@ public class ProductDetail extends ProductBean implements Serializable{
 
     public void setSkuList(List<Sku> skuList) {
         this.skuList = skuList;
+    }
+
+    public List<ProductDetailAttrInfo> getSaleAttrInfo() {
+        return saleAttrInfo;
+    }
+
+    public void setSaleAttrInfo(List<ProductDetailAttrInfo> saleAttrInfo) {
+        this.saleAttrInfo = saleAttrInfo;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.dsm.model.BackMsg;
 import com.dsm.model.formData.ReleaseProductFormDTO;
 import com.dsm.model.product.ProductBean;
 import com.dsm.model.product.ProductDetail;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * Date: 2017/2/27
  *
  * @author : Lbwwz
- *         <p>
+ *         <p/>
  *         商品操作的相关服务接口
  */
 
@@ -31,13 +32,14 @@ public interface IProductService {
 
     /**
      * 条件查询类目下的商品列表
-     * @param catId 类目
+     *
+     * @param catId     类目
      * @param pageIndex 页面index
-     * @param num 每页商品数量
-     * @param sortType 排序规则 0：默认；1：热度（点击量）；2：信用（好评分数）；3：价格（由低到高）；4：价格（由高到低）
+     * @param num       每页商品数量
+     * @param sortType  排序规则 0：默认；1：热度（点击量）；2：信用（好评分数）；3：价格（由低到高）；4：价格（由高到低）
+     * @param ev        多选属性筛选条件
      * @return 商品列表信息
      */
-    List<ProductBean> getProductListByCat(Integer catId,int pageIndex,int num,int sortType);
-
-
+    @Transactional(timeout = 10000)
+    List<ProductBean> getProductListByCat(Integer catId, int pageIndex, int num, int sortType, String ev);
 }

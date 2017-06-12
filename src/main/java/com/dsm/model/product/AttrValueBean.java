@@ -85,9 +85,30 @@ public class AttrValueBean implements Comparable<AttrValueBean>,Serializable {
 	}
 
 	@Override
-	public String toString() {
-		return "AttrValueBean [valueId=" + valueId + ", valueName=" + valueName + ", attrId=" + attrId + ", catId="
-				+ catId + ", valueSort=" + valueSort + "]";
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof AttrValueBean)) return false;
+
+		AttrValueBean that = (AttrValueBean) o;
+
+		if (valueId != that.valueId) return false;
+		if (attrId != that.attrId) return false;
+		if (valueName != null ? !valueName.equals(that.valueName) : that.valueName != null) return false;
+		if (catId != null ? !catId.equals(that.catId) : that.catId != null) return false;
+		if (valueSort != null ? !valueSort.equals(that.valueSort) : that.valueSort != null) return false;
+		return status != null ? status.equals(that.status) : that.status == null;
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = valueId;
+		result = 31 * result + (valueName != null ? valueName.hashCode() : 0);
+		result = 31 * result + attrId;
+		result = 31 * result + (catId != null ? catId.hashCode() : 0);
+		result = 31 * result + (valueSort != null ? valueSort.hashCode() : 0);
+		result = 31 * result + (status != null ? status.hashCode() : 0);
+		return result;
 	}
 
 	@Override
