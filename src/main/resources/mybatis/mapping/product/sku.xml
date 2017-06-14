@@ -13,6 +13,22 @@
         <result column="sku_price" property="skuPrice"/>
         <result column="shop_sn" property="shopSn"/>
     </resultMap>
+
+    <resultMap id="productResult" type="ProductBean">
+        <id column="product_id" property="productId"/>
+        <result column="cat_id" property="catId"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="product_name" property="productName"/>
+        <result column="main_img" property="mainImage"/>
+        <result column="product_brief" property="productBrief"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="properties_name" property="propertiesName"/>
+        <result column="quantity" property="quantity"/>
+        <result column="sku_price" property="skuPrice"/>
+        <result column="shop_sn" property="shopSn"/>
+    </resultMap>
     <!--插入一条sku信息-->
     <insert id="addSkuItem" parameterType="Sku" useGeneratedKeys="true" keyProperty="skuId">
         INSERT INTO
@@ -34,6 +50,12 @@
 
     <select id="getSkuListByProductId" resultMap="skuResult" parameterType="int">
         SELECT * FROM dsm_product_sku WHERE product_id=#{productId};
+    </select>
+
+    <select id="getProductSkuSkuItem" resultMap="skuResult" parameterType="int">
+        SELECT *
+        FROM dsm_product,dsm_product_sku
+        WHERE dsm_product.product_id = dsm_product_sku.product_id AND dsm_product_sku.sku_id={skuId}
     </select>
 
 </mapper>

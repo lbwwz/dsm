@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="dsm:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="dsm.war">
+      <element id="artifact" artifact-name="dsm:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -55,7 +55,7 @@ public class ProductServiceImpl implements IProductService {
         /**
          * 拆分相关的商品信息，将信息组合调用相关的接口进行保存
          */
-        ProductBean productBean = new ProductBean(releaseProductFormDTO.getKeywords(),
+        ProductBean productBean = new ProductBean(releaseProductFormDTO.getKeywords(),releaseProductFormDTO.getProduceBrief(),
                 releaseProductFormDTO.getMainImgItem(), releaseProductFormDTO.getProductName(), releaseProductFormDTO.getBrand(),
                 releaseProductFormDTO.getCatId(), Integer.parseInt(SessionToolUtils.getUser().getShop().getShopId()));
         try {
@@ -65,6 +65,7 @@ public class ProductServiceImpl implements IProductService {
             try {
                 productDao.addProductInfo(productBean);
             } catch (Exception ex) {
+                ex.printStackTrace();
                 throw new Exception("商品基本信息添加失败！");
             }
             int productId = productBean.getProductId();
@@ -75,8 +76,6 @@ public class ProductServiceImpl implements IProductService {
             if(releaseProductFormDTO.getImgItem() != null){
                 int isMain;
                 List<ProductImageItem> imageList = new ArrayList<>();
-
-
 
                 for (String item : releaseProductFormDTO.getImgItem()) {
                     if (releaseProductFormDTO.getMainImgItem().equals(item)) {

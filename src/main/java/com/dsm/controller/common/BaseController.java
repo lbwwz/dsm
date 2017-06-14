@@ -3,6 +3,7 @@ package com.dsm.controller.common;
 import com.dsm.model.user.User;
 import com.dsm.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,13 +17,13 @@ public abstract class BaseController {
      */
     @Autowired
     private IUserService userService;
-//    @ModelAttribute
-//    public void testLogin(){
-//        User user = getSessionUser();
-//        if(user == null){
-//            userService.userLogin("18202755619", "123456", false);
-//        }
-//    }
+    @ModelAttribute
+    public void testLogin(){
+        User user = getSessionUser();
+        if(user == null){
+            userService.userLogin("18202755619", "123456", false);
+        }
+    }
 
     /**
      * 获取request

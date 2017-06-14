@@ -42,24 +42,17 @@
     <div class="row">
         <div class="ItemDetailImg" style="float: left">
             <div id="preview" class="spec-preview">
-                <span class="jqzoom"><img jqimg="images/b1.jpg" src="images/s1.jpg" width="400" height="400"/></span>
+                <span class="jqzoom"><img jqimg="${productDetail.mainImage}" src="${productDetail.mainImage}" width="400" height="400"/></span>
             </div>
             <!--缩图开始-->
             <div class="spec-scroll"> <a class="prev"><img src="images/disabled-prev.png"/></a> <a class="next"><img src="images/disabled-next.png"/></a>
                 <div class="items">
                     <ul>
-                        <li><img alt="佳能" bimg="images/b1.jpg" src="images/s1.jpg" ></li>
-                        <li><img alt="佳能" bimg="images/b2.jpg" src="images/s2.jpg" ></li>
-                        <li><img alt="佳能" bimg="images/b3.jpg" src="images/s3.jpg" ></li>
-                        <li><img alt="佳能" bimg="images/b1.jpg" src="images/s1.jpg" ></li>
-                        <li><img alt="佳能" bimg="images/b3.jpg" src="images/s3.jpg" ></li>
-                        <li><img alt="佳能" bimg="images/b1.jpg" src="images/s1.jpg" ></li>
-                        <li><img alt="佳能" bimg="images/b2.jpg" src="images/s2.jpg" ></li>
-                        <li><img alt="佳能" bimg="images/b1.jpg" src="images/s1.jpg" ></li>
-                        <li><img alt="佳能" bimg="images/b2.jpg" src="images/s2.jpg" ></li>
-                        <li><img alt="佳能" bimg="images/b2.jpg" src="images/s2.jpg" ></li>
-                        <li><img alt="佳能" bimg="images/b1.jpg" src="images/s1.jpg" ></li>
-                        <li><img alt="佳能" bimg="images/b2.jpg" src="images/s2.jpg" ></li>
+
+                            <li><img alt="佳能" bimg="${productDetail.mainImage}" src="${productDetail.mainImage}"></li>
+                        <c:forEach items="${productDetail.productImages}" var="imgItem">
+                            <c:if test="${imgItem.isMain != 1}"><li><img alt="佳能" bimg="${imgItem.imgUrl}" src="${imgItem.imgUrl}" ></li></c:if>
+                        </c:forEach>
                     </ul>
                 </div>
             </div>
@@ -78,7 +71,7 @@
             </dl>
             <dl>
                 <dt class="item_metatit">价格</dt>
-                <dd><em class="item_yuan yListr_hilite">¥</em> <span class="item_price yListr_hilite">469.00</span>
+                <dd><em class="item_yuan yListr_hilite">¥</em> <span class="item_price yListr_hilite" id="sku_price">${productDetail.minPrice}</span>
                     <div class="staticPromoTip "></div>
                 </dd>
             </dl>
@@ -121,20 +114,21 @@
                 <option>15</option>
                 <option>16</option>
             </select>--%>
-            <a href="" class="YImmediatelyininstallment">加入购物车</a>
+            <div class="detail_option">
+                <a href="" class="buyImmediately" >立即购买</a>
+                <a href="" class="addToCart" id="addToCart"><i class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></i>&nbsp;加入购物车</a>
+            </div>
         </form>
     </div>
     </div>
 </div>
 
 <script src="js/dsm-jqzoom.js" type="text/javascript"></script>
-<script src="js/productDetail.js" type="text/javascript"></script>
+
 <script>
     var skuList = ${skuList}
-
-
-
 </script>
+<script src="js/productDetail.js" type="text/javascript"></script>
 
 </body>
 </html>

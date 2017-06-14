@@ -55,8 +55,9 @@ public class ProductBean implements Serializable{
 
     public ProductBean() {}
 
-    public ProductBean(String keywords, String mainImage, String productName, Integer brandId, Integer catId, Integer shopId) {
+    public ProductBean(String keywords,String productBrief, String mainImage, String productName, Integer brandId, Integer catId, Integer shopId) {
         this.keywords = keywords;
+        this.productBrief = productBrief;
         this.mainImage = mainImage;
         this.productName = productName;
         this.brandId = brandId;

@@ -64,4 +64,13 @@ public class BackMsg<T> {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    @Override
+    public String toString() {
+        return "BackMsg{" +
+                "error=" + error +
+                ", data=" + data +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

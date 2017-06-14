@@ -1,5 +1,6 @@
 package com.dsm.controller.user.seller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dsm.common.DsmConcepts;
 import com.dsm.controller.common.BaseController;
 import com.dsm.model.BackMsg;
@@ -136,12 +137,12 @@ public class SellerController extends BaseController {
 //        if (ServletToolUtils.checkRepeatSubmit(getRequest().getSession(), token, "token")) {
 
         //校验通过
-//        System.out.println(JSONObject.toJSONString(releaseProductFormDTO));
-//        BackMsg msg = productService.releaseProduct(releaseProductFormDTO);
+        System.out.println(JSONObject.toJSONString(releaseProductFormDTO));
+        BackMsg msg = productService.releaseProduct(releaseProductFormDTO);
 //        }else{
 //
 //        }
-        return null;
+        return msg;
 
     }
 //

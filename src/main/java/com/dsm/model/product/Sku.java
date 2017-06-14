@@ -109,9 +109,7 @@ public class Sku {
         this.jsonProperties = jsonProperties;
     }
 
-    //    public Map<String, String> getJsonProperties() {
-//        return StringHandleUtils.formatPropertiesToMap(properties);
-//    }
+
 
     @Override
     public String toString() {

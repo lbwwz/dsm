@@ -30,6 +30,7 @@
         <result column="brand_id" property="brandId"/>
         <result column="sort_order" property="sort"/>
         <result column="product_name" property="productName"/>
+        <result column="main_img" property="mainImage"/>
         <result column="product_brief" property="productBrief"/>
         <result column="detail_text" property="detailText"/>
         <result column="min_price" property="minPrice"/>
@@ -80,10 +81,10 @@
     <!--添加商品基本信息-->
     <insert id="addProductInfo" parameterType="ProductBean" useGeneratedKeys="true" keyProperty="productId">
         INSERT INTO
-        dsm_product(cat_id, product_sn, product_name, brand_id, shop_id, , main_img, product_brief
+        dsm_product(cat_id, product_name, brand_id, shop_id,  main_img, product_brief,
         create_time, update_time)
         VALUES
-            (#{catId}, #{productSn}, #{productName}, #{brandId}, #{shopId}, #{mainImage},{productBrief} NOW(), NOW())
+            (#{catId}, #{productName}, #{brandId}, #{shopId}, #{mainImage},#{productBrief}, NOW(), NOW())
     </insert>
 
     <!-- 添加商品图文详情信息 -->
@@ -123,7 +124,7 @@
     <!--根据商品id查询商品基本信息-->
     <select id="getProductBaseInfoById" resultMap="productResult" parameterType="int">
         SELECT
-            product_id, cat_id, product_sn, product_name, click_count, brand_id, product_number, shop_id, shop_name
+            product_id, cat_id, product_sn, product_name, click_count, brand_id, shop_id, shop_name
             min_price, max_price, shop_price, warn_number,product_brief, main_img, product_grade, product_status,
             is_best, is_new, is_hot
         FROM vdsm_user_product_base  WHERE product_id=#{productId} AND product_status=1
@@ -133,7 +134,7 @@
 
     <!--根据类目ID查询商品的基本信息列表-->
     <select id="getProductBaseInfoByCatId" resultMap="productResult" parameterType="int">
-        SELECT product_id, cat_id, product_sn, product_name, click_count, brand_id, product_number, shop_id, a.shop_name,
+        SELECT product_id, cat_id, product_sn, product_name, click_count, brand_id, shop_id, a.shop_name,
             price_min, price_max, shop_price, warn_number,product_brief, main_img, product_grade, product_status,
             is_best, is_new, is_hot
         FROM dsm_product  WHERE catId=#{productId} AND status=1
@@ -143,7 +144,7 @@
         <!--不含属性筛选-->
         <if test="attrBeans == null or attrBeans.size() == 0">
             SELECT
-                a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.product_number, a.shop_id, a.shop_name,
+                a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.shop_id, a.shop_name,
                 a.min_price, a.max_price, a.shop_price, a.warn_number, a.product_brief, a.main_img, a.product_grade, a.product_status,
                 a.is_best, a.is_new, a.is_hot
             FROM vdsm_user_product_base a,
@@ -184,7 +185,7 @@
         <!--不含属性筛选-->
         <if test="attrBeans == null or attrBeans.size() == 0">
         SELECT
-            a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.product_number, a.shop_id, a.shop_name,
+            a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.shop_id, a.shop_name,
             a.min_price, a.max_price, a.shop_price, a.warn_number, a.product_brief, a.main_img, a.product_grade, a.product_status,
             a.is_best, a.is_new, a.is_hot
         FROM vdsm_user_product_base a,
@@ -201,7 +202,7 @@
         <!--含有属性筛选-->
         <if test="attrBeans != null and attrBeans.size() > 0">
             SELECT
-                a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.product_number, a.shop_id, a.shop_name,
+                a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.shop_id, a.shop_name,
                 a.min_price, a.max_price, a.shop_price, a.warn_number, a.product_brief, a.main_img, a.product_grade, a.product_status,
                 a.is_best, a.is_new, a.is_hot
             FROM vdsm_user_product_base a,
@@ -240,7 +241,7 @@
 
     <select id="getPageByCategoryWithPriceNew" resultMap="productResult">
         SELECT
-            p.product_id, cat_id, product_sn, product_name, click_count, brand_id, product_number, shop_id, shop_name,
+            p.product_id, cat_id, product_sn, product_name, click_count, brand_id, shop_id, shop_name,
             min_price, max_price, shop_price, warn_number,product_brief, main_img, product_grade, product_status,
             is_best, is_new, is_hot
         FROM
@@ -278,7 +279,7 @@
         <!--不含属性筛选-->
         <if test="attrBeans == null or attrBeans.size() == 0">
             SELECT
-                a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.product_number, a.shop_id, a.shop_name,
+                a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.shop_id, a.shop_name,
                 a.min_price, a.max_price, a.shop_price, a.warn_number, a.product_brief, a.main_img, a.product_grade, a.product_status,
                 a.is_best, a.is_new, a.is_hot
             FROM vdsm_user_product_base a,
@@ -310,7 +311,7 @@
         <!--含有属性筛选条件-->
         <if test="attrBeans != null and attrBeans.size() > 0">
             SELECT
-                a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.product_number, a.shop_id, a.shop_name,
+                a.product_id, a.cat_id, a.product_sn, a.product_name, a.click_count, a.brand_id, a.shop_id, a.shop_name,
                 a.min_price, a.max_price, a.shop_price, a.warn_number, a.product_brief, a.main_img, a.product_grade, a.product_status,
                 a.is_best, a.is_new, a.is_hot
             FROM vdsm_user_product_base a,
@@ -374,7 +375,7 @@
     <!--查询商品详细信息-->
     <select id="getProductDetailInfo" resultMap="productDetailResult" parameterType="int">
         SELECT
-            p.product_id, p.cat_id, p.product_sn, p.product_name, p.click_count, p.brand_id, p.product_number, p.shop_id, p.shop_name,
+            p.product_id, p.cat_id, p.product_sn, p.product_name, p.click_count, p.brand_id, p.shop_id, p.shop_name,p.main_img,
             p.min_price, p.max_price, p.shop_price, p.warn_number,p.product_brief, p.main_img, p.product_grade, p.product_status,
             p.is_best, p.is_new, p.is_hot,d.detail_text, p.update_time,p.create_time
         FROM vdsm_user_product_base p LEFT JOIN dsm_product_graphic_detail d

@@ -63,12 +63,6 @@ $(function(){
 //    {skuId:110,properties:{0:4,1:1,2:2,3:2},properties_name:{'0|颜色':'4|黑色','1|内存':'1|16G ROM','2|尺寸':'2|4.7寸','3|类型':'2|国行'},num:1}
 //];
 $(function(){
-
-
-
-
-
-
     //初始化sku显示列表
     initSkuCheckPanel(skuList);
     $(".yListr ul li em").click(function(){
@@ -83,7 +77,6 @@ $(function(){
         }
         //sku选项面板计算
         calculateSkuCheckPanelShow();
-
     })
 });
 
@@ -133,7 +126,31 @@ function deepCopy(source) {
     return result;
 }
 function setDataToInput(skuItem){
-    console.log("打印："+skuItem.skuId);
+    var a, b,temp;
+    for(var i = 0; i<skuList.length;i++){
+
+        if(skuList[i].skuId == skuItem.skuId){
+            temp =skuList[i].skuPrice+"";
+            a = temp.indexOf(".")
+            if(a != -1){
+                if(b = temp.length-a<3){
+                    for(var j = 0;j<3-b;j++){
+                        temp+="0";
+                    }
+                }
+                $("#sku_price").text(temp)
+            }else{
+                $("#sku_price").text(temp+".00")
+            }
+
+        }
+    }
+}
+
+function formatPrice(price){
+    if(price.indexOf(".") != -1){
+
+    }
 }
 
 function initSkuCheckPanel(skuList){
@@ -187,3 +204,19 @@ function getCheckedSkuData(){
     return skuObj;
 
 }
+
+
+/**
+ * 业务js
+ */
+
+$(function(){
+
+    /**
+     * 加入购物车
+     */
+    $("#addToCart").click(function(){
+
+    })
+
+});

@@ -25,7 +25,7 @@ public class ProductDaoTest extends BaseJunitTest{
 
     @Test
     public void addProductInfo(){
-        ProductBean productBean = new ProductBean("123",
+        ProductBean productBean = new ProductBean("123","",
                 "1.jpg","好吃点蛋卷",12,
                 14, 1);
 
