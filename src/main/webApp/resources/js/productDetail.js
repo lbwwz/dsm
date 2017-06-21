@@ -65,7 +65,7 @@ $(function(){
 $(function(){
     //初始化sku显示列表
     initSkuCheckPanel(skuList);
-    $(".yListr ul li em").click(function(){
+    $("#saleSelect em").click(function(){
 
         if($(this).attr("class")=="yListrclickem"){
             $(this).removeClass("yListrclickem");
@@ -77,6 +77,9 @@ $(function(){
         }
         //sku选项面板计算
         calculateSkuCheckPanelShow();
+        if($(this).parents("li").hasClass("warn")){
+            $(this).parents("li").removeClass("warn");
+        }
     })
 });
 
@@ -115,6 +118,8 @@ function calculateSkuCheckPanelShow(){
     }
     if(tempList.length == 1){
         setDataToInput(tempList[0]);
+    }else{
+        $(".sku_item_count font").text("");
     }
 }
 
@@ -142,6 +147,8 @@ function setDataToInput(skuItem){
             }else{
                 $("#sku_price").text(temp+".00")
             }
+            $(".sku_item_count font").text("剩余"+skuList[1].quantity+"件")
+
 
         }
     }
@@ -194,9 +201,9 @@ function initSkuCheckPanel(skuList){
 function getCheckedSkuData(){
     skuObj = {};
     var attrId,valueId;
-    for(var i = 0; i<$(".yListr li").length; i++){
-        valueId = $($(".yListr li")[i]).children(".yListrclickem").attr("data");
-        attrId = $($(".yListr li")[i]).attr("data_attrId");
+    for(var i = 0; i<$("#saleSelect li").length; i++){
+        valueId = $($("#saleSelect li")[i]).find(".yListrclickem").attr("data");
+        attrId = $($("#saleSelect li")[i]).attr("data_attrId");
         if(valueId != undefined){
             skuObj[attrId] = valueId||0;
         }
@@ -216,7 +223,14 @@ $(function(){
      * 加入购物车
      */
     $("#addToCart").click(function(){
-
+        var $_chooseItems = $("#saleSelect li");
+        for(var i = 0;i<$_chooseItems.length;i++){
+            if($($_chooseItems[i]).find(".yListrclickem").length==0){
+                $($_chooseItems[i]).addClass("warn")
+                return false;
+            }
+        }
+        //选项完整
     })
 
 });

@@ -65,5 +65,10 @@ public class ProductSkuDaoTest extends BaseJunitTest{
         System.out.println(productSkuDao.getSkuListByProductId(1));
     }
 
+    @Test
+    public void getProductSkuItemTest(){
+        System.out.println(productSkuDao.getProductSkuItem(7));
+    }
+
 
 }

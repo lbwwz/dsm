@@ -2,11 +2,10 @@ package com.dsm.service.interfaces;
 
 import com.dsm.model.BackMsg;
 import com.dsm.model.formData.ReleaseProductFormDTO;
-import com.dsm.model.product.ProductBean;
 import com.dsm.model.product.ProductDetail;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,5 +40,5 @@ public interface IProductService {
      * @return 商品列表信息
      */
     @Transactional(timeout = 10000)
-    List<ProductBean> getProductListByCat(Integer catId, int pageIndex, int num, int sortType, String ev);
+    Map<String,Object> getProductListByCat(Integer catId, int pageIndex, int num, int sortType, String ev);
 }

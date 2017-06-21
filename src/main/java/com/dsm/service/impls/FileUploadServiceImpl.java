@@ -13,6 +13,8 @@ import com.dsm.service.interfaces.IFileUploadService;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,11 +33,18 @@ import java.util.function.Function;
  * Created by Lbwwz on 2016/8/9.
  * <p/>
  * 文件上传操作的具体实现
+ * 使用future 模式优化图片上传模块
  */
 @Service("IFileUploadService")
 public class FileUploadServiceImpl extends BaseService implements IFileUploadService {
 
     private static Logger logger = LoggerFactory.getLogger(FileUploadServiceImpl.class);
+
+    /**
+     * spring 线程池
+     */
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
 
     @Resource

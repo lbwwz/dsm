@@ -1,5 +1,6 @@
 package com.dsm.dao;
 
+import com.dsm.model.product.ProductSkuItem;
 import com.dsm.model.product.Sku;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ import java.util.List;
 @Component
 public interface IProductSkuDao {
     /**
-     * 为商品表添加商品信息
+     * 为sku表添加sku信息
      */
     Integer addSkuItem(Sku sku);
 
@@ -28,8 +29,22 @@ public interface IProductSkuDao {
     Integer addSkuItemList(List<Sku> skuList);
 
     /**
+     * 通过商品号查询sku列表信息
+     * @param productId 商品号
      */
     List<Sku> getSkuListByProductId(int productId);
+
+
+
+    ProductSkuItem getProductSkuItem(int skuId);
+
+
+    /**
+     * 查询sku 单品的库存
+     * @param skuId
+     * @return
+     */
+    int getSkuQuantity(int skuId);
 
 
 

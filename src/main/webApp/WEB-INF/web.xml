@@ -33,6 +33,10 @@
         <listener-class>com.dsm.common.listener.SessionManagerListener</listener-class>
     </listener>
 
+    <listener>
+        <listener-class>com.dsm.common.listener.ContextRefreshedListener</listener-class>
+    </listener>
+
 
     <!-- Spring MVC配置 ====================================== -->
     <!-- 设置servlet的请求编码 -->

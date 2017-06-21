@@ -14,6 +14,7 @@ public class DsmConcepts {
     public static final int CORRECT = 0;    //操作成功
     public static final int ERROR = 1;      //操作失败
     public static final int NO_LOGIN = 100;      //用户未登录
+    public static final int NEED_REDIRECT = 9;      //需要跳转到其他页面
 
     /* 文件上传 start */
     public static final int SIZE_WARRING = 101; //大小异常

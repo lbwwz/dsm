@@ -68,7 +68,7 @@ public class CategoryController {
             //剩余可选的属性列信息
             m.put("selectAttrList",attrBeans);
             //查询按照综合排序查询默认的商品列表
-            m.put("productList",productService.getProductListByCat(catId,page, DsmConcepts.LIST_PAGE_DEFAULT_NUM,sortType,ev));
+            m.putAll(productService.getProductListByCat(catId,page, DsmConcepts.LIST_PAGE_DEFAULT_NUM,sortType,ev));
         } catch (Exception e) {
             logger.error(e.getMessage());
             m.put("errorMsg",e.getMessage());
@@ -163,7 +163,7 @@ public class CategoryController {
 
         try{
             return new BackMsg<>(DsmConcepts.CORRECT,
-                    productService.getProductListByCat(catId, pageIndex, 20, sortType, ev), "");
+                    productService.getProductListByCat(catId, pageIndex, DsmConcepts.LIST_PAGE_DEFAULT_NUM, sortType, ev), "");
         }catch (Exception ex){
             return new BackMsg<>(DsmConcepts.ERROR,null,ex.getMessage());
         }

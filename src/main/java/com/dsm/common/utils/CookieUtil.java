@@ -82,7 +82,7 @@ public class CookieUtil {
 	}
 
 	/**
-	 * 获取指定cookies的值 findCookieByName
+	 * 获取指定cookies的值
 	 *
 	 * @param request {@link HttpServletRequest}
 	 * @param name cookie的键值

@@ -37,8 +37,8 @@
     </div>
 </div>
 
-<!--广告 -->
-<div class="container " style="margin-top:30px;">
+
+<div class="container detail_panel" >
     <div class="row">
         <div class="ItemDetailImg" style="float: left">
             <div id="preview" class="spec-preview">
@@ -78,48 +78,102 @@
         </div>
 
         <form>
-            <ul>
+            <ul id="saleSelect">
                 <c:forEach items="${productDetail.saleAttrInfo}" var="attrItem">
-                    <li data_attrId="${attrItem.attrId}">
-                        <span>${attrItem.attrName}</span>
-                        <c:forEach items="${attrItem.saleAttrValues}" var="valueItem">
-                        <em data="${valueItem.valueId}">${valueItem.valueName}<i></i></em>
-                        </c:forEach>
+                    <li data_attrId="${attrItem.attrId}" >
+                        <span class="chooseName">${attrItem.attrName}</span>
+
+                        <div class="sale_valueBox">
+                            <c:forEach items="${attrItem.saleAttrValues}" var="valueItem">
+                                <em data="${valueItem.valueId}">${valueItem.valueName}<i></i></em>
+                            </c:forEach>
+                        </div>
+                        <div class="clear"></div>
+
                     </li>
                 </c:forEach>
 
             </ul>
-            <%--<p class="colorp00">价值：<em>￥6099.00</em>--%>
-                <!-- <span>月供：<em>6281.97</em>元（本金：<em>6099.00</em>元 + 服务费：<em>182.97</em>元）分期 x <em>1个月</em></span> -->
-            <%--</p>--%>
-           <%-- <label>首付金额：</label>
-            <input type="text" />
-            <label> 元</label>
-            <label style="margin-left:40px;">分期月数：</label>
-            <select>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-                <option>11</option>
-                <option>12</option>
-                <option>13</option>
-                <option>14</option>
-                <option>15</option>
-                <option>16</option>
-            </select>--%>
+            <style>
+                .sku_item_count{margin-top:-20px}
+                .sku_item_count li .countBox,.sku_item_count li .countBox_btn{float:left}
+                .sku_item_count font{padding-left:10px;line-height: 40px;color:#999;font-size:14px}
+                .countBox_btn{width:32px;margin-left: 2px;}
+                #countBox_input{height: 40px;color: #999}
+                .countBox_btn a{width:30px;border:1px solid #ccc; display: block;text-align: center;color:#ccc;padding:2px 4px;}
+                .countBox_btn a:first-of-type{margin-bottom: 2px;}
+            </style>
+            <ul class="sku_item_count">
+                <li>
+                    <span class="chooseName">数量</span>
+                    <div class="countBox">
+                        <input type="text" id="countBox_input" value="1"/>
+                    </div>
+                    <div class="countBox_btn">
+                            <a href="javascript:;"/><i class="glyphicon glyphicon-chevron-up" ></i></a>
+                            <a href="javascript:;"/><i class="glyphicon glyphicon-chevron-down" ></i></a>
+                    </div>
+                    <font ></font>
+                    <div class="clear"></div>
+
+                </li>
+            </ul>
             <div class="detail_option">
-                <a href="" class="buyImmediately" >立即购买</a>
-                <a href="" class="addToCart" id="addToCart"><i class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></i>&nbsp;加入购物车</a>
+                <a href="javascript:;" class="buyImmediately" id="buyImmediately">立即购买</a>
+                <a href="javascript:;" class="addToCart" id="addToCart"><i class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></i>&nbsp;加入购物车</a>
             </div>
         </form>
     </div>
+        <div class="likely_productBox">
+            <div><img src="123.jpg" width="140" height="140"/></div>
+            <div><img src="123.jpg" width="140" height="140"/></div>
+            <div><img src="123.jpg" width="140" height="140"/></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div class="container detail_panel" >
+    <div class="row">
+        <div class="col-xs-2 border_grey" >
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
+        </div>
+        <div class="col-xs-8 ">
+
+
+            <div class="attr_box border_grey" >
+                <h5>产品参数：</h5>
+                <ul class="list-inline">
+
+                    <c:forEach items="${productDetail.baseAttrsInfo}" var="baseAttr">
+                        <li style="width:235px">${baseAttr.attrName}：${baseAttr.attrValue}</li>
+                    </c:forEach>
+                    <c:forEach items="${productDetail.customerAttrsInfo}" var="customerAttr">
+                        <li style="width:235px">${customerAttr.attrName}：${customerAttr.attrValue}</li>
+                    </c:forEach>
+
+                </ul>
+            </div>
+            <div class="detail_box " >
+                ${productDetail.detailText}
+            </div>
+
+
+
+
+        </div>
+        <div class="col-xs-2 ">
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
+        </div>
     </div>
 </div>
 

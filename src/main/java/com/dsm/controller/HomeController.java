@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 
 /**
- * 控制首页一些交互操作的controller
+ * 首页一些交互操作的controller
  */
 @Controller
 public class HomeController extends BaseController {

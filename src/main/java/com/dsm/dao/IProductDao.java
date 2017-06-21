@@ -66,8 +66,8 @@ public interface IProductDao {
     /**
      * 获取商品的基本属性
      *
-     * @param productId productId
-     * @return
+     * @param productId 商品号
+     * @return 商品基本属性列表
      */
     List<ProductDetailAttrInfo> getProductBaseAttrInfo(Integer productId);
 
@@ -75,15 +75,14 @@ public interface IProductDao {
      * 为发布的商品添加自定义属性
      *
      * @param info 要添加自定义属性信息
-     * @return
      */
     Integer addProductCustomAttrList(List<ProductDetailAttrInfo> info);
 
     /**
      * 获取商品的自定义属性
      *
-     * @param productId
-     * @return
+     * @param productId 商品号
+     * @return 自定义属性列表
      */
     List<ProductDetailAttrInfo> getProductCustomAttrInfo(Integer productId);
 
@@ -107,7 +106,9 @@ public interface IProductDao {
      * @param offset      偏移量
      * @param queryWeight 权重数组
      * @param attrBeans   多选属性筛选条件list
-     * @return
+     * @return 商品列表
+     *
+     * @see IProductDao#getPageByCategoryWithWeightValueNew
      */
     @Deprecated
     List<ProductBean> getPageByCategoryWithWeightValue(@Param("catId") Integer catId, @Param("start") int start, @Param("offset") int offset,
@@ -120,7 +121,7 @@ public interface IProductDao {
      * @param totalNum    查询总数
      * @param queryWeight 权重数组
      * @param attrBeans   多选属性筛选条件list
-     * @return
+     * @return 商品列表
      */
     List<ProductBean> getPageByCategoryWithWeightValueNew(@Param("catId") Integer catId, @Param("totalNum") int totalNum,
                                                           @Param("attrBeans") List<BaseAttrBean> attrBeans, @Param("queryWeight") String... queryWeight);
@@ -134,6 +135,8 @@ public interface IProductDao {
      * @param sortType  排序方法: 0：价格从小到达；1：价格从大到小
      * @param attrBeans 多选属性筛选条件list
      * @return 一页商品的数据
+     *
+     * @see IProductDao#getPageByCategoryWithPriceNew
      */
     @Deprecated
     List<ProductBean> getPageByCategoryWithPrice(@Param("catId") Integer catId, @Param("start") int start, @Param("offset") int offset,

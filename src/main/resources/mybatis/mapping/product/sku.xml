@@ -14,7 +14,7 @@
         <result column="shop_sn" property="shopSn"/>
     </resultMap>
 
-    <resultMap id="productResult" type="ProductBean">
+    <resultMap id="ProductSkuItemResult" type="ProductSkuItem">
         <id column="product_id" property="productId"/>
         <result column="cat_id" property="catId"/>
         <result column="shop_id" property="shopId"/>
@@ -52,10 +52,18 @@
         SELECT * FROM dsm_product_sku WHERE product_id=#{productId};
     </select>
 
-    <select id="getProductSkuSkuItem" resultMap="skuResult" parameterType="int">
-        SELECT *
-        FROM dsm_product,dsm_product_sku
-        WHERE dsm_product.product_id = dsm_product_sku.product_id AND dsm_product_sku.sku_id={skuId}
+
+    <select id="getProductSkuItem" resultMap="ProductSkuItemResult" parameterType="int">
+        SELECT dsm_product_sku.product_id , cat_id, product_sn, product_name, click_count, brand_id, shop_id, shop_name,
+            warn_number,product_brief, main_img, product_grade, product_status,
+            is_best, is_new, is_hot,sku_id,properties_name, quantity, sku_price, shop_sn
+        FROM vdsm_user_product_base,dsm_product_sku
+        WHERE vdsm_user_product_base.product_id = dsm_product_sku.product_id AND dsm_product_sku.sku_id=#{skuId}
+    </select>
+
+    <!--查询sku单品的库存-->
+    <select id="getSkuQuantity" parameterType="int">
+        SELECT quantity FROM dsm_product_sku WHERE sku_id=#{skuId}
     </select>
 
 </mapper>

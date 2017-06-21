@@ -153,11 +153,17 @@
         </div>
         </c:forEach>
 
+        <%--商品分页--%>
         <div class="col-xs-12 text-center pageIndex_ul">
             <ul class="pagination">
                 <li id="prevPage">
                     <a href="#">< 上一页</a>
                 </li>
+
+                <%--<c:if test="${totalPage ge 5}">--%>
+                    <%----%>
+                <%--</c:if>--%>
+                <%--<c:if test="${totalPage ge 5}">--%>
                 <li class="active">
                     <a href="#">1</a>
                 </li>
@@ -170,12 +176,15 @@
                 <li>
                     <a href="#">4</a>
                 </li>
-                <li>
-                    <i class="" style="border-width:0;padding: 7px 12px 6px;line-height: 1.42857143; float:left">···</i>
-                </li>
+                <c:if test="${totalPage gt 5}">
+                    <li>
+                        <i class="" style="border-width:0;padding: 7px 12px 6px;line-height: 1.42857143; float:left">···</i>
+                    </li>
+                </c:if>
                 <li>
                     <a href="#">5</a>
                 </li>
+                <%--</c:if>--%>
                 <li id="nextPage">
                     <a href="#">下一页 ></a>
                 </li>

@@ -1,6 +1,6 @@
 @CHARSET "UTF-8";
 
-body{overflow-x: hidden;}
+body{min-width:1240px}
 #topNavbar .navbar-nav>li>a>span{color:#F40; font-size: 12px;}
 #topNavbar .navbar-nav>li>a:hover{background-color: #eee;}
 #topNavbar .list-group>li{color: #777;text-decoration: none;}

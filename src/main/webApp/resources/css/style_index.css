@@ -87,7 +87,8 @@ a:hover{text-decoration:none}
 #prevPage a,#nextPage a{margin:0 10px;}
 
 /* 详情页面 */
-
+.detail_panel{margin-top:30px}
+.detail_panel .border_grey{border:1px solid #eeeeee;}
 .ItemDetailImg a:link,.ItemDetailImg a:visited{ color:#333333; text-decoration:none; }
 .ItemDetailImg a:hover{ color:#CC0000; text-decoration:underline; }
 .ItemDetailImg a:active{ color:#990000; }
@@ -115,7 +116,8 @@ a:hover{text-decoration:none}
 .spec-scroll .items ul li img{padding:2px;width:50px;height:50px;}
 .spec-scroll .items ul li .on{border:2px solid #5bc0de;padding:1px;}
 
-.yListr{width:690px;font-family:"微软雅黑";font-size: 12px;margin-left:30px;font-family: tahoma,arial,\5FAE\8F6F\96C5\9ED1,sans-serif; }
+.detail_panel{font-family: tahoma,arial,\5FAE\8F6F\96C5\9ED1,sans-serif;}
+.yListr{width:520px;font-family:"微软雅黑";font-size: 12px;margin-left:28px; }
 .yListr h4{color:#666;margin:10px 0 12px 8px; font-weight:700}
 .yListr p{color:#FF0036;margin:10px 0 12px 8px;}
 .yListr dl{margin: 0; }
@@ -127,11 +129,13 @@ a:hover{text-decoration:none}
 .yListr .yListr_hilite{color: #FF0036;}
 .yListr .yListr_origin{font-size: 14px; font-weight: 100;    text-decoration: line-through;}
 .yListr ul{padding-bottom:10px;margin-bottom:13px;padding-left:0}
-.yListr ul li{height:36px;margin-bottom:23px; list-style-type:none;}
-.yListr ul li span{color:#838383;font-size:12px;line-height:36px;display:inline-block;width:65px;margin-left: 8px;}
-.yListr ul li em{cursor:pointer;color:#666666;font-size:12px;display:inline-block;padding:0 10px;font-style:normal;border:1px solid #ccc;line-height:34px;height:34px;}
+.yListr ul li{;margin-bottom:23px; list-style-type:none;overflow:auto}
+.yListr ul .warn{border: 1px dashed #ffb9b9;padding: 10px 0;background: #ffe8e8; margin: -11px 0 12px -1px;}
+.yListr ul li .chooseName{color:#838383;font-size:12px;line-height:36px;display:inline-block;width:65px;margin-left: 8px;display: block;float: left}
+.yListr ul li .sale_valueBox{float:left;width:435px}
+.yListr ul li em{margin-bottom:4px;cursor:pointer;color:#666666;background: #fff;font-size:12px;display:inline-block;padding:0 10px;font-style:normal;border:1px solid #ccc;line-height:34px;height:34px;}
 .yListr ul li em.yListrnoclickem{border:1px dashed #ccc;}
-.yListr ul li em.yListrclickem{line-height:32px;border:2px solid #e9630a;height:32px;position:relative;padding:0 9px;}
+.yListr ul li em.yListrclickem{line-height:32px;border:2px solid #5bc0de;position:relative;padding:0 9px;}
 .yListr ul li em.yListrclickem i{display:block;width:15px;height:14px;background:url(../images/righbt.png) no-repeat 0 0;right:-1px;bottom:-1px;position:absolute;}
 .yListr .colorp00{color:#333333;font-size:18px;line-height:50px;}
 .yListr .colorp00 span{color:#ed610c;font-size:14px;padding-left:20px;}
@@ -146,3 +150,15 @@ a:hover{text-decoration:none}
 .yListr form .buyImmediately{color:#5bc0de;background:#e8faff;border: 1px solid #5bc0de;}
 .yListr form .addToCart:hover{background: #5bcede}
 .yListr form .buyImmediately:hover{border: 1px solid #5bcede;background: #f1fcff}
+
+.likely_productBox{float:left;width:212px;margin-left:18px;border-left:1px solid #eeeeee;min-height:500px;padding-left:20px;}
+.likely_productBox div{
+	margin-bottom:20px;padding:10px 20px 0}
+
+.attr_box{color:#6d6d6d;font-size:12px; padding:12px 20px 8px;}
+.attr_box h5{font-weight: 700;padding-bottom: 10px; color: #999}
+.attr_box ul li{padding-bottom:10px}
+
+.detail_box{margin-top:10px;}
+
+

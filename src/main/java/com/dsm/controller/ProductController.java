@@ -1,8 +1,7 @@
 package com.dsm.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.dsm.common.utils.SessionToolUtils;
-import com.dsm.model.BackMsg;
+import com.dsm.controller.common.BaseController;
 import com.dsm.model.product.ProductDetail;
 import com.dsm.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import java.util.Map;
  * @author : Lbwwz
  */
 @Controller
-public class ProductController {
+public class ProductController extends BaseController {
 
     @Autowired
     private IProductService productService;
@@ -32,6 +31,7 @@ public class ProductController {
      */
     @RequestMapping("item.html")
     public String getProductDetailPage(Map<String, Object> m,Integer id){
+
         ProductDetail detail = productService.getProductDetail(id);
 
         m.put("productDetail",detail);
@@ -40,18 +40,7 @@ public class ProductController {
         return "/productDetail";
     }
 
-    @RequestMapping("addToCart")
-    public BackMsg<String> addToCart(){
 
-        //检查用户登录
-        if(SessionToolUtils.checkLogin()==1){
-            //调用api将商品信息添加到购物车中
-        }else{
-
-        }
-
-        return null;
-    }
 
 
 }

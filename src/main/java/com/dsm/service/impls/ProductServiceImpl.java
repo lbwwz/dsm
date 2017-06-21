@@ -2,6 +2,7 @@ package com.dsm.service.impls;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dsm.common.DsmConcepts;
+import com.dsm.common.annotation.TestAnnotation;
 import com.dsm.common.cache.cacheService.IRedisService;
 import com.dsm.common.utils.SessionToolUtils;
 import com.dsm.controller.utils.ParamUtils;
@@ -28,6 +29,7 @@ import java.util.*;
  *
  * @author : Lbwwz
  */
+@TestAnnotation
 @Service("IProductService")
 public class ProductServiceImpl implements IProductService {
     public static Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
@@ -55,7 +57,7 @@ public class ProductServiceImpl implements IProductService {
         /**
          * 拆分相关的商品信息，将信息组合调用相关的接口进行保存
          */
-        ProductBean productBean = new ProductBean(releaseProductFormDTO.getKeywords(),releaseProductFormDTO.getProduceBrief(),
+        ProductBean productBean = new ProductBean(releaseProductFormDTO.getKeywords(), releaseProductFormDTO.getProduceBrief(),
                 releaseProductFormDTO.getMainImgItem(), releaseProductFormDTO.getProductName(), releaseProductFormDTO.getBrand(),
                 releaseProductFormDTO.getCatId(), Integer.parseInt(SessionToolUtils.getUser().getShop().getShopId()));
         try {
@@ -73,7 +75,7 @@ public class ProductServiceImpl implements IProductService {
             /**
              * 添加商品的图片列表
              */
-            if(releaseProductFormDTO.getImgItem() != null){
+            if (releaseProductFormDTO.getImgItem() != null) {
                 int isMain;
                 List<ProductImageItem> imageList = new ArrayList<>();
 
@@ -88,7 +90,7 @@ public class ProductServiceImpl implements IProductService {
                 try {
                     productDao.addProductImageList(imageList);
                 } catch (Exception ex) {
-                    throw new Exception("商品图片列表添加失败！",ex);
+                    throw new Exception("商品图片列表添加失败！", ex);
                 }
             }
 
@@ -98,7 +100,7 @@ public class ProductServiceImpl implements IProductService {
             try {
                 productDao.addGraphicDetail(new GraphicDetail(productId, releaseProductFormDTO.getDetailContent()));
             } catch (Exception ex) {
-                throw new Exception("商品详情内容添加失败！",ex);
+                throw new Exception("商品详情内容添加失败！", ex);
             }
 
             /**
@@ -122,7 +124,7 @@ public class ProductServiceImpl implements IProductService {
             }
             String[] customAttrNames = releaseProductFormDTO.getCustomBaseAttrName(), customAttrValues = releaseProductFormDTO.getCustomBaseAttrValue();
 
-            if(customAttrNames != null && customAttrValues != null){
+            if (customAttrNames != null && customAttrValues != null) {
                 if (customAttrNames.length != customAttrValues.length) {
                     throw new Exception("自定义基础属性数据异常！");
                 }
@@ -137,7 +139,7 @@ public class ProductServiceImpl implements IProductService {
                 if (customAttrList.size() > 0)
                     productDao.addProductCustomAttrList(customAttrList);
             } catch (Exception ex) {
-                throw new Exception("商品基础属性添加失败！",ex);
+                throw new Exception("商品基础属性添加失败！", ex);
             }
 
             try {
@@ -145,7 +147,7 @@ public class ProductServiceImpl implements IProductService {
                 if (baseAttrList.size() > 0)
                     productDao.addProductBaseAttrList(baseAttrList);
             } catch (Exception ex) {
-                throw new Exception("商品基础属性添加失败！",ex);
+                throw new Exception("商品基础属性添加失败！", ex);
             }
 
             /**
@@ -167,7 +169,7 @@ public class ProductServiceImpl implements IProductService {
                 if (skuList.size() > 0)
                     productSkuDao.addSkuItemList(skuList);
             } catch (Exception ex) {
-                throw new Exception("商品sku信息添加失败！",ex);
+                throw new Exception("商品sku信息添加失败！", ex);
             }
 
             return new BackMsg(DsmConcepts.CORRECT, "", "商品添加成功！");
@@ -209,7 +211,7 @@ public class ProductServiceImpl implements IProductService {
         /**
          * 操作将sku信息转换成相应的销售属性列表集
          */
-        if(productDetail != null){
+        if (productDetail != null) {
             productDetail.setSaleAttrInfo(formatSkuListToSaleAttrList(productDetail.getSkuList()));
 
         }
@@ -220,88 +222,97 @@ public class ProductServiceImpl implements IProductService {
 
     /**
      * 将sku对象结果集转换为销售属性信息列表
+     *
      * @param skuList
      * @return
      */
-    private List<ProductDetailAttrInfo> formatSkuListToSaleAttrList(List<Sku> skuList){
+    private List<ProductDetailAttrInfo> formatSkuListToSaleAttrList(List<Sku> skuList) {
 
         List<ProductDetailAttrInfo> saleAttrInfoList = new ArrayList<>(skuList.get(0).getPropertiesName().split(";").length);
-        String[] itemInfoList,tempList;
-        for(int i = 0; i<skuList.size();i++){
+        String[] itemInfoList, tempList;
+        for (int i = 0; i < skuList.size(); i++) {
             itemInfoList = skuList.get(i).getPropertiesName().split(";");
 
-            if (i == 0){
-                for(String itemInfo : itemInfoList){
+            if (i == 0) {
+                for (String itemInfo : itemInfoList) {
                     tempList = itemInfo.split("\\|");
-                    if(tempList.length != 4){
-                        logger.error("录入的sku信息异常，skuId为{}",skuList.get(i).getSkuId());
+                    if (tempList.length != 4) {
+                        logger.error("录入的sku信息异常，skuId为{}", skuList.get(i).getSkuId());
                         return null;
                     }
                     Set<AttrValueBean> attrValueSet = new HashSet<>();
-                    attrValueSet.add(new AttrValueBean(Integer.parseInt(tempList[1]),tempList[3]));
-                    saleAttrInfoList.add(new ProductDetailAttrInfo(Integer.parseInt(tempList[0]),tempList[2],attrValueSet));
+                    attrValueSet.add(new AttrValueBean(Integer.parseInt(tempList[1]), tempList[3]));
+                    saleAttrInfoList.add(new ProductDetailAttrInfo(Integer.parseInt(tempList[0]), tempList[2], attrValueSet));
                 }
-            }else{
-                for(int j=0; j<itemInfoList.length; j++){
+            } else {
+                for (int j = 0; j < itemInfoList.length; j++) {
                     tempList = itemInfoList[j].split("\\|");
-                    if(tempList.length != 4){
-                        logger.error("录入的sku信息异常，skuId为{}",skuList.get(i).getSkuId());
+                    if (tempList.length != 4) {
+                        logger.error("录入的sku信息异常，skuId为{}", skuList.get(i).getSkuId());
                         return null;
                     }
-                    saleAttrInfoList.get(j).getSaleAttrValues().add(new AttrValueBean(Integer.parseInt(tempList[1]),tempList[3]));
+                    saleAttrInfoList.get(j).getSaleAttrValues().add(new AttrValueBean(Integer.parseInt(tempList[1]), tempList[3]));
                 }
             }
         }
         return saleAttrInfoList;
     }
 
-//    public void
+
 
     @Transactional(timeout = 10000)
     @Override
-    public List<ProductBean> getProductListByCat(Integer catId, int pageIndex, int num, int sortType, String ev) {
-        if(catId== null){
+    public Map<String,Object> getProductListByCat(Integer catId, int pageIndex, int num, int sortType, String ev) {
+        if (catId == null) {
             return null;
         }
+        num = num != 0 ? num : DsmConcepts.LIST_PAGE_DEFAULT_NUM;
+        int totalNum = num * DsmConcepts.LIST_PAGE_SIZE;
+
         try {
             List<BaseAttrBean> attrBeans = ParamUtils.formatAttrSelectParamToBean(ev);//抛出非法参数异常
 
-            //这里可以考虑使用缓存
-            String productList = redisService.get("productList_" + catId + "_" + pageIndex + "_" + sortType +"_"+ev);
 
-            if (StringUtils.isNoneBlank(productList)) {
-                return JSONObject.parseArray(productList, ProductBean.class);
-            }
-            //缓存中不存在
             List<ProductBean> list;
 
-            if (sortType < 3) { //默认排序和点击排序
-                String[] queryWeight = getQueryTypeInfo(sortType);
-                //根据权重排序，分页查询相关的商品信息
-                list = productDao.getPageByCategoryWithWeightValueNew(catId, DsmConcepts.LIST_PAGE_DEFAULT_NUM*DsmConcepts.LIST_PAGE_SIZE, attrBeans, queryWeight);
-            } else {
-                if (sortType == DsmConcepts.SEARCH_SORT_PRICE_TO_LARGE) {
-                    list = productDao.getPageByCategoryWithPriceNew(catId, DsmConcepts.LIST_PAGE_DEFAULT_NUM*DsmConcepts.LIST_PAGE_SIZE, 0,attrBeans);
+            //这里可以考虑使用缓存
+            String productList = redisService.get("productList_" + totalNum + "_" + sortType + "_" + ev);
+
+            if (StringUtils.isNoneBlank(productList)) {
+                list =  JSONObject.parseArray(productList, ProductBean.class);
+            }else{
+                //缓存中不存在,在数据库中查询
+                if (sortType < 3) { //默认排序和点击排序
+                    String[] queryWeight = getQueryTypeInfo(sortType);
+                    //根据权重排序，分页查询相关的商品信息
+                    list = productDao.getPageByCategoryWithWeightValueNew(catId, totalNum, attrBeans, queryWeight);
                 } else {
-                    list = productDao.getPageByCategoryWithPriceNew(catId, DsmConcepts.LIST_PAGE_DEFAULT_NUM*DsmConcepts.LIST_PAGE_SIZE, 1,attrBeans);
+                    if (sortType == DsmConcepts.SEARCH_SORT_PRICE_TO_LARGE) {
+                        list = productDao.getPageByCategoryWithPriceNew(catId, totalNum, 0, attrBeans);
+                    } else {
+                        list = productDao.getPageByCategoryWithPriceNew(catId, totalNum, 1, attrBeans);
+                    }
                 }
-            }
-            if (list != null && list.size() > 0) {
                 //设置商品列表的缓存时间为15分钟
-                redisService.set("productList_"+catId+"_" + pageIndex+"_"+sortType +"_*"+ev, JSONObject.toJSONString(list), 900);
-
-                //查询分页数据
-                int length = list.size(),start =pageIndex*num, end = Math.min((start+num),length);
-                if(start<=end && end<=length){
-                    list = list.subList(pageIndex*num,end);
-                }
+                redisService.set("productList_" + totalNum + "_" + sortType + "_" + ev, JSONObject.toJSONString(list), 900);
             }
 
-            return list;
-        }catch (IllegalArgumentException iex){
+
+            if (list != null && list.size() > 0) {
+                Map<String,Object> m = new HashMap<>();
+                m.put("totalPage",list.size() % num != 0?list.size()/num+1:list.size()/num);
+                //查询分页数据
+                int length = list.size(), start = pageIndex * num, end = Math.min((start + num), length);
+                if (start <= end && end <= length) {
+                    m.put("productList", list.subList(pageIndex * num, end));
+
+                }
+                return m;
+            }
+        } catch (IllegalArgumentException iex) {
             logger.error(iex.getMessage());
             throw new IllegalArgumentException(iex.getMessage());
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             logger.error("类目查询商品信息失败：{}", ex.getMessage());
         }
         return null;
@@ -310,21 +321,22 @@ public class ProductServiceImpl implements IProductService {
 
     /**
      * 使用哪种权值排序
+     *
      * @param sortType 0：默认；1：热度（点击量）；2：信用（好评分数）；3：价格（由低到高）；4：价格（由高到低）
      * @return
      */
     private String[] getQueryTypeInfo(int sortType) {
-        switch (sortType){
-            case DsmConcepts.SEARCH_SORT_DEFAULT :
-                return new String[]{"0.05","1","1","1","0"};
-            case DsmConcepts.SEARCH_SORT_HOT :
-                return new String[]{"1","0","0","0","0"};
-            case DsmConcepts.SEARCH_SORT_PRICE_TO_LARGE :
+        switch (sortType) {
+            case DsmConcepts.SEARCH_SORT_DEFAULT:
+                return new String[]{"0.05", "1", "1", "1", "0"};
+            case DsmConcepts.SEARCH_SORT_HOT:
+                return new String[]{"1", "0", "0", "0", "0"};
+            case DsmConcepts.SEARCH_SORT_PRICE_TO_LARGE:
                 break;
-            case DsmConcepts.SEARCH_SORT_PRICE_TO_SMALL :
+            case DsmConcepts.SEARCH_SORT_PRICE_TO_SMALL:
                 break;
         }
-        return  null;
+        return null;
     }
 
 
