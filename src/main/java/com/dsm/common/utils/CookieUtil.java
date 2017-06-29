@@ -88,8 +88,8 @@ public class CookieUtil {
 	 * @param name cookie的键值
 	 * @return String
 	 */
-	public static String findCookieByName(HttpServletRequest request,
-			String name) {
+	public static String getCookieByName(HttpServletRequest request,
+										 String name) {
 		Cookie[] cookies = request.getCookies();
 		if(null == cookies || cookies.length == 0) return null;
 		String string = null;

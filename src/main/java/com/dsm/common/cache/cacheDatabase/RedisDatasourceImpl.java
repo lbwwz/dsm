@@ -30,7 +30,7 @@ public class RedisDatasourceImpl implements RedisDataSource {
     @Value("${redis.retry.num}")
     private  String RETRY_NUM;
 
-    public  void setRetryNum(String retryNum) {
+    public void setRetryNum(String retryNum) {
         RETRY_NUM = retryNum;
     }
 
@@ -44,7 +44,6 @@ public class RedisDatasourceImpl implements RedisDataSource {
                 shardJedis = shardedJedisPool.getResource();
             } catch (Exception e) {
                 logger.error("RedisDataSource ERROR[getRedis error!]", e);
-                closeJedis(shardJedis);
             }
         }
         while (shardJedis == null && count++ < Integer.parseInt(RETRY_NUM));

@@ -10,7 +10,11 @@ import java.util.concurrent.Executors;
 public class CacheExecutor {
 
 
-    private static CachePool cachePool;
+    private  static volatile CachePool cachePool;
+
+    private CacheExecutor(){
+
+    }
 
     /**
      * 静态的工厂方法
@@ -20,19 +24,24 @@ public class CacheExecutor {
     public static CachePool newCachePool(){
 
         if (cachePool == null){
-            /**
-             * 初始化散状清理线程池，使用CachedThreadPool，动态线程池
-             */
-            looseCleanExecutor = Executors.newCachedThreadPool();
 
-            /**
-             * 初始化任务表清理线程池，该线程用于执行{@link CachePool}中 清理任务表 中的清理任务
-             * 负责清理
-             */
-            mainCleanExecutor = Executors.newCachedThreadPool();
+            synchronized (CacheExecutor.class){
+                if(cachePool==null){
+                    /**
+                     * 初始化散状清理线程池，使用CachedThreadPool，动态线程池
+                     */
+                    looseCleanExecutor = Executors.newCachedThreadPool();
 
-            //创建缓存池
-            cachePool = CachePool.getInstance();
+                    /**
+                     * 初始化任务表清理线程池，该线程用于执行{@link CachePool}中 清理任务表 中的清理任务
+                     * 负责清理
+                     */
+                    mainCleanExecutor = Executors.newCachedThreadPool();
+
+                    //创建缓存池
+                    cachePool = CachePool.getInstance();
+                }
+            }
         }
 
 

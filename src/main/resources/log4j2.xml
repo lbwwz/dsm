@@ -4,17 +4,17 @@
     <properties>
         <!--优先级从高到低依次为：OFF、FATAL、ERROR、WARN、INFO、DEBUG、TRACE、ALL -->
         <property name="LOG_LEVEL">INFO</property><!-- 日志输出级别 -->
-        <property name="FILE_SIZE">500MB</property><!--日志切割的最小单位 -->
+        <property name="FILE_SIZE">100MB</property><!--日志切割的最小单位 -->
 
         <property name="LOG_HOME">/opt/java/logs/dsm/</property>
         <!-- <property name="LOG_HOME">/opt/java/logs/mylog/</property> -->
         <!-- <property name="LOG_HOME">D:\logs\wap</property> -->
-        <property name="FILE_OUT_NAME">dsm_output</property>
-        <property name="FILE_Error_NAME">dsm_error</property>
+        <property name="FILE_INFO_NAME">dsm_info</property>
+        <property name="FILE_ERROR_NAME">dsm_error</property>
 
         <property name="LOG_PATTERN">%date[%-5level] %logger{36}:%line: %msg%n</property>
-        <property name="ROLLING_OUT_NAME">${LOG_HOME}/%d{yyyy-MM-dd}/${FILE_OUT_NAME}-%d{yyyy-MM-dd-HH}.log.gz</property>
-        <property name="ROLLING_ERROR_NAME">${LOG_HOME}/%d{yyyy-MM-dd}/${FILE_Error_NAME}-%d{yyyy-MM-dd}-%i.log.gz</property>
+        <property name="ROLLING_INFO_NAME">${LOG_HOME}/%d{yyyy-MM-dd}/${FILE_INFO_NAME}-%d{yyyy-MM-dd-HH}.log.gz</property>
+        <property name="ROLLING_ERROR_NAME">${LOG_HOME}/%d{yyyy-MM-dd}/${FILE_ERROR_NAME}-%d{yyyy-MM-dd}-%i.log.gz</property>
         <property name="Log_MAX_CNT">3000</property><!-- 保留日志文件数量 -->
     </properties>
     <Appenders>
@@ -27,31 +27,38 @@
 
         <!--这个会打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档。
         按天或者超过50MB分割 -->
-        <RollingFile name="RollingFile" fileName="${LOG_HOME}/${FILE_OUT_NAME}.log"    filePattern="${ROLLING_OUT_NAME}">
+        <RollingFile name="RollingFileInfo" fileName="${LOG_HOME}/${FILE_INFO_NAME}.log"    filePattern="${ROLLING_INFO_NAME}">
             <!-- 需要记录的级别 -->
             <!-- <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" /> -->
             <PatternLayout pattern="${LOG_PATTERN}" />
             <Policies>
-                <OnStartupTriggeringPolicy />
-                <TimeBasedTriggeringPolicy />
-                <SizeBasedTriggeringPolicy size="50 MB" />
+                <!--四小时打包日志一次-->
+                <TimeBasedTriggeringPolicy interval="4" modulate="true" />
+                <SizeBasedTriggeringPolicy size="${FILE_SIZE}" />
             </Policies>
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
         </RollingFile>
+
+
         <!-- 输出错误日志 -->
-        <RollingFile name="RollingFileError" fileName="${LOG_HOME}/${FILE_Error_NAME}.log" filePattern="${ROLLING_ERROR_NAME}">
+        <RollingFile name="RollingFileError" fileName="${LOG_HOME}/${FILE_ERROR_NAME}.log" filePattern="${ROLLING_ERROR_NAME}">
             <PatternLayout pattern="${LOG_PATTERN}" />
             <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-                <!-- <SizeBasedTriggeringPolicy size="${FILE_SIZE}" /> -->
+                <TimeBasedTriggeringPolicy interval="4" modulate="true" />
+                 <SizeBasedTriggeringPolicy size="${FILE_SIZE}" />
             </Policies>
             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY" />
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Root level="info"> <!-- 全局配置 -->
-            <AppenderRef ref="Console" />
-            <AppenderRef ref="RollingFile"/>
-        </Root>
+        <!--过滤掉spring和mybatis的一些无用的DEBUG信息-->
+        <logger name="org.springframework" level="INFO"></logger>
+        <logger name="org.mybatis" level="INFO"></logger>
+        <root level="info">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="RollingFileError"/>
+        </root>
         <!-- 为sql语句配置特殊的Log级别，方便调试 -->
         <!--<Logger name="com.dsm.dao" level="DEBUG" additivity="false">-->
             <!--<AppenderRef ref="Console" />-->
