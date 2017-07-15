@@ -95,7 +95,7 @@ public class ProductDaoTest extends BaseJunitTest{
 
     @Test
     public void getPageByCategoryByPriceNewTest() {
-        System.out.println(productDao.getPageByCategoryWithPriceNew(1,1500,1, null));
+        System.out.println(productDao.getPageByCategoryWithPriceNew(1,1500,1, null,0));
     }
 
     @Test

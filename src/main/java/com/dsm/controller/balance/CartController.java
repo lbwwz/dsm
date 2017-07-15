@@ -33,9 +33,9 @@ public class CartController {
      */
     @ResponseBody
     @RequestMapping("cart/addToCart")
-    public BackMsg<String> addToCart(Integer skuId,@RequestParam(defaultValue = "1") Integer count,boolean cookieEnabled){
+    public BackMsg<String> addToCart(String skuId,@RequestParam(defaultValue = "1") Integer count,boolean cookieEnabled){
 
-        BackMsg<String> msg = cartService.addToCart(skuId,count,cookieEnabled);
+        BackMsg<String> msg = cartService.addOrMinusToCart(skuId,count,cookieEnabled);
         return null;
 
     }

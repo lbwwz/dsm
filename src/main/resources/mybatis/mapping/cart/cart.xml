@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace必须是接口的全类名  -->
+<mapper namespace="com.dsm.dao.ICartDao">
+
+    <!-- ShoppingCartPO 属性别名与字段之间映射-->
+    <resultMap type="ShoppingCartPO" id="shoppingCartPOResult">
+        <id column="cart_item_id" property="cartItemId"/>
+        <result column="user_id" property="userId"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="num" property="num"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+</mapper>

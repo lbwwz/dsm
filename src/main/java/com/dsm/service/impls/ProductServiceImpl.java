@@ -280,7 +280,7 @@ public class ProductServiceImpl implements IProductService {
 
             if (StringUtils.isNoneBlank(productList)) {
                 list =  JSONObject.parseArray(productList, ProductBean.class);
-            }else{
+            }else {
                 //缓存中不存在,在数据库中查询
                 if (sortType < 3) { //默认排序和点击排序
                     String[] queryWeight = getQueryTypeInfo(sortType);
@@ -288,15 +288,14 @@ public class ProductServiceImpl implements IProductService {
                     list = productDao.getPageByCategoryWithWeightValueNew(catId, totalNum, attrBeans, queryWeight);
                 } else {
                     if (sortType == DsmConcepts.SEARCH_SORT_PRICE_TO_LARGE) {
-                        list = productDao.getPageByCategoryWithPriceNew(catId, totalNum, 0, attrBeans);
+                        list = productDao.getPageByCategoryWithPriceNew(catId, totalNum, 0, attrBeans,attrBeans == null?0:attrBeans.size());
                     } else {
-                        list = productDao.getPageByCategoryWithPriceNew(catId, totalNum, 1, attrBeans);
+                        list = productDao.getPageByCategoryWithPriceNew(catId, totalNum, 1, attrBeans,attrBeans == null?0:attrBeans.size());
                     }
                 }
                 //设置商品列表的缓存时间为15分钟
-                redisService.set("productList_" + totalNum + "_" + sortType + "_" + ev, JSONObject.toJSONString(list), 900);
+                redisService.set("productList_" + totalNum + "_" + sortType + "_" + ev, JSONObject.toJSONString(list), 10);
             }
-
 
             if (list != null && list.size() > 0) {
                 Map<String,Object> m = new HashMap<>();
@@ -305,7 +304,6 @@ public class ProductServiceImpl implements IProductService {
                 int length = list.size(), start = pageIndex * num, end = Math.min((start + num), length);
                 if (start <= end && end <= length) {
                     m.put("productList", list.subList(pageIndex * num, end));
-
                 }
                 return m;
             }

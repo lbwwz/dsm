@@ -21,7 +21,7 @@ public class BaseAttrBean implements Serializable,Comparable<BaseAttrBean>{
 	public BaseAttrBean() {
 	}
 
-	public BaseAttrBean(Integer valueId, Integer attrId) {
+	public BaseAttrBean(Integer attrId,Integer valueId) {
 		this.valueId = valueId;
 		this.attrId = attrId;
 	}

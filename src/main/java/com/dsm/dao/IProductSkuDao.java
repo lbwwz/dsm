@@ -41,8 +41,6 @@ public interface IProductSkuDao {
 
     /**
      * 查询sku 单品的库存
-     * @param skuId
-     * @return
      */
     int getSkuQuantity(int skuId);
 

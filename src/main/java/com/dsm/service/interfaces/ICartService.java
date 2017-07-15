@@ -13,11 +13,11 @@ import com.dsm.model.BackMsg;
  */
 public interface ICartService {
     /**
-     * 添加商品到购物车
+     * 增减商品到购物车
      * @param skuId 商品sku
-     * @param count 商品数量
+     * @param changeCount 变更数量商品数量
      * @param cookieEnabled
      * @return
      */
-    BackMsg<String> addToCart(Integer skuId, Integer count, boolean cookieEnabled);
+    BackMsg<String> addOrMinusToCart(String skuId, int changeCount, boolean cookieEnabled);
 }

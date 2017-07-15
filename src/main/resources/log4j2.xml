@@ -60,8 +60,8 @@
             <appender-ref ref="RollingFileError"/>
         </root>
         <!-- 为sql语句配置特殊的Log级别，方便调试 -->
-        <!--<Logger name="com.dsm.dao" level="DEBUG" additivity="false">-->
-            <!--<AppenderRef ref="Console" />-->
-        <!--</Logger>-->
+        <Logger name="com.dsm.dao" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console" />
+        </Logger>
     </Loggers>
 </Configuration>
