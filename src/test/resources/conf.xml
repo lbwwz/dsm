@@ -2,19 +2,26 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-	<properties resource="datasource.properties"/>
 
+	<!--
+		resource：使用类路径下的配置文件
+		url：使用磁盘路径或者网络路径的配置文件
+	-->
+	<properties resource="datasource.properties"/>
+	<!--<properties url="datasource.properties"/>-->
 	<!-- 配置别名 -->
 	<typeAliases>
-		<!-- 批量扫描别名 -->
+		<!-- 批量扫描别名
+			若扫描的包中出现两个相同的类名的类，可以使用MyBatis注解@Alias为同名的类指定不同别名
+		-->
 		<package name="com.dsm.model"/>
 	</typeAliases>
 
 	<!--
-        development : 开发模式
-        work : 工作模式
+        default 默认指定environment（id）环境，这里默认development : 开发模式
      -->
 	<environments default="development">
+		<!-- id 指定唯一的environment 环境，可以用来区分测试库和开发库 -->
 		<environment id="development">
 			<transactionManager type="JDBC" />
 			<dataSource type="POOLED">

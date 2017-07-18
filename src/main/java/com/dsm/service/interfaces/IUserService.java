@@ -19,7 +19,7 @@ public interface IUserService {
      * @param isRemember 是否记住登录
      * @return {@link BackMsg} 返回对象信息封装
      */
-    BackMsg userLogin(String loginName, String password, boolean isRemember);
+    BackMsg<String> userLogin(String loginName, String password, boolean isRemember);
 
     /**
      * 提交用户基本信息

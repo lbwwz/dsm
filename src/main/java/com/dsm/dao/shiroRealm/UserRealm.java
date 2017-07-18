@@ -1,5 +1,6 @@
 package com.dsm.dao.shiroRealm;
 
+import com.dsm.common.DsmConcepts;
 import com.dsm.common.utils.ValidateUtils;
 import com.dsm.dao.IShopDao;
 import com.dsm.dao.IUserDao;
@@ -40,6 +41,7 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals){
         //获取当前登录的用户名,等价于(String)principals.fromRealm(this.getName()).iterator().next()
         String currentUsername = (String)super.getAvailablePrincipal(principals);
+
 //      List<String> roleList = new ArrayList<String>();
 //      List<String> permissionList = new ArrayList<String>();
 //      //从数据库中获取当前登录用户的详细信息
@@ -64,18 +66,16 @@ public class UserRealm extends AuthorizingRealm {
 //      }else{
 //          throw new AuthorizationException();
 //      }
-//      //为当前用户设置角色和权限
-//      SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
-//      simpleAuthorInfo.addRoles(roleList);
-//      simpleAuthorInfo.addStringPermissions(permissionList);
+
+        //为当前用户设置角色和权限
         SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
         //实际中可能会像上面注释的那样从数据库取得
-        if(null!=currentUsername && "jadyer".equals(currentUsername)){
+        if(null!=currentUsername && DsmConcepts.SESSION_USER.equals(currentUsername)){
             //添加一个角色,不是配置意义上的添加,而是证明该用户拥有admin角色
-            simpleAuthorInfo.addRole("admin");
+            simpleAuthorInfo.addRole(DsmConcepts.SESSION_USER);
             //添加权限
-            simpleAuthorInfo.addStringPermission("admin:manage");
-            System.out.println("已为用户[jadyer]赋予了[admin]角色和[admin:manage]权限");
+//            simpleAuthorInfo.addStringPermission("admin:manage");
+//            System.out.println("已为用户[jadyer]赋予了[admin]角色和[admin:manage]权限");
             return simpleAuthorInfo;
         }else if(null!=currentUsername && "玄玉".equals(currentUsername)){
             System.out.println("当前用户[玄玉]无授权");
@@ -98,33 +98,44 @@ public class UserRealm extends AuthorizingRealm {
          * 实际上这个 token 是从 UserServiceImpl 里面currentUser.login(token)传过来的
          */
         UsernamePasswordToken token = (UsernamePasswordToken)authcToken;
-        User user = getUserByLoginName(token.getUsername());
 
-        if (null != user) {
-            //校验用户是否被禁封
-            if(user.getStatus() > 0){
-                throw new AuthenticationException("用户账户被禁封，请联系管理员！");
-            }
-            //未被禁封，校验用户密码
-            String password = String.valueOf(token.getPassword());
-            if (password.equals(user.getPassword())) {
-                AuthenticationInfo authcInfo =
-                        new SimpleAuthenticationInfo(user.getUserName(), user.getPassword().toCharArray(), getName());
-                this.setSession("user", user);
-                if(user.getPromotedType() == 3){
-                    try{
-                        //设置用户的店铺信息
-                        user.setShop(shopDao.getShopByUserId(user.getId()));
-                    }catch (Exception ex){
-                        throw new RuntimeException("查询店铺信息出错！");
-                    }
+        String[] loginNameToken = token.getUsername().split("\\\\");
+        //校验是管理员账户还是普通账户
+        if(loginNameToken[1].equals(DsmConcepts.SESSION_USER) ){
+            User user = getUserByLoginName(loginNameToken[0]);
 
+            if (null != user) {
+                //校验用户是否被禁封
+                if(user.getStatus() > 0){
+                    throw new AuthenticationException("用户账户被禁封，请联系管理员！");
                 }
-                return authcInfo;
-            }else{
-                throw new IncorrectCredentialsException("密码错误！");
+                //未被禁封，校验用户密码
+                String password = String.valueOf(token.getPassword());
+                if (password.equals(user.getPassword())) {
+
+                            ;
+                    this.setSession("user", user);
+                    if(user.getPromotedType() == 3){
+                        try{
+                            //设置用户的店铺信息
+                            user.setShop(shopDao.getShopByUserId(user.getId()));
+                        }catch (Exception ex){
+                            throw new RuntimeException("查询店铺信息出错！");
+                        }
+
+                    }
+                    return new SimpleAuthenticationInfo(DsmConcepts.SESSION_USER, user.getPassword().toCharArray(), getName());
+                }else{
+                    throw new IncorrectCredentialsException("密码错误！");
+                }
             }
+        }else{
+
         }
+
+
+
+
         return null;
     }
 

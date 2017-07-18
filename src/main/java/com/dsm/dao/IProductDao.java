@@ -154,4 +154,5 @@ public interface IProductDao {
      */
     List<ProductBean> getPageByCategoryWithPriceNew(@Param("catId") Integer catId, @Param("totalNum") int totalNum,
                                                     @Param("sortType") int sortType, @Param("attrBeans") List<BaseAttrBean> attrBeans,@Param("beanSize")int size);
+
 }

@@ -1,5 +1,6 @@
 package com.dsm.service.impls;
 
+import com.dsm.common.DsmConcepts;
 import com.dsm.common.utils.EncryptUtils;
 import com.dsm.dao.ILocationDao;
 import com.dsm.dao.IShippingAddressDao;
@@ -66,9 +67,10 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public BackMsg userLogin(String loginName, String password, boolean isRemember) {
+    public BackMsg<String> userLogin(String loginName, String password, boolean isRemember) {
 
-        BackMsg backMsg = new BackMsg();
+        BackMsg<String> backMsg = new BackMsg<>();
+        loginName = loginName+"\\"+ DsmConcepts.SESSION_USER;
         UsernamePasswordToken token = new UsernamePasswordToken(loginName, EncryptUtils.encryptMD5(password));
 
         //设置是否记住账户
@@ -136,6 +138,8 @@ public class UserServiceImpl implements IUserService {
     @Override
     public String register(UserRegisterDTO userRegisterDTO) {
         try{
+            // 密码MD5加密
+            userRegisterDTO.setPassword(EncryptUtils.encryptMD5(userRegisterDTO.getPassword()));
             userDao.register(userRegisterDTO);
             shippingAddressDao.addDefaultRelevant(userRegisterDTO.getId());
         }catch (Exception e){

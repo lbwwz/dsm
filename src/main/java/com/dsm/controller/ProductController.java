@@ -18,6 +18,7 @@ import java.util.Map;
  * @author : Lbwwz
  */
 @Controller
+@RequestMapping
 public class ProductController extends BaseController {
 
     @Autowired
@@ -25,9 +26,7 @@ public class ProductController extends BaseController {
 
     /**
      * 商品详情
-     * @param m
      * @param id 商品ID
-     * @return
      */
     @RequestMapping("item.html")
     public String getProductDetailPage(Map<String, Object> m,Integer id){

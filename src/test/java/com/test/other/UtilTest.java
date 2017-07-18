@@ -6,6 +6,8 @@ import com.dsm.common.utils.chineseSplit.dic.Dictionary;
 import com.dsm.common.utils.configContext.ConfigContext;
 import com.dsm.common.utils.configContext.ConfigContextFactory;
 import com.dsm.model.user.User;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
 
@@ -223,6 +225,15 @@ public class UtilTest {
         UUID uuid = UUID.randomUUID();
         System.out.println(".{"+uuid.toString()+"}");
 
+    }
+
+    /**
+     * 测试shiro加盐
+     */
+    @Test
+    public void test18(){
+        Object saltPwd = new SimpleHash("MD5","123456", ByteSource.Util.bytes("lbwwz"),1024);
+        System.out.println(saltPwd.toString());
     }
 
 

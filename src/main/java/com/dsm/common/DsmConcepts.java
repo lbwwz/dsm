@@ -13,9 +13,9 @@ public class DsmConcepts {
     /*****  {@link com.dsm.model.BackMsg} 错误号，状态码 start  *****/
     public static final int CORRECT = 0;    //操作成功
     public static final int ERROR = 1;      //操作失败
-    public static final int WARRING = 1;      //操作警告
-    public static final int NO_LOGIN = 100;      //用户未登录
-    public static final int NEED_REDIRECT = 9;      //需要跳转到其他页面
+    public static final int WARRING = 1;    //操作警告
+    public static final int NO_LOGIN = 100;     //用户未登录
+    public static final int NEED_REDIRECT = 9;  //需要跳转到其他页面
 
     /* 文件上传 start */
     public static final int SIZE_WARRING = 101; //大小异常
@@ -36,7 +36,7 @@ public class DsmConcepts {
 
     public static final int SEARCH_SORT_DEFAULT=0;      //查找排序——默认
     public static final int SEARCH_SORT_HOT=1;          //查找排序——点击量
-    public static final int SEARCH_SORT_CREDIT=2;          //查找排序——信用（商品好评率）
+    public static final int SEARCH_SORT_CREDIT=2;       //查找排序——信用（商品好评率）
     public static final int SEARCH_SORT_PRICE_TO_LARGE=3;   //查找排序——价格从低到高
     public static final int SEARCH_SORT_PRICE_TO_SMALL=4;   //查找排序——价格从高到低
     /***** 业务标志编号 end *****/
@@ -47,14 +47,16 @@ public class DsmConcepts {
     public static final String LAST_ACCESS_URL ="lastAccessUrl"; //上页路径
     public static final String DSM_SHOPPING_CART ="dsmShoppingCart"; //cookie中创建的购物车名
 
+    public static final String MD5 = "MD5";
+    public static final String SHA = "SHA";
+
     /***** 业务名称 end *****/
 
 
     /***** 业务中的常量 *****/
-    //默认每页查询的商品数量
-    public static final int LIST_PAGE_DEFAULT_NUM = 15;
-    public static final int LIST_PAGE_SIZE = 100;
 
+    public static final int LIST_PAGE_DEFAULT_NUM = 15;//默认每页查询的商品数量
+    public static final int LIST_PAGE_SIZE = 100;      //默认最大分页页数
 
 
     //时间常量
@@ -71,6 +73,7 @@ public class DsmConcepts {
     public static final int TIMESTAMP_YEAR = YEAR*1000;
 
     /***** 业务中的常量 *****/
+
 
 
 

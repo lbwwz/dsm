@@ -33,6 +33,7 @@ import java.io.IOException;
  * 登录注册操作的controller
  */
 @Controller
+@RequestMapping
 public class LoginRegisterController extends BaseController {
 
     @Autowired
@@ -95,11 +96,11 @@ public class LoginRegisterController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public BackMsg login(String loginName, String password, @RequestParam(value = "isRemember", defaultValue = "0") String isRemember[]) {
+    public BackMsg<String> login(String loginName, String password, @RequestParam(value = "isRemember", defaultValue = "0") String isRemember[]) {
 
         String lastAccessUrl = (String) getSession().getAttribute(DsmConcepts.LAST_ACCESS_URL);
         lastAccessUrl = lastAccessUrl == null ? getWebRoot() : lastAccessUrl;
-        BackMsg backMsg;
+        BackMsg<String> backMsg = new BackMsg<>();
         //校验是否已经登录
         if (getSession().getAttribute("user") == null) {
 //        //获取HttpSession中的验证码
@@ -110,7 +111,7 @@ public class LoginRegisterController extends BaseController {
             backMsg = userService.userLogin(loginName, password, !isRemember[0].equals("0"));
         } else {
             //用户已经登录过了
-            backMsg = new BackMsg(2, "", "您已经登录过了");
+            backMsg.set(2, "", "您已经登录过了");
         }
 
         if (backMsg.getError() == 0) {
@@ -141,25 +142,24 @@ public class LoginRegisterController extends BaseController {
      */
     @ResponseBody
     @RequestMapping("register")
-    public BackMsg register(UserRegisterDTO userRegisterDTO) {
+    public BackMsg<String> register(UserRegisterDTO userRegisterDTO) {
 
-        BackMsg backMsg;
+        BackMsg<String> backMsg;
         // 检查用户提交的信息是否合法
         backMsg = checkRegisterInfo(userRegisterDTO);
         if (backMsg.getError() == BackMsg.CORRECT) {// 验证通过
             // 校验重复提交
             if (ServletToolUtils.checkRepeatSubmit(getRequest(), "registerToken", "registerToken")) {
-                // 密码加密
-                userRegisterDTO.setPassword(EncryptUtils.encryptMD5(userRegisterDTO.getPassword()));
+
                 // 提交注册信息
                 String errorMsg = userService.register(userRegisterDTO);
                 if (errorMsg == null)
-                    backMsg = new BackMsg(BackMsg.CORRECT, "regSuccess", "注册用户成功");
+                    backMsg .set(BackMsg.CORRECT, "regSuccess", "注册用户成功");
                 else
-                    backMsg = new BackMsg(BackMsg.ERROR, null, errorMsg);
+                    backMsg.set(BackMsg.ERROR, null, errorMsg);
             } else {
                 //表单重复提交的返回
-                backMsg = new BackMsg(1, null, "");
+                backMsg .set(1, null, "");
             }
         }
         return backMsg;
@@ -181,7 +181,7 @@ public class LoginRegisterController extends BaseController {
      * @param userInfo 注册信息的封装实体
      * @return {@link BackMsg}
      */
-    private BackMsg checkRegisterInfo(UserRegisterDTO userInfo) {
+    private BackMsg<String> checkRegisterInfo(UserRegisterDTO userInfo) {
 
         String userName = userInfo.getUserName();
         String email = userInfo.getEmail();
@@ -189,7 +189,7 @@ public class LoginRegisterController extends BaseController {
         String confirmPassword = userInfo.getConfirmPassword();
         String mobile = userInfo.getMobile();
 
-        BackMsg backMsg = new BackMsg();
+        BackMsg<String> backMsg = new BackMsg<>();
         // 检查必填元素是否为空
         if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(password) ||
                 StringUtils.isEmpty(confirmPassword) || StringUtils.isEmpty(email)) {

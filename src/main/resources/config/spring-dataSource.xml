@@ -75,14 +75,16 @@
         xml文件,/**表示mapper下层任意多级目录， User.xml 位于 mybatis.mapping.user 包下，
         这样User.xml就可以被自动扫描
          -->
+
+        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"></property>
         <property name="mapperLocations" value="classpath:mybatis/mapping/**/*.xml"/>
         <!-- 批量扫描该包目录下的文件设置为别名, 目录和目录之间用“,”分隔 -->
-        <property name="typeAliasesPackage"
-                  value="com.dsm.model,
-                  com.dsm.model.address,
-                  com.dsm.model.product,
-                  com.dsm.model.seller,
-                  com.dsm.model.user" />
+        <!--<property name="typeAliasesPackage"-->
+                  <!--value="com.dsm.model,-->
+                  <!--com.dsm.model.address,-->
+                  <!--com.dsm.model.product,-->
+                  <!--com.dsm.model.seller,-->
+                  <!--com.dsm.model.user" />-->
     </bean>
 
     <!-- DAO接口所在包名，Spring会自动查找其下的类 （扫描器扫描）-->
