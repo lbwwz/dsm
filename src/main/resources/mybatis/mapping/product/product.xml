@@ -124,7 +124,7 @@
     <!--根据商品id查询商品基本信息-->
     <select id="getProductBaseInfoById" resultMap="productResult" parameterType="int">
         SELECT
-            product_id, cat_id, product_sn, product_name, click_count, brand_id, shop_id, shop_name
+            product_id, cat_id, product_sn, product_name, click_count, brand_id, shop_id, shop_name,
             min_price, max_price, shop_price, warn_number,product_brief, main_img, product_grade, product_status,
             is_best, is_new, is_hot
         FROM vdsm_user_product_base  WHERE product_id=#{productId} AND product_status=1

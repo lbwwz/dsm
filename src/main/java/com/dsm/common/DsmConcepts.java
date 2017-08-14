@@ -47,6 +47,8 @@ public class DsmConcepts {
     public static final String LAST_ACCESS_URL ="lastAccessUrl"; //上页路径
     public static final String DSM_SHOPPING_CART ="dsmShoppingCart"; //cookie中创建的购物车名
 
+    public static final String DSM_USER_KEY = "user_key";//用来标志未登录用户的某些权益的唯一标志名
+
     public static final String MD5 = "MD5";
     public static final String SHA = "SHA";
 
@@ -59,13 +61,14 @@ public class DsmConcepts {
     public static final int LIST_PAGE_SIZE = 100;      //默认最大分页页数
 
 
-    //时间常量
+    //时间常量（单位：秒）
     public static final int MINUTE = 60;
     public static final int HOUR = MINUTE*60;
     public static final int DAY = HOUR*24;
     public static final int MONTH = DAY*30;
     public static final int YEAR = DAY*365;
 
+    //时间常量（单位：毫秒）
     public static final int TIMESTAMP_MINUTE = MINUTE*1000;
     public static final int TIMESTAMP_HOUR = HOUR*1000;
     public static final int TIMESTAMP_DAY = DAY*1000;

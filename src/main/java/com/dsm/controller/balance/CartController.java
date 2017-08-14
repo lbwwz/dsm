@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Map;
+
 /**
  * Created with IntelliJ IDEA.
  * Project: dsm
@@ -24,6 +26,19 @@ public class CartController {
     @Autowired
     private ICartService cartService;
 
+
+    /**
+     * 请求跳转购物车页面
+     */
+    @RequestMapping("cart")
+    public String cart(Map<String,Object> m){
+
+        m.put("cartInfo",cartService.getMyShoppingCart());
+
+        return "cart";
+
+    }
+
     /**
      * 将商品加入购物车
      * @param skuId skuId
@@ -33,7 +48,7 @@ public class CartController {
      */
     @ResponseBody
     @RequestMapping("cart/addToCart")
-    public BackMsg<String> addToCart(String skuId,@RequestParam(defaultValue = "1") Integer count,boolean cookieEnabled){
+    public BackMsg<String> addToCart(Integer skuId,@RequestParam(defaultValue = "1") Integer count,boolean cookieEnabled){
 
         BackMsg<String> msg = cartService.addOrMinusToCart(skuId,count,cookieEnabled);
         return null;

@@ -5,8 +5,10 @@
 <configuration>
     <!-- mybatis 基本配置 -->
     <settings>
-        <!--<setting name="cacheEnabled" value="true" />-->
-
+        <!--mybatis 二级缓存-->
+        <setting name="cacheEnabled" value="false" />
+        <!--mybatis 本地缓存 STATEMENT 表示不使用-->
+        <setting name="localCacheScope" value="SESSION" />
         <!--<setting name="multipleResultSetsEnabled" value="true" />-->
         <!--<setting name="useColumnLabel" value="true" />-->
         <!--<setting name="useGeneratedKeys" value="false" />-->
@@ -15,7 +17,7 @@
         <!--<setting name="defaultStatementTimeout" value="25" />-->
         <!--<setting name="safeRowBoundsEnabled" value="false" />-->
         <!--<setting name="mapUnderscoreToCamelCase" value="false" />-->
-        <!--<setting name="localCacheScope" value="SESSION" />-->
+
         <setting name="jdbcTypeForNull" value="NULL" />
         <!-- 配置嵌套sql的延时加载 -->
         <setting name="lazyLoadingEnabled" value="true" />

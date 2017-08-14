@@ -21,8 +21,6 @@
         <result column="shop_name" property="shopName"/>
         <result column="brand_id" property="brandId"/>
         <result column="product_name" property="productName"/>
-        <result column="main_img" property="mainImage"/>
-        <result column="product_brief" property="productBrief"/>
         <result column="sku_id" property="skuId"/>
         <result column="properties_name" property="propertiesName"/>
         <result column="quantity" property="quantity"/>
@@ -49,6 +47,10 @@
     </insert>
 
     <select id="getSkuListByProductId" resultMap="skuResult" parameterType="int">
+        SELECT * FROM dsm_product_sku WHERE product_id=#{productId};
+    </select>
+
+    <select id="getSku" resultMap="skuResult" parameterType="int">
         SELECT * FROM dsm_product_sku WHERE product_id=#{productId};
     </select>
 

@@ -24,6 +24,14 @@ public interface IRedisService {
 
 
     /**
+     * 检查某个键是否存在
+     * @param key
+     * @return
+     */
+    boolean exists(String key);
+
+
+    /**
      * 设置一个key在某个时间点过期
      *
      * @param key           key值
@@ -264,6 +272,13 @@ public interface IRedisService {
      * @return Json String or String value
      */
     String getHSet(String key, String field);
+
+
+    /**
+     * 查询hashSet 中所有的元素（包含key 和 value）
+     * @param key 键
+     */
+    Map<String, String> getHSetAll(String key);
 
     /**
      * 删除HashSet对象

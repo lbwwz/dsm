@@ -1,7 +1,6 @@
 package com.dsm.common.utils;
 
-import org.apache.shiro.crypto.hash.SimpleHash;
-import org.apache.shiro.util.ByteSource;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,14 +14,10 @@ import org.apache.shiro.util.ByteSource;
  */
 public class BusinessUtils {
 
-    /**
-     * 为message加盐
-     * @param message
-     * @param salt
-     * @return
-     */
-    public static String encryptWithSalt(String message, String salt,String encryptType){
-        Object saltPwd = new SimpleHash(encryptType,message, ByteSource.Util.bytes(salt),1024);
-        return saltPwd.toString();
-    }
+
+
+
+
+
+
 }

@@ -4,8 +4,8 @@
 <!--namespace必须是接口的全类名  -->
 <mapper namespace="com.dsm.dao.ICartDao">
 
-    <!-- ShoppingCartPO 属性别名与字段之间映射-->
-    <resultMap type="ShoppingCartPO" id="shoppingCartPOResult">
+    <!-- ShoppingCartItemPO 属性别名与字段之间映射-->
+    <resultMap type="ShoppingCartItemPO" id="shoppingCartItemPOResult">
         <id column="cart_item_id" property="cartItemId"/>
         <result column="user_id" property="userId"/>
         <result column="shop_id" property="shopId"/>
@@ -14,5 +14,51 @@
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
+
+    <!-- ShoppingCartItem 属性别名与字段之间映射-->
+    <resultMap type="ShoppingCartItem" id="shoppingCartItemResult">
+        <id column="cart_item_id" property="cartItemId"/>
+        <result column="user_id" property="userId"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="product_id" property="productId"/>
+        <result column="cat_id" property="catId"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="product_name" property="productName"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="properties_name" property="propertiesName"/>
+        <result column="quantity" property="quantity"/>
+        <result column="sku_price" property="skuPrice"/>
+        <result column="shop_sn" property="shopSn"/>
+        <result column="shop_sn" property="status"/>
+        <result column="cart_item_num" property="cartItemNum"/>
+        <result column="is_selected" property="isSelected"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+
+    <select id="getShoppingCartItem" resultMap="shoppingCartItemResult" parameterType="int">
+        SELECT cart_item_id,user_id,cart_item_num,is_selected, dsm_product_sku.product_id , cat_id, product_sn, product_name, click_count, brand_id,
+            vdsm_user_product_base.shop_id, shop_name, warn_number,product_brief, main_img, product_grade, product_status, is_best, is_new,
+            is_hot,dsm_product_sku.sku_id,properties_name, quantity, sku_price, shop_sn
+        FROM vdsm_user_product_base,dsm_product_sku,dsm_user_shopping_cart
+        WHERE vdsm_user_product_base.product_id = dsm_product_sku.product_id
+            AND dsm_product_sku.sku_id=dsm_user_shopping_cart.sku_id
+            AND dsm_user_shopping_cart.cart_item_id=#{cartItemId}
+    </select>
+
+    <select id="getShoppingCartInfo" resultMap="shoppingCartItemResult" parameterType="int">
+        SELECT cart_item_id,user_id,cart_item_num,is_selected, dsm_product_sku.product_id , cat_id, product_sn, product_name, click_count, brand_id,
+        vdsm_user_product_base.shop_id, shop_name, warn_number,product_brief, main_img, product_grade, product_status, is_best, is_new,
+        is_hot,dsm_product_sku.sku_id,properties_name, quantity, sku_price, shop_sn
+        FROM vdsm_user_product_base,dsm_product_sku,dsm_user_shopping_cart
+        WHERE vdsm_user_product_base.product_id = dsm_product_sku.product_id
+        AND dsm_product_sku.sku_id=dsm_user_shopping_cart.sku_id
+        AND dsm_user_shopping_cart.user_id=#{userId}
+    </select>
+
 
 </mapper>

@@ -2,6 +2,8 @@ package com.dsm.common.utils;
 
 import com.dsm.common.utils.chineseSplit.core.IKSegmenter;
 import com.dsm.common.utils.chineseSplit.core.Lexeme;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -82,6 +84,17 @@ public class StringHandleUtils {
         }
 
         return  m;
+    }
+
+    /**
+     * 为message加盐
+     * @param message 信息
+     * @param salt 盐
+     * @return 加盐后的串
+     */
+    public static String encryptWithSalt(String message, String salt,String encryptType){
+        Object saltPwd = new SimpleHash(encryptType,message, ByteSource.Util.bytes(salt),1024);
+        return saltPwd.toString();
     }
 
 }

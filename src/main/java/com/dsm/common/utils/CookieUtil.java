@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CookieUtil {
 
     /**
-     * 设置cookie
+     * 设置cookie（默认非httpOnly）
      *
      * @param response {@link HttpServletResponse}
      * @param name

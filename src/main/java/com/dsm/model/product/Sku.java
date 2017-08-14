@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 /**
- * 某个商品的的SKU属性
+ * 某个商品的的SKU属性（po对象，对应数据库模型）
  */
 public class Sku {
 
@@ -20,6 +20,7 @@ public class Sku {
     // 用于反映一项sku确定的商品的具体信息
     private String properties;
 
+    //用于前端页面个格式化解析
     private Map<String,String> jsonProperties;
 
     //表示SKU销售属性ID和对应中文名

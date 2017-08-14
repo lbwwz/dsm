@@ -1,5 +1,7 @@
 package com.dsm.model.product;
 
+import java.math.BigDecimal;
+
 /**
  * Created with IntelliJ IDEA.
  * Project: dsm
@@ -9,15 +11,15 @@ package com.dsm.model.product;
  *         <p/>
  *         单条sku商品基本信息(购物车页，订单结算页显示使用)
  */
-public class ProductSkuItem extends ProductBean{
+public class ProductSkuItem extends ProductBaseBean{
     //skuId
     public String skuId;
     //组合销售属性信息
     public String propertiesName;
     //该商品的数量
-    public String quantity;
+    public Integer quantity;
     //该商品的单价
-    public String skuPrice;
+    public BigDecimal skuPrice;
     //该商品的商品码
     public String shopSn;
 
@@ -37,19 +39,19 @@ public class ProductSkuItem extends ProductBean{
         this.propertiesName = propertiesName;
     }
 
-    public String getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-    public String getSkuPrice() {
+    public BigDecimal getSkuPrice() {
         return skuPrice;
     }
 
-    public void setSkuPrice(String skuPrice) {
+    public void setSkuPrice(BigDecimal skuPrice) {
         this.skuPrice = skuPrice;
     }
 
@@ -64,30 +66,19 @@ public class ProductSkuItem extends ProductBean{
     @Override
     public String toString() {
         return "ProductSkuItem{" +
-            "skuId='" + skuId + '\'' +
-            ", propertiesName='" + propertiesName + '\'' +
-            ", quantity='" + quantity + '\'' +
-            ", skuPrice='" + skuPrice + '\'' +
-            ", shopSn='" + shopSn + '\'' +
-            ", productId=" + productId +
-            ", shopId=" + shopId +
-            ", shopName='" + shopName + '\'' +
-            ", catId=" + catId +
-            ", brandId=" + brandId +
-            ", productName='" + productName + '\'' +
-            ", productSn='" + productSn + '\'' +
-            ", mainImage='" + mainImage + '\'' +
-            ", productBrief='" + productBrief + '\'' +
-            ", minPrice=" + minPrice +
-            ", maxPrice=" + maxPrice +
-            ", keywords='" + keywords + '\'' +
-            ", sort=" + sort +
-            ", status=" + status +
-            ", isBest=" + isBest +
-            ", isNew=" + isNew +
-            ", isHot=" + isHot +
-            ", createTime=" + createTime +
-            ", lastUpdateTime=" + lastUpdateTime +
-       '}';
+                "skuId='" + skuId + '\'' +
+                ", propertiesName='" + propertiesName + '\'' +
+                ", quantity=" + quantity +
+                ", skuPrice=" + skuPrice +
+                ", shopSn='" + shopSn + '\'' +
+                ", productId=" + productId +
+                ", shopId=" + shopId +
+                ", shopName='" + shopName + '\'' +
+                ", catId=" + catId +
+                ", brandId=" + brandId +
+                ", productName='" + productName + '\'' +
+                ", sort=" + sort +
+                ", status=" + status +
+                '}';
     }
 }

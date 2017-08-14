@@ -140,7 +140,7 @@ public class ServletToolUtils {
         String userAgent = request.getHeader("User-Agent");
 
         if (StringUtils.contains(userAgent, "Baiduspider") || StringUtils.contains(userAgent, "360Spider") || StringUtils.contains(userAgent, "HaosouSpider")
-                || StringUtils.contains(userAgent, "Yisouspider") || StringUtils.contains(userAgent, "Sogou") || StringUtils.contains(userAgent, "Googlebot")
+                || StringUtils.contains(userAgent, "Yisouspider") || StringUtils.contains(userAgent, "Googlebot")
                 || StringUtils.contains(userAgent, "Bingbot") || StringUtils.contains(userAgent, "MSNbot")) {
             comeFromSpider = Boolean.TRUE;
             response.addHeader("Vary", "User-Agent");

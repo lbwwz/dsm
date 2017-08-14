@@ -11,7 +11,7 @@ import java.sql.Timestamp;
  *         <p/>
  *         关于购物车数据表字段对应的PO对象
  */
-public class ShoppingCartPO {
+public class ShoppingCartItemPO {
 
     private Integer cartItemId;
 
@@ -21,10 +21,23 @@ public class ShoppingCartPO {
 
     private Integer skuId;
 
-    private Integer num;
+    private Integer cartItemNum;
+
+    private Integer isSelected;
 
     private Timestamp createTime;
     private Timestamp updateTime;
+
+    public ShoppingCartItemPO() {
+    }
+
+    public ShoppingCartItemPO(Integer userId, Integer shopId, Integer skuId, Integer cartItemNum, Integer isSelected) {
+        this.userId = userId;
+        this.shopId = shopId;
+        this.skuId = skuId;
+        this.cartItemNum = cartItemNum;
+        this.isSelected = isSelected;
+    }
 
     public Integer getCartItemId() {
         return cartItemId;
@@ -58,12 +71,20 @@ public class ShoppingCartPO {
         this.skuId = skuId;
     }
 
-    public Integer getNum() {
-        return num;
+    public Integer getCartItemNum() {
+        return cartItemNum;
     }
 
-    public void setNum(Integer num) {
-        this.num = num;
+    public void setCartItemNum(Integer cartItemNum) {
+        this.cartItemNum = cartItemNum;
+    }
+
+    public Integer getIsSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(Integer isSelected) {
+        this.isSelected = isSelected;
     }
 
     public Timestamp getCreateTime() {

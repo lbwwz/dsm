@@ -65,6 +65,10 @@ public class BackMsg<T> {
         this.message = message;
     }
 
+    public BackMsg<T> newInstance(BackMsg<?> beanMsg){
+        return new BackMsg<>(beanMsg.error,null,beanMsg.message);
+    }
+
     @Override
     public String toString() {
         return "BackMsg{" +

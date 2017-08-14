@@ -1,5 +1,9 @@
 package com.dsm.model.cart;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * Project: dsm
@@ -11,13 +15,53 @@ package com.dsm.model.cart;
  */
 public class ShoppingCart {
 
-    private Integer cartItemId;
 
-    private Integer userId;
+    //商家分包对象,将商品按照商家分组
+    private List<CartPackage> cartPackages;
 
-    private Integer shopId;
+    //商品总额
+    private BigDecimal totalPrice;
 
-    private Integer skuId;
+    //运费（需要根据分包计算总和）---待定
+    private BigDecimal freight;
 
-    private Integer num;
+
+    //其他提示信息
+
+
+    public ShoppingCart() {
+    }
+
+    public List<CartPackage> getCartPackages() {
+        return cartPackages;
+    }
+
+    public void setCartPackages(List<CartPackage> cartPackages) {
+        this.cartPackages = cartPackages;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public BigDecimal getFreight() {
+        return freight;
+    }
+
+    public void setFreight(BigDecimal freight) {
+        this.freight = freight;
+    }
+
+    public void addCartPackage(CartPackage cartPackage){
+        this.cartPackages = this.cartPackages==null?new ArrayList<>():this.cartPackages;
+        this.cartPackages.add(cartPackage);
+    }
+
+
+
+
 }

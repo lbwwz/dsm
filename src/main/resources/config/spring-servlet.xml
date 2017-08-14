@@ -14,7 +14,9 @@
 
 
     <!--spring mvc 要扫描的 controller 位置-->
-    <context:component-scan base-package="com.dsm.controller"/>
+    <context:component-scan base-package="com.dsm.controller">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
 
     <!--开启注解映射-->
     <mvc:annotation-driven/>

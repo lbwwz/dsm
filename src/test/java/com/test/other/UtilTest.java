@@ -237,4 +237,26 @@ public class UtilTest {
     }
 
 
+
+    @Test
+    public void test20() {
+        String str=UUID.randomUUID().toString();
+        try {
+            String result= EncryptUtils.encodeBase64(str.getBytes());
+            System.out.println("result=====加密数据=========="+result);
+            str = new String(EncryptUtils.decodeBase64(result));
+            System.out.println("str========解密数据========"+str);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void test123(){
+        String a = "#benlai:1231231232132";
+        System.out.println(a.substring(8));
+    }
+
+
 }

@@ -62,6 +62,25 @@ public class RedisServiceImpl implements IRedisService{
         return 0;
     }
 
+    @Override
+    public boolean exists(String key) {
+        if (key == null || key.equals("")) {
+            return false;
+        }
+
+
+        ShardedJedis shardedJedis = null;
+        try {
+            shardedJedis = redisDataSource.getResource();
+            return shardedJedis.exists(key);
+        } catch (Exception ex) {
+            logger.error("exists error[key=" + key + "]" + ex.getMessage(), ex);
+        } finally {
+            returnResource(shardedJedis);
+        }
+        return false;
+    }
+
     /**
      * 设置一个key在某个时间点过期
      *
@@ -602,6 +621,20 @@ public class RedisServiceImpl implements IRedisService{
             return shardedJedis.hget(key, field);
         } catch (Exception ex) {
             logger.error("getHSet error.", ex);
+        } finally {
+            returnResource(shardedJedis);
+        }
+        return null;
+    }
+
+    @Override
+    public Map<String, String> getHSetAll(String key) {
+        ShardedJedis shardedJedis = null;
+        try {
+            shardedJedis = redisDataSource.getResource();
+            return shardedJedis.hgetAll(key);
+        } catch (Exception ex) {
+            logger.error("delHSet error.", ex);
         } finally {
             returnResource(shardedJedis);
         }
