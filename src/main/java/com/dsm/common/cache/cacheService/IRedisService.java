@@ -278,7 +278,14 @@ public interface IRedisService {
      * 查询hashSet 中所有的元素（包含key 和 value）
      * @param key 键
      */
-    Map<String, String> getHSetAll(String key);
+    Map<String, String> getHsetAll(String key);
+
+    /**
+     * 设置map结构的key
+     * @param key 键
+     * @param m ，map数据封装
+     */
+    boolean setHmset(String key, Map<String, String> m);
 
     /**
      * 删除HashSet对象

@@ -30,12 +30,12 @@ public class CartController {
     /**
      * 请求跳转购物车页面
      */
-    @RequestMapping("cart")
+    @RequestMapping("")
     public String cart(Map<String,Object> m){
 
         m.put("cartInfo",cartService.getMyShoppingCart());
 
-        return "cart";
+        return "/cart";
 
     }
 
@@ -47,7 +47,7 @@ public class CartController {
      * @return
      */
     @ResponseBody
-    @RequestMapping("cart/addToCart")
+    @RequestMapping("addToCart")
     public BackMsg<String> addToCart(Integer skuId,@RequestParam(defaultValue = "1") Integer count,boolean cookieEnabled){
 
         BackMsg<String> msg = cartService.addOrMinusToCart(skuId,count,cookieEnabled);

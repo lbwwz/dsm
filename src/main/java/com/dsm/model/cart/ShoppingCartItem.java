@@ -84,7 +84,11 @@ public class ShoppingCartItem extends ProductSkuItem{
     @Override
     public String toString() {
         return "ShoppingCartItem{" +
-                "skuId='" + skuId + '\'' +
+                "cartItemId=" + cartItemId +
+                ", userId=" + userId +
+                ", cartItemNum=" + cartItemNum +
+                ", isSelected=" + isSelected +
+                ", skuId=" + skuId +
                 ", propertiesName='" + propertiesName + '\'' +
                 ", quantity=" + quantity +
                 ", skuPrice=" + skuPrice +
@@ -97,10 +101,8 @@ public class ShoppingCartItem extends ProductSkuItem{
                 ", productName='" + productName + '\'' +
                 ", sort=" + sort +
                 ", status=" + status +
-                ", cartItemId=" + cartItemId +
-                ", userId=" + userId +
-                ", cartItemNum=" + cartItemNum +
-                ", isSelected=" + isSelected +
+                ", createTime=" + createTime +
+                ", lastUpdateTime=" + lastUpdateTime +
                 '}';
     }
 }

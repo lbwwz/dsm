@@ -61,7 +61,12 @@ public class ShoppingCart {
         this.cartPackages.add(cartPackage);
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "ShoppingCart{" +
+                "cartPackages=" + cartPackages +
+                ", totalPrice=" + totalPrice +
+                ", freight=" + freight +
+                '}';
+    }
 }

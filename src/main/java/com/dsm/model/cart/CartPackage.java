@@ -46,4 +46,13 @@ public class CartPackage {
     public void setCartItems(List<ShoppingCartItem> cartItems) {
         CartItems = cartItems;
     }
+
+    @Override
+    public String toString() {
+        return "CartPackage{" +
+                "shopId=" + shopId +
+                ", shopName='" + shopName + '\'' +
+                ", CartItems=" + CartItems +
+                '}';
+    }
 }

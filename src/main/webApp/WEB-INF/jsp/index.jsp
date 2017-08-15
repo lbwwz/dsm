@@ -12,7 +12,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/non-responsive.css" rel="stylesheet">
 
-    <link href="css/style_index.css" rel="stylesheet">
+    <link href="css/style_base.css" rel="stylesheet">
     <script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="js/bootstrap.min.js" type="text/javascript"></script>
 

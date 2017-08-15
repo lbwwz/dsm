@@ -627,8 +627,9 @@ public class RedisServiceImpl implements IRedisService{
         return null;
     }
 
+
     @Override
-    public Map<String, String> getHSetAll(String key) {
+    public Map<String, String> getHsetAll(String key) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = redisDataSource.getResource();
@@ -639,6 +640,20 @@ public class RedisServiceImpl implements IRedisService{
             returnResource(shardedJedis);
         }
         return null;
+    }
+
+    @Override
+    public boolean setHmset(String key,Map<String,String> m){
+        ShardedJedis shardedJedis = null;
+        try {
+            shardedJedis = redisDataSource.getResource();
+            return shardedJedis.hmset(key, m).equalsIgnoreCase("OK");
+        } catch (Exception ex) {
+            logger.error("delHSet error.", ex);
+        } finally {
+            returnResource(shardedJedis);
+        }
+        return false;
     }
 
     /**

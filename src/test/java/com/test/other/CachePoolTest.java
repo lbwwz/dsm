@@ -6,6 +6,7 @@ import com.test.common.BaseJunitTest;
 import org.junit.Test;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,7 +22,7 @@ public class CachePoolTest extends BaseJunitTest{
     @Test
     public void Test1(){
 
-        Map<String, String> map = redisService.getHSetAll("test7");
+        Map<String, String> map = redisService.getHsetAll("test7");
 
         System.out.println(map);
     }
@@ -29,5 +30,16 @@ public class CachePoolTest extends BaseJunitTest{
     @Test
     public void Test2(){
         System.out.println(redisService.exists("test1"));
+    }
+
+    @Test
+    public void Test3(){
+
+        Map<String, String > m = new HashMap<>();
+
+        m.put("aa","123");
+        m.put("ww","456");
+        m.put("ee","789");
+        System.out.println(redisService.setHmset("test8",m));
     }
 }

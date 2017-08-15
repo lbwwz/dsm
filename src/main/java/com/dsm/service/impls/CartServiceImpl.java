@@ -79,6 +79,7 @@ public class CartServiceImpl implements ICartService {
             if(cartItemList == null){
                 //如果不存在，从数据库中读取一次
                 cartItemList = cartDao.getShoppingCartInfo(user.getId());
+                setCartItemListToCache("cart_"+user.getId(),cartItemList);
             }
         } else {
             //未登录用户使用用户唯一标志符查找缓存中的购物车信息
@@ -109,7 +110,7 @@ public class CartServiceImpl implements ICartService {
      */
     private List<ShoppingCartItem> getCartItemListFromCache(String cartKey) {
         if(redisService.exists(cartKey)){
-            Map<String, String> m = redisService.getHSetAll(cartKey);
+            Map<String, String> m = redisService.getHsetAll(cartKey);
 
             List<ShoppingCartItem> cartItemList = new ArrayList<>();
             for (Map.Entry<String, String> entry : m.entrySet()) {
@@ -120,10 +121,12 @@ public class CartServiceImpl implements ICartService {
         return null;
     }
 
-    private void setCartItemListToCache(List<ShoppingCartItem> cartItemList){
+    private boolean setCartItemListToCache(String cartKey,List<ShoppingCartItem> cartItemList){
+        Map<String, String> m = new HashMap<>();
         for(ShoppingCartItem item : cartItemList){
-            
+            m.put(item.getSkuId()+"",JSONObject.toJSONString(item));
         }
+        return redisService.setHmset(cartKey,m);
     }
 
     /**

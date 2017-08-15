@@ -36,14 +36,14 @@
         <result column="cart_item_num" property="cartItemNum"/>
         <result column="is_selected" property="isSelected"/>
         <result column="create_time" property="createTime"/>
-        <result column="update_time" property="updateTime"/>
+        <result column="update_time" property="lastUpdateTime"/>
     </resultMap>
 
 
     <select id="getShoppingCartItem" resultMap="shoppingCartItemResult" parameterType="int">
         SELECT cart_item_id,user_id,cart_item_num,is_selected, dsm_product_sku.product_id , cat_id, product_sn, product_name, click_count, brand_id,
-            vdsm_user_product_base.shop_id, shop_name, warn_number,product_brief, main_img, product_grade, product_status, is_best, is_new,
-            is_hot,dsm_product_sku.sku_id,properties_name, quantity, sku_price, shop_sn
+            vdsm_user_product_base.shop_id, shop_name, warn_number,product_brief, main_img, product_grade, product_status, is_best, is_new, is_hot,
+            dsm_product_sku.sku_id,properties_name, quantity, sku_price, shop_sn dsm_user_shopping_cart.create_time, dsm_user_shopping_cart.update_time
         FROM vdsm_user_product_base,dsm_product_sku,dsm_user_shopping_cart
         WHERE vdsm_user_product_base.product_id = dsm_product_sku.product_id
             AND dsm_product_sku.sku_id=dsm_user_shopping_cart.sku_id
@@ -52,8 +52,8 @@
 
     <select id="getShoppingCartInfo" resultMap="shoppingCartItemResult" parameterType="int">
         SELECT cart_item_id,user_id,cart_item_num,is_selected, dsm_product_sku.product_id , cat_id, product_sn, product_name, click_count, brand_id,
-        vdsm_user_product_base.shop_id, shop_name, warn_number,product_brief, main_img, product_grade, product_status, is_best, is_new,
-        is_hot,dsm_product_sku.sku_id,properties_name, quantity, sku_price, shop_sn
+        vdsm_user_product_base.shop_id, shop_name, warn_number,product_brief, main_img, product_grade, product_status, is_best, is_new,is_hot,
+        dsm_product_sku.sku_id, properties_name, quantity, sku_price, shop_sn, dsm_user_shopping_cart.create_time, dsm_user_shopping_cart.update_time
         FROM vdsm_user_product_base,dsm_product_sku,dsm_user_shopping_cart
         WHERE vdsm_user_product_base.product_id = dsm_product_sku.product_id
         AND dsm_product_sku.sku_id=dsm_user_shopping_cart.sku_id

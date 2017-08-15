@@ -13,7 +13,7 @@
     <link href="${webRoot}/css/bootstrap.min.css" rel="stylesheet">
     <link href="${webRoot}/css/non-responsive.css" rel="stylesheet">
 
-    <link href="${webRoot}/css/style_index.css" rel="stylesheet">
+    <link href="${webRoot}/css/style_base.css" rel="stylesheet">
     <script src="${webRoot}/js/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="${webRoot}/js/bootstrap.min.js" type="text/javascript"></script>
 

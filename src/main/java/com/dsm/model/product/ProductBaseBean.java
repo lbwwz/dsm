@@ -115,4 +115,5 @@ public class ProductBaseBean implements Serializable{
         this.lastUpdateTime = lastUpdateTime;
     }
 
+
 }

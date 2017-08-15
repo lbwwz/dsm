@@ -12,7 +12,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/non-responsive.css" rel="stylesheet">
 
-    <link href="css/style_index.css" rel="stylesheet">
+    <link href="css/style_base.css" rel="stylesheet">
 
     <script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="js/bootstrap.min.js" type="text/javascript"></script>
@@ -101,7 +101,7 @@
                 .countBox_btn{width:32px;margin-left: 2px;}
                 #countBox_input{height: 40px;color: #999}
                 .countBox_btn a{width:30px;border:1px solid #ccc; display: block;text-align: center;color:#ccc;padding:2px 4px;}
-                .countBox_btn a:first-of-type{margin-bottom: 2px;}
+                .countBox_btn a:first-of-type{margin-bottom: 4px;}
             </style>
             <ul class="sku_item_count">
                 <li>
