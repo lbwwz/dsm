@@ -27,12 +27,13 @@
         <result column="shop_id" property="shopId"/>
         <result column="brand_id" property="brandId"/>
         <result column="product_name" property="productName"/>
+        <result column="main_img" property="mainImage"/>
         <result column="sku_id" property="skuId"/>
         <result column="properties_name" property="propertiesName"/>
         <result column="quantity" property="quantity"/>
         <result column="sku_price" property="skuPrice"/>
         <result column="shop_sn" property="shopSn"/>
-        <result column="shop_sn" property="status"/>
+        <result column="status" property="status"/>
         <result column="cart_item_num" property="cartItemNum"/>
         <result column="is_selected" property="isSelected"/>
         <result column="create_time" property="createTime"/>

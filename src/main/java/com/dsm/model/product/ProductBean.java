@@ -15,8 +15,6 @@ public class ProductBean extends ProductBaseBean implements Serializable{
     private static final long serialVersionUID = -936896536518602212L;
     //商品编号
     protected String productSn;
-    //商品主图
-    protected String mainImage;
     //商品简述
     protected String productBrief;
     //商品的最小价格
@@ -50,14 +48,6 @@ public class ProductBean extends ProductBaseBean implements Serializable{
 
     public void setProductSn(String productSn) {
         this.productSn = productSn;
-    }
-
-    public String getMainImage() {
-        return mainImage;
-    }
-
-    public void setMainImage(String mainImage) {
-        this.mainImage = mainImage;
     }
 
     public String getProductBrief() {

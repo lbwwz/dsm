@@ -2,6 +2,8 @@ package com.dsm.model.cart;
 
 import com.dsm.model.product.ProductSkuItem;
 
+import java.math.BigDecimal;
+
 /**
  * Created with IntelliJ IDEA.
  * Project: dsm
@@ -25,6 +27,8 @@ public class ShoppingCartItem extends ProductSkuItem{
 
     //购物车中商品选中状态
     private Integer isSelected;
+
+    private BigDecimal itemTotalAmount;
 
     public Integer getCartItemId() {
         return cartItemId;
@@ -58,6 +62,14 @@ public class ShoppingCartItem extends ProductSkuItem{
         this.isSelected = isSelected;
     }
 
+    public BigDecimal getItemTotalAmount() {
+        return itemTotalAmount;
+    }
+
+    public void setItemTotalAmount(BigDecimal itemTotalAmount) {
+        this.itemTotalAmount = itemTotalAmount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -88,8 +100,10 @@ public class ShoppingCartItem extends ProductSkuItem{
                 ", userId=" + userId +
                 ", cartItemNum=" + cartItemNum +
                 ", isSelected=" + isSelected +
+                ", itemTotalAmount=" + itemTotalAmount +
                 ", skuId=" + skuId +
                 ", propertiesName='" + propertiesName + '\'' +
+                ", mainImage='" + mainImage + '\'' +
                 ", quantity=" + quantity +
                 ", skuPrice=" + skuPrice +
                 ", shopSn='" + shopSn + '\'' +

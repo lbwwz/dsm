@@ -1,6 +1,7 @@
 package com.test.other;
 
 
+import com.dsm.common.DsmConcepts;
 import com.dsm.common.cache.cacheService.IRedisService;
 import com.test.common.BaseJunitTest;
 import org.junit.Test;
@@ -41,5 +42,11 @@ public class CachePoolTest extends BaseJunitTest{
         m.put("ww","456");
         m.put("ee","789");
         System.out.println(redisService.setHmset("test8",m));
+    }
+
+    @Test
+    public void Test4(){
+
+        System.out.println(redisService.expire("test8", DsmConcepts.MINUTE));
     }
 }

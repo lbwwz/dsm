@@ -21,11 +21,13 @@ public class CartDaoTest extends BaseJunitTest {
     @Test
     public void getShoppingCartItemTest(){
         System.out.println(cartDao.getShoppingCartItem(1));
-
     }
 
     @Test
     public void getShoppingCartInfoTest(){
         System.out.println(cartDao.getShoppingCartInfo(1));
     }
+
+
+
 }

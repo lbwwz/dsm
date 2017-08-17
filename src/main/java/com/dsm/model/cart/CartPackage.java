@@ -15,12 +15,12 @@ public class CartPackage {
     private Integer shopId;
     private String shopName;
 
-    private List<ShoppingCartItem> CartItems;
+    private List<ShoppingCartItem> cartItems;
 
     public CartPackage(Integer shopId, String shopName, List<ShoppingCartItem> cartItems) {
         this.shopId = shopId;
         this.shopName = shopName;
-        CartItems = cartItems;
+        this.cartItems = cartItems;
     }
 
     public Integer getShopId() {
@@ -40,11 +40,11 @@ public class CartPackage {
     }
 
     public List<ShoppingCartItem> getCartItems() {
-        return CartItems;
+        return cartItems;
     }
 
     public void setCartItems(List<ShoppingCartItem> cartItems) {
-        CartItems = cartItems;
+        this.cartItems = cartItems;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class CartPackage {
         return "CartPackage{" +
                 "shopId=" + shopId +
                 ", shopName='" + shopName + '\'' +
-                ", CartItems=" + CartItems +
+                ", cartItems=" + cartItems +
                 '}';
     }
 }

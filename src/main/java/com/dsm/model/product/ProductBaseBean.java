@@ -24,6 +24,8 @@ public class ProductBaseBean implements Serializable{
     protected Integer brandId;
     //商品名称
     protected String productName;
+    //商品主图
+    protected String mainImage;
     //商品排序，该字段仅用于店铺内显示的商品排序
     protected Integer sort;
     //商品状态 0，草稿；1，上架；2，下架；3，禁售
@@ -81,6 +83,14 @@ public class ProductBaseBean implements Serializable{
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public String getMainImage() {
+        return mainImage;
+    }
+
+    public void setMainImage(String mainImage) {
+        this.mainImage = mainImage;
     }
 
     public Integer getSort() {

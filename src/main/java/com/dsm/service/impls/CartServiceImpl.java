@@ -112,6 +112,7 @@ public class CartServiceImpl implements ICartService {
         if(redisService.exists(cartKey)){
             Map<String, String> m = redisService.getHsetAll(cartKey);
 
+            redisService.expire(cartKey, DsmConcepts.DAY);
             List<ShoppingCartItem> cartItemList = new ArrayList<>();
             for (Map.Entry<String, String> entry : m.entrySet()) {
                 cartItemList.add(JSON.parseObject(entry.getValue(), ShoppingCartItem.class));
@@ -126,7 +127,11 @@ public class CartServiceImpl implements ICartService {
         for(ShoppingCartItem item : cartItemList){
             m.put(item.getSkuId()+"",JSONObject.toJSONString(item));
         }
-        return redisService.setHmset(cartKey,m);
+        if(redisService.setHmset(cartKey,m)){
+            redisService.expire(cartKey, DsmConcepts.DAY);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -157,13 +162,17 @@ public class CartServiceImpl implements ICartService {
         //设置信息
         Integer tempShopId;
         String tempShopName;
+        BigDecimal b = new BigDecimal(0);
         for (Map.Entry<String, List<ShoppingCartItem>> entry : map.entrySet()) {
             tempShopId = entry.getValue().get(0).getShopId();
             tempShopName = entry.getValue().get(0).getShopName();
             cartInfo.addCartPackage(new CartPackage(tempShopId, tempShopName, entry.getValue()));
+            for(ShoppingCartItem item : entry.getValue()){
+                b = b.add(item.getSkuPrice().multiply(BigDecimal.valueOf(item.getCartItemNum())));
+            }
         }
         //计算商品总价
-        cartInfo.setTotalPrice(new BigDecimal(123));
+        cartInfo.setTotalPrice(b);
 
         return cartInfo;
     }
