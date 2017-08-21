@@ -2,24 +2,35 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
           http://www.springframework.org/schema/context
           http://www.springframework.org/schema/context/spring-context-3.0.xsd
           http://www.springframework.org/schema/mvc
-          http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+          http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!--===== 配置spring-mvc的环境 =====-->
-
+    <!--配置ico容器管理的bean-->
+    <context:component-scan base-package="com.dsm.dao">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+    </context:component-scan>
+    <context:component-scan base-package="com.dsm.service">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
 
     <!--spring mvc 要扫描的 controller 位置-->
     <context:component-scan base-package="com.dsm.controller">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
+    <context:component-scan base-package="com.dsm.common.expanding"></context:component-scan>
+    <context:component-scan base-package="com.dsm.common.cache"></context:component-scan>
+    <aop:aspectj-autoproxy expose-proxy="true"/>
+
     <!--开启注解映射-->
     <mvc:annotation-driven/>
+
 
     <!-- 默认访问跳转到首页(即定义无需Controller的url<->view直接映射) -->
     <!--<mvc:view-controller path="/" view-name="forward:/index.jsp"/>-->

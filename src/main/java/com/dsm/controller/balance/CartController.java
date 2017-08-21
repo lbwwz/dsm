@@ -1,5 +1,6 @@
 package com.dsm.controller.balance;
 
+import com.dsm.common.annotation.TestAnnotation;
 import com.dsm.model.BackMsg;
 import com.dsm.service.interfaces.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,7 @@ public class CartController {
      * @param cookieEnabled 浏览器是否禁用cookie,若禁用，则引到用户登录
      * @return
      */
+    @TestAnnotation
     @ResponseBody
     @RequestMapping("addToCart")
     public BackMsg<String> addToCart(Integer skuId,@RequestParam(defaultValue = "1") Integer count,boolean cookieEnabled){

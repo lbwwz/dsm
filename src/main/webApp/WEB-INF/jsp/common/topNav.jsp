@@ -32,7 +32,7 @@
                 <!--右侧菜单 -->
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">我的Mall <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a></li>
-                    <li><a href="#">购物车  <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a></li>
+                    <li><a href="${webRoot}/cart">购物车  <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a></li>
                     <li><a href="#">收藏夹  <span class="glyphicon glyphicon-star" aria-hidden="true"></span></a></li>
                     <li><a href="#">买家中心  <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a></li>
                     <li><a href="#">其他</a></li>

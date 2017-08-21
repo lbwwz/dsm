@@ -2,7 +2,6 @@ package com.dsm.service.impls;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dsm.common.DsmConcepts;
-import com.dsm.common.annotation.TestAnnotation;
 import com.dsm.common.cache.cacheService.IRedisService;
 import com.dsm.common.utils.SessionToolUtils;
 import com.dsm.controller.utils.ParamUtils;
@@ -29,7 +28,7 @@ import java.util.*;
  *
  * @author : Lbwwz
  */
-@TestAnnotation
+
 @Service("IProductService")
 public class ProductServiceImpl implements IProductService {
     public static Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);

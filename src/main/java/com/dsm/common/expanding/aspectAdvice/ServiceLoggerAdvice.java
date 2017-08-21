@@ -1,4 +1,4 @@
-package com.dsm.service.base;
+package com.dsm.common.expanding.aspectAdvice;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -22,11 +22,9 @@ import java.util.Arrays;
 @Component
 public class ServiceLoggerAdvice {
 
-
     Logger logger = LoggerFactory.getLogger(ServiceLoggerAdvice.class);
 
-
-    @Around("com.dsm.common.aspectAdvice.DsmAspectPointCut.serviceOutputPoint()")
+    @Around("com.dsm.common.expanding.aspectAdvice.DsmAspectPointCut.serviceOutputPoint()")
     public Object around(ProceedingJoinPoint pjp) {
         Object retVal = null;
 

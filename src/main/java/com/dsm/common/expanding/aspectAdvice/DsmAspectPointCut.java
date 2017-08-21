@@ -1,4 +1,4 @@
-package com.dsm.common.aspectAdvice;
+package com.dsm.common.expanding.aspectAdvice;
 
 import org.aspectj.lang.annotation.Pointcut;
 
@@ -14,4 +14,7 @@ public class DsmAspectPointCut {
     //service 记录日志切面
     @Pointcut("execution(* com.dsm.service.impls..*(..))")
     public void serviceOutputPoint(){}
+
+    @Pointcut("execution(* com.dsm.controller..*(..))")
+    public void requestValidate(){}
 }
