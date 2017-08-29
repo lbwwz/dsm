@@ -17,7 +17,7 @@
     <script src="${rsRoot}/js/bootstrap.min.js" type="text/javascript"></script>
 
     <%--校验工具--%>
-    <script type="text/javascript" src="${rsRoot}/js/validateTools.js"></script>
+    <script type="text/javascript" src="${rsRoot}/js/ValidateTools.js"></script>
     <script type="text/javascript" src="${rsRoot}/js/ajaxSubmit.js"></script>
 
 </head>
@@ -64,7 +64,9 @@
                 <label class="col-xs-2 control-label" for="email">电子邮箱</label>
                 <div class="col-xs-4">
                     <input id="email" name="email" class="form-control " type="email" placeholder="请输入邮箱"/>
-                    <p class="help-block" id="email_check"></p>
+                    <div class="col-xs-6">
+                        <p class="help-block" id="email_check"></p>
+                    </div>
                 </div>
                 <div class="col-xs-6">
                     <p class="help-block"></p>

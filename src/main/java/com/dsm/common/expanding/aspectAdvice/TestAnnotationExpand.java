@@ -1,9 +1,14 @@
 package com.dsm.common.expanding.aspectAdvice;
 
+import com.dsm.common.annotation.TestAnnotation;
+import com.dsm.common.expanding.aspectAdvice.utils.JoinPointUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Method;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,14 +27,13 @@ public class TestAnnotationExpand {
     public Object around(ProceedingJoinPoint pjp) {
         Object retVal = null;
 
-
-//        JoinPointUtils.getParamByName(p)
-
-
-//        pjp.et
-
-        //编辑日志的输出格式
         try {
+
+            Method method = JoinPointUtils.getMethod(pjp);
+            if(AnnotationUtils.getAnnotation(method,TestAnnotation.class) != null){
+
+            }
+
             retVal = pjp.proceed();
             //返回通知（发生异常不执行）
 
