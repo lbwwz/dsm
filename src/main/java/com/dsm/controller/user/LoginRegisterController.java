@@ -1,7 +1,7 @@
 package com.dsm.controller.user;
 
 import com.dsm.common.DsmConcepts;
-import com.dsm.common.annotation.TestAnnotation;
+import com.dsm.common.annotation.RepeatSubmitCheck;
 import com.dsm.common.utils.EncryptUtils;
 import com.dsm.common.utils.ValidateUtils;
 import com.dsm.common.utils.VerifyCodeUtils;
@@ -140,29 +140,22 @@ public class LoginRegisterController extends BaseController {
      * @param userRegisterDTO 注册用户的封装
      * @return {@link BackMsg}
      */
-    @TestAnnotation
+    @RepeatSubmitCheck
     @ResponseBody
     @RequestMapping("register")
     public BackMsg<String> register(UserRegisterDTO userRegisterDTO) {
 
         BackMsg<String> backMsg = null;
-//        // 检查用户提交的信息是否合法
-//        backMsg = checkRegisterInfo(userRegisterDTO);
-//        if (backMsg.getError() == BackMsg.CORRECT) {// 验证通过
-//            // 校验重复提交
-//            if (ServletToolUtils.checkRepeatSubmit(getRequest(), "registerToken", "registerToken")) {
-//
-//                // 提交注册信息
-//                String errorMsg = userService.register(userRegisterDTO);
-//                if (errorMsg == null)
-//                    backMsg .set(BackMsg.CORRECT, "regSuccess", "注册用户成功");
-//                else
-//                    backMsg.set(BackMsg.ERROR, null, errorMsg);
-//            } else {
-//                //表单重复提交的返回
-//                backMsg .set(1, null, "");
-//            }
-//        }
+        // 检查用户提交的信息是否合法
+        backMsg = checkRegisterInfo(userRegisterDTO);
+        if (backMsg.getError() == BackMsg.CORRECT) {// 验证通过
+            // 提交注册信息
+            String errorMsg = userService.register(userRegisterDTO);
+            if (errorMsg == null)
+                backMsg .set(BackMsg.CORRECT, "regSuccess", "注册用户成功");
+            else
+                backMsg.set(BackMsg.ERROR, null, errorMsg);
+        }
         return backMsg;
     }
 

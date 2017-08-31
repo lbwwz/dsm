@@ -32,9 +32,7 @@ public class JoinPointUtils {
         }else if(index<0){
             index = 0;
         }
-
         return (T)joinPoint.getArgs()[index];
-
     }
 
 
@@ -44,7 +42,6 @@ public class JoinPointUtils {
      * @return 所在方法
      */
     public static Method getMethod(JoinPoint joinPoint){
-
         Method[] methods = joinPoint.getSignature().getDeclaringType().getDeclaredMethods();
         for(Method method : methods){
             if(method.toString().equals(joinPoint.getSignature().toLongString()))

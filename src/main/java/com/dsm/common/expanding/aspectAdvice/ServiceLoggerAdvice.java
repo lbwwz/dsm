@@ -3,6 +3,7 @@ package com.dsm.common.expanding.aspectAdvice;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -22,9 +23,15 @@ import java.util.Arrays;
 @Component
 public class ServiceLoggerAdvice {
 
+
+    //service 记录日志切面
+    @Pointcut("execution(* com.dsm.service.impls..*(..))")
+    public void serviceOutputPoint(){}
+
+
     Logger logger = LoggerFactory.getLogger(ServiceLoggerAdvice.class);
 
-    @Around("com.dsm.common.expanding.aspectAdvice.DsmAspectPointCut.serviceOutputPoint()")
+    @Around("serviceOutputPoint()")
     public Object around(ProceedingJoinPoint pjp) {
         Object retVal = null;
 

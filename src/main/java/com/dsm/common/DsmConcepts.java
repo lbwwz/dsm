@@ -13,7 +13,7 @@ public class DsmConcepts {
     /*****  {@link com.dsm.model.BackMsg} 错误号，状态码 start  *****/
     public static final int CORRECT = 0;    //操作成功
     public static final int ERROR = 1;      //操作失败
-    public static final int WARRING = 1;    //操作警告
+    public static final int WARRING = 2;    //操作警告
     public static final int NO_LOGIN = 100;     //用户未登录
     public static final int NEED_REDIRECT = 9;  //需要跳转到其他页面
 

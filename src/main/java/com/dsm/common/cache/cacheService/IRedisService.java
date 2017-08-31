@@ -45,7 +45,7 @@ public interface IRedisService {
      *
      * @param key    键
      * @param value  信息值
-     * @param second 缓存时间
+     * @param second 多少秒后过期
      * @return 操作状态值
      */
     boolean set(String key, String value, int second);
