@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<jsp:include page="../../common/commonPath.jsp"/>
+
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="content-language" content="zh-CN" />
 	<title>D.S Mall-我是卖家</title>
@@ -27,7 +27,7 @@
 	<script src="${rsRoot}/front-lib/kindeditor-master/kindeditor-all.js" type="text/javascript"></script>
 	<script src="${rsRoot}/front-lib/kindeditor-master/lang/zh-CN.js" type="text/javascript"></script>
 	<script src="${rsRoot}/front-lib/kindeditor-master/plugins/code/prettify.js" type="text/javascript"></script>
-
+	<jsp:include page="../../common/commonPath.jsp"/>
 
 			
 <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->

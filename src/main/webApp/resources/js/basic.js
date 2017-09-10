@@ -106,3 +106,27 @@ function _debounce(fn, delay,atleast){
         startTime= curTime;
     }
 }
+
+/**
+ * 关于购物车添加和移除的相关操作
+ */
+
+/**
+ * 修改购物车中的商品数量
+ * @param sku
+ * @param changeCount
+ * @param returnWithData
+ * @param success
+ */
+function addOrMinusToCart(sku,changeCount,success,returnWithData){
+    returnWithData = returnWithData == undefined?0:returnWithData;
+    $.ajax({
+        url: "/cart/addOrMinusToCart",
+        type:"post",
+        cache: false,
+        data:{skuId:sku,count:changeCount,returnWithData:returnWithData,cookieEnabled:navigator.cookieEnabled},
+        success:success
+    })
+}
+
+

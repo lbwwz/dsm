@@ -4,10 +4,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<jsp:include page="../common/commonPath.jsp"/>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>卖家注册</title>
 
+
+	<title>卖家注册</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href="../css/bootstrap.min.css" rel="stylesheet">
 	<link href="../css/non-responsive.css" rel="stylesheet">
 	<!-- Custom Fonts -->
@@ -17,6 +17,7 @@
 
 	<script src="../js/jquery-1.11.3.min.js" type="text/javascript"></script>
 	<script src="../js/bootstrap.min.js" type="text/javascript"></script>
+	<jsp:include page="../common/commonPath.jsp"/>
 	<!--[if lt IE 9]>
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>

@@ -40,16 +40,6 @@ public interface IRedisService {
      */
     long expireAt(String key, long unixTimestamp);
 
-    /**
-     * 设置时效缓存
-     *
-     * @param key    键
-     * @param value  信息值
-     * @param second 多少秒后过期
-     * @return 操作状态值
-     */
-    boolean set(String key, String value, int second);
-
 
     /**
      * 设置缓存
@@ -60,6 +50,27 @@ public interface IRedisService {
      */
     boolean set(String key, String value);
 
+
+    /**
+     * 设置时效缓存
+     *
+     * @param key    键
+     * @param value  信息值
+     * @param second 多少秒后过期
+     * @return 操作状态值
+     */
+    boolean set(String key, String value, int second);
+
+    <T> boolean setObject(String key, T t, int second);
+
+    /**
+     * 获取缓存中的数据
+     *
+     * @param key 键
+     * @return 查询的结果，没有结果则为空
+     */
+    String get(String key);
+
     /**
      * 获取缓存
      *
@@ -69,12 +80,6 @@ public interface IRedisService {
      */
     String get(String key, String defaultValue);
 
-    /**
-     * 获取缓存中的数据
-     * @param key
-     * @return 查询的结果，没有结果则为空
-     */
-    String get(String key);
 
     /**
      * 删除缓存
@@ -83,6 +88,8 @@ public interface IRedisService {
      * @return 操作的状态值
      */
     boolean del(String key);
+
+
     /**
      * 将 key 中储存的数字值增一。
      * <p>
@@ -104,8 +111,9 @@ public interface IRedisService {
      */
     long decr(String key);
 
-    /********** list的相关操作 *********/
 
+
+    /********** list的相关操作 *********/
     /**
      * 添加 List
      *
@@ -113,7 +121,8 @@ public interface IRedisService {
      * @param value 信息值
      * @return 操作状态
      */
-    boolean addList(String key, String... value);
+    <T> boolean addList(String key, T... value);
+
 
     /**
      * 添加 List(只新增)
@@ -122,7 +131,7 @@ public interface IRedisService {
      * @param list 新增的列表元素
      * @return 操作状态
      */
-    boolean addList(String key, List<String> list);
+    <T> boolean addList(String key, List<T> list);
 
     /**
      * 添加 List（同时设置过期时间）
@@ -132,7 +141,27 @@ public interface IRedisService {
      * @param value   信息值
      * @return 操作状态
      */
-    boolean addList(String key, int seconds, String... value);
+    <T> boolean addList(String key, int seconds, T... value);
+
+    /**
+     * 添加 List（同时设置过期时间）
+     *
+     * @param key     key值
+     * @param seconds 过期时间 单位s
+     * @param list   信息值列表
+     * @return 操作状态
+     */
+    <T> boolean addList(String key, int seconds, List<T> list);
+
+
+    /**
+     * 从list中删除value 默认count 1
+     *
+     * @param key    设置的键
+     * @param values 值list
+     * @return 操作状态
+     */
+    int removeListValue(String key, List<String> values);
 
     /**
      * 从list中删除value
@@ -153,15 +182,6 @@ public interface IRedisService {
      * @return 成功删除元素的数量
      */
     int removeListValue(String key, long count, List<String> values);
-
-    /**
-     * 从list中删除value 默认count 1
-     *
-     * @param key    设置的键
-     * @param values 值list
-     * @return 操作状态
-     */
-    int removeListValue(String key, List<String> values);
 
     /**
      * 截断一个List
@@ -262,17 +282,42 @@ public interface IRedisService {
      * @param value Json String or String value
      * @return 操作状态
      */
-    boolean setHSet(String key, String field, String value);
+    <T> boolean setHSet(String key, String field, T value);
+
+    /**
+     * 设置map结构的key
+     * @param key 键
+     * @param m ，map数据封装
+     */
+    <T> boolean setHmset(String key, Map<String, T> m);
 
     /**
      * 获得 HashSet 中某个域的值
      *
      * @param key   键
      * @param field 域名
-     * @return Json String or String value
+     * @return 对象
      */
     String getHSet(String key, String field);
 
+
+    /**
+     * 获得 HashSet 中某个域的值信息对象
+     *
+     * @param key   键
+     * @param field 域名
+     * @return 具体对象
+     */
+    <T> T getHSetAsObject(String key, String field, Class<T> clazz);
+
+    /**
+     *
+     * @param key   键
+     * @param field 域名
+     * @param clazz 类
+     * @return 类对应的对象列表
+     */
+    <T> List<T> getHSetAsList(String key, String field, Class<T> clazz);
 
     /**
      * 查询hashSet 中所有的元素（包含key 和 value）
@@ -280,12 +325,9 @@ public interface IRedisService {
      */
     Map<String, String> getHsetAll(String key);
 
-    /**
-     * 设置map结构的key
-     * @param key 键
-     * @param m ，map数据封装
-     */
-    boolean setHmset(String key, Map<String, String> m);
+
+
+
 
     /**
      * 删除HashSet对象

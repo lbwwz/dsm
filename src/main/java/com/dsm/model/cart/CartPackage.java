@@ -14,13 +14,14 @@ public class CartPackage {
 
     private Integer shopId;
     private String shopName;
+    private boolean isSelected;
 
     private List<ShoppingCartItem> cartItems;
 
     public CartPackage(Integer shopId, String shopName, List<ShoppingCartItem> cartItems) {
         this.shopId = shopId;
         this.shopName = shopName;
-        this.cartItems = cartItems;
+        setCartItems(cartItems);
     }
 
     public Integer getShopId() {
@@ -39,13 +40,30 @@ public class CartPackage {
         this.shopName = shopName;
     }
 
+
+    public boolean getIsSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
     public List<ShoppingCartItem> getCartItems() {
         return cartItems;
     }
 
     public void setCartItems(List<ShoppingCartItem> cartItems) {
         this.cartItems = cartItems;
+        this.isSelected = true;
+        for(ShoppingCartItem item : cartItems){
+            if(item.getIsSelected()!= 1){
+                this.isSelected = false;
+                return;
+            }
+        }
     }
+
 
     @Override
     public String toString() {

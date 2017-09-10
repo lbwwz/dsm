@@ -1,6 +1,7 @@
 package com.test.daoTest;
 
 import com.dsm.dao.ICartDao;
+import com.dsm.model.cart.ShoppingCartItemPO;
 import com.test.common.BaseJunitTest;
 import org.junit.Test;
 
@@ -25,9 +26,18 @@ public class CartDaoTest extends BaseJunitTest {
 
     @Test
     public void getShoppingCartInfoTest(){
-        System.out.println(cartDao.getShoppingCartInfo(1));
+        System.out.println(cartDao.getShoppingCartInfoAll(1));
     }
 
-
+    @Test
+    public void updateCartTest(){
+            ShoppingCartItemPO scPO = new ShoppingCartItemPO();
+            scPO.setUserId(1);
+            scPO.setShopId(1);
+            scPO.setIsSelected(0);
+            scPO.setCartItemNum(10);
+            int i= cartDao.updateCart(scPO);
+            System.out.println(i);
+        }
 
 }

@@ -10,7 +10,7 @@
         <result column="user_id" property="userId"/>
         <result column="shop_id" property="shopId"/>
         <result column="sku_id" property="skuId"/>
-        <result column="num" property="num"/>
+        <result column="cart_Item_num" property="cartItemNum"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
@@ -41,25 +41,66 @@
     </resultMap>
 
 
-    <select id="getShoppingCartItem" resultMap="shoppingCartItemResult" parameterType="int">
+    <!--获取购物车信息的sql-->
+    <sql id="shoppingCartInfo">
         SELECT cart_item_id,user_id,cart_item_num,is_selected, dsm_product_sku.product_id , cat_id, product_sn, product_name, click_count, brand_id,
             vdsm_user_product_base.shop_id, shop_name, warn_number,product_brief, main_img, product_grade, product_status, is_best, is_new, is_hot,
-            dsm_product_sku.sku_id,properties_name, quantity, sku_price, shop_sn dsm_user_shopping_cart.create_time, dsm_user_shopping_cart.update_time
-        FROM vdsm_user_product_base,dsm_product_sku,dsm_user_shopping_cart
-        WHERE vdsm_user_product_base.product_id = dsm_product_sku.product_id
-            AND dsm_product_sku.sku_id=dsm_user_shopping_cart.sku_id
-            AND dsm_user_shopping_cart.cart_item_id=#{cartItemId}
-    </select>
-
-    <select id="getShoppingCartInfo" resultMap="shoppingCartItemResult" parameterType="int">
-        SELECT cart_item_id,user_id,cart_item_num,is_selected, dsm_product_sku.product_id , cat_id, product_sn, product_name, click_count, brand_id,
-        vdsm_user_product_base.shop_id, shop_name, warn_number,product_brief, main_img, product_grade, product_status, is_best, is_new,is_hot,
-        dsm_product_sku.sku_id, properties_name, quantity, sku_price, shop_sn, dsm_user_shopping_cart.create_time, dsm_user_shopping_cart.update_time
+            dsm_product_sku.sku_id,properties_name, quantity, sku_price, shop_sn, dsm_user_shopping_cart.create_time, dsm_user_shopping_cart.update_time
         FROM vdsm_user_product_base,dsm_product_sku,dsm_user_shopping_cart
         WHERE vdsm_user_product_base.product_id = dsm_product_sku.product_id
         AND dsm_product_sku.sku_id=dsm_user_shopping_cart.sku_id
+
+    </sql>
+    <select id="getShoppingCartItem" resultMap="shoppingCartItemResult" >
+        <include refid="shoppingCartInfo"/>
+            AND dsm_user_shopping_cart.cart_item_id=#{cartItemId}
+    </select>
+
+    <select id="getShoppingCartItemBySkuId" resultMap="shoppingCartItemResult" >
+        <include refid="shoppingCartInfo"/>
+        AND dsm_user_shopping_cart.user_id=#{userId}
+        AND dsm_user_shopping_cart.sku_id=#{skuId}
+    </select>
+
+    <select id="getShoppingCartInfoAll" resultMap="shoppingCartItemResult" parameterType="int">
+        <include refid="shoppingCartInfo"/>
         AND dsm_user_shopping_cart.user_id=#{userId}
     </select>
+
+    <select id="getShoppingCartInfoByShopId" resultMap="shoppingCartItemResult" parameterType="int">
+        <include refid="shoppingCartInfo"/>
+        AND dsm_user_shopping_cart.user_id=#{userId}
+        AND dsm_user_shopping_cart.shop_id=#{shopId}
+    </select>
+
+    <update id="updateCart" parameterType="ShoppingCartItemPO" useGeneratedKeys="true" keyProperty="cartItemId">
+        UPDATE dsm_user_shopping_cart
+        <set>
+            <if test="cartItemNum != null">
+                cart_item_num=#{cartItemNum},
+            </if>
+            <if test="isSelected != null">
+                is_selected=#{isSelected},
+            </if>
+            update_time=now()
+        </set>
+        <trim prefix="WHERE" prefixOverrides="AND">
+            user_id=#{userId}
+            <if test="skuId != null">
+                AND sku_id=#{skuId}
+            </if>
+            <if test="shopId != null">
+                AND shop_id=#{shopId}
+            </if>
+        </trim>
+    </update>
+
+
+    <!--Integer changeSelectedBySkuId(int userId, Integer skuId, int selected);-->
+
+    <!--Integer changeSelectedByShopId(int userId, Integer shopId, int selected);-->
+
+    <!--Integer changeSelectedAll(int userId, int selected);-->
 
 
 </mapper>

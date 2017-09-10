@@ -22,8 +22,14 @@ public class ShoppingCart {
     //商品总额
     private BigDecimal totalPrice;
 
+    //选中商品的总件数
+    private int selectTotalNum;
+
     //运费（需要根据分包计算总和）---待定
     private BigDecimal freight;
+
+    //所有商品是否全部选中
+    private boolean selectedAll = true;
 
 
     //其他提示信息
@@ -48,6 +54,14 @@ public class ShoppingCart {
         this.totalPrice = totalPrice;
     }
 
+    public int getSelectTotalNum() {
+        return selectTotalNum;
+    }
+
+    public void setSelectTotalNum(int selectTotalNum) {
+        this.selectTotalNum = selectTotalNum;
+    }
+
     public BigDecimal getFreight() {
         return freight;
     }
@@ -56,9 +70,20 @@ public class ShoppingCart {
         this.freight = freight;
     }
 
+    public boolean isSelectedAll() {
+        return selectedAll;
+    }
+
+    public void setSelectedAll(boolean selectedAll) {
+        this.selectedAll = selectedAll;
+    }
+
     public void addCartPackage(CartPackage cartPackage){
         this.cartPackages = this.cartPackages==null?new ArrayList<>():this.cartPackages;
         this.cartPackages.add(cartPackage);
+        if(!cartPackage.getIsSelected()){
+            this.selectedAll = false;
+        }
     }
 
     @Override
@@ -66,7 +91,9 @@ public class ShoppingCart {
         return "ShoppingCart{" +
                 "cartPackages=" + cartPackages +
                 ", totalPrice=" + totalPrice +
+                ", selectTotalNum=" + selectTotalNum +
                 ", freight=" + freight +
+                ", selectedAll=" + selectedAll +
                 '}';
     }
 }

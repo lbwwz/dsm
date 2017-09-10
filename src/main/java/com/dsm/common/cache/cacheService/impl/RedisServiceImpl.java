@@ -1,5 +1,6 @@
 package com.dsm.common.cache.cacheService.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dsm.common.cache.cacheDatabase.RedisDataSource;
 import com.dsm.common.cache.cacheService.IRedisService;
 import org.slf4j.Logger;
@@ -130,6 +131,11 @@ public class RedisServiceImpl implements IRedisService{
         return false;
     }
 
+    @Override
+    public <T> boolean setObject(String key, T t, int second) {
+        return set(key,JSONObject.toJSONString(t),second);
+    }
+
 
     /**
      * 设置缓存
@@ -253,18 +259,18 @@ public class RedisServiceImpl implements IRedisService{
      * 添加 List
      *
      * @param key   key值
-     * @param value 信息值
+     * @param t 信息值
      * @return 操作状态
      */
     @Override
-    public boolean addList(String key, String... value) {
-        if (key == null || value == null) {
+    public <T> boolean addList(String key, T... t) {
+        if (key == null || t == null) {
             return false;
         }
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = redisDataSource.getResource();
-            shardedJedis.lpush(key, value);
+            shardedJedis.lpush(key, Arrays.stream(t).map(JSONObject::toJSONString).toArray(String[]::new));
             return true;
         } catch (Exception ex) {
             logger.error("setList error.", ex);
@@ -282,12 +288,11 @@ public class RedisServiceImpl implements IRedisService{
      * @return 操作状态
      */
     @Override
-    public boolean addList(String key, List<String> list) {
+    public <T> boolean addList(String key, List<T> list) {
         if (key == null || list == null || list.size() == 0) {
             return false;
         }
-        String[] s = new String[list.size()];
-        addList(key, list.toArray(s));
+        addList(key, list.stream().toArray());
         return true;
     }
 
@@ -300,8 +305,18 @@ public class RedisServiceImpl implements IRedisService{
      * @return 操作状态
      */
     @Override
-    public boolean addList(String key, int seconds, String... value) {
+    public <T> boolean addList(String key, int seconds, T... value) {
         boolean result = addList(key, value);
+        if (result) {
+            long i = expire(key, seconds);
+            return i == 1;
+        }
+        return false;
+    }
+
+    @Override
+    public <T> boolean addList(String key, int seconds, List<T> list) {
+        boolean result = addList(key, list);
         if (result) {
             long i = expire(key, seconds);
             return i == 1;
@@ -587,17 +602,23 @@ public class RedisServiceImpl implements IRedisService{
      *
      * @param key   键值
      * @param field 域名
-     * @param value Json String or String value
+     * @param value 数据对象
      * @return 操作状态
      */
     @Override
-    public boolean setHSet(String key, String field, String value) {
+    public <T> boolean setHSet(String key, String field, T value) {
         if (value == null)
             return false;
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = redisDataSource.getResource();
-            return shardedJedis.hset(key, field, value) == 1;
+            String str;
+            if(value instanceof String){
+                str = (String)value;
+            }else{
+                str = JSONObject.toJSONString(value);
+            }
+            return shardedJedis.hset(key, field, str) > 0;
         } catch (Exception ex) {
             logger.error("setHSet error.", ex);
         } finally {
@@ -605,6 +626,27 @@ public class RedisServiceImpl implements IRedisService{
         }
         return false;
     }
+
+
+    @Override
+    public <T> boolean setHmset(String key,Map<String,T> m){
+        ShardedJedis shardedJedis = null;
+        try {
+            shardedJedis = redisDataSource.getResource();
+            Map<String,String> map = new HashMap<>();
+            for(Map.Entry<String,T> entry: m.entrySet()){
+                map.put(entry.getKey(),JSONObject.toJSONString(entry.getValue()));
+            }
+            return shardedJedis.hmset(key, map).equalsIgnoreCase("OK");
+        } catch (Exception ex) {
+            logger.error("setHmset error.", ex);
+        } finally {
+            returnResource(shardedJedis);
+        }
+        return false;
+    }
+
+
 
     /**
      * 获得 HashSet 中某个域的值
@@ -618,6 +660,7 @@ public class RedisServiceImpl implements IRedisService{
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = redisDataSource.getResource();
+            String str = shardedJedis.hget(key, field);
             return shardedJedis.hget(key, field);
         } catch (Exception ex) {
             logger.error("getHSet error.", ex);
@@ -626,16 +669,20 @@ public class RedisServiceImpl implements IRedisService{
         }
         return null;
     }
-
+    @Override
+    public <T> T getHSetAsObject(String key, String field, Class<T> clazz){
+        return JSONObject.parseObject(getHSet(key,field),clazz);
+    }
 
     @Override
-    public Map<String, String> getHsetAll(String key) {
+    public <T> List<T> getHSetAsList(String key, String field, Class<T> clazz) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = redisDataSource.getResource();
-            return shardedJedis.hgetAll(key);
+            String str = shardedJedis.hget(key, field);
+            return JSONObject.parseArray(shardedJedis.hget(key, field),clazz);
         } catch (Exception ex) {
-            logger.error("delHSet error.", ex);
+            logger.error("getHSet error.", ex);
         } finally {
             returnResource(shardedJedis);
         }
@@ -643,18 +690,19 @@ public class RedisServiceImpl implements IRedisService{
     }
 
     @Override
-    public boolean setHmset(String key,Map<String,String> m){
+    public  Map<String, String> getHsetAll(String key) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = redisDataSource.getResource();
-            return shardedJedis.hmset(key, m).equalsIgnoreCase("OK");
+            return shardedJedis.hgetAll(key);
         } catch (Exception ex) {
-            logger.error("delHSet error.", ex);
+            logger.error("getHsetAll error.", ex);
         } finally {
             returnResource(shardedJedis);
         }
-        return false;
+        return null;
     }
+
 
     /**
      * 删除HashSet对象

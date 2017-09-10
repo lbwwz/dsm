@@ -1,6 +1,7 @@
 package com.dsm.common.expanding.aspectAdvice;
 
 import com.dsm.common.DsmConcepts;
+import com.dsm.common.annotation.RepeatSubmitCheck;
 import com.dsm.common.cache.cacheService.IRedisService;
 import com.dsm.common.expanding.aspectAdvice.utils.JoinPointUtils;
 import com.dsm.controller.common.RequestResponseContext;
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
@@ -57,12 +59,14 @@ public class RepeatSubmitCheckAnnotationAction {
         Object retVal = null;
         try {
             boolean setCheckFlag = true;
+            Method method = null;
             HttpServletRequest request = RequestResponseContext.getRequest();
             //只对@Controller注解标注的控制器内的方法进行处理
             if (pjp.getSignature().getDeclaringType().getAnnotation(Controller.class) != null) {
                 //重复提交校验
                 try {
-                    retVal = doRepeatSubmitCheck(pjp, request);
+                    method = JoinPointUtils.getMethod(pjp);
+                    retVal = doRepeatSubmitCheck(method, request);
                     if (!Optional.empty().equals(retVal)) { //校验通过，执行后续操作
                         return retVal;
                     }
@@ -72,9 +76,21 @@ public class RepeatSubmitCheckAnnotationAction {
                 }
             }
             retVal = pjp.proceed();
+            assert method != null;
+            if(retVal instanceof BackMsg){
+                if(!method.getAnnotation(RepeatSubmitCheck.class).successCheck()){
+                    BackMsg msg = (BackMsg)retVal;
+
+                    //这里暂时只处理BackMsg类型的返回值
+                    if(msg.getError()==DsmConcepts.CORRECT){
+                        setCheckFlag=false;
+                    }
+                }
+            }
             if (setCheckFlag) {
+                AnnotationUtils.getAnnotation(JoinPointUtils.getMethod(pjp), RepeatSubmitCheck.class).timeInterval();
                 //操作成功：这里做重复提交标记。标记前n秒是否有提交操作
-                redisService.set(request.getSession().getId() + "_repeatCheck", "1", 3);
+                redisService.set(request.getSession().getId() + "_repeatCheck", "1", method.getAnnotation(RepeatSubmitCheck.class).timeInterval());
             }
         } catch (Throwable throwable) {
             //controller方法中出现异常处理
@@ -88,16 +104,15 @@ public class RepeatSubmitCheckAnnotationAction {
      *
      * @return 返回的信息：如果为Optional.empty()，表示校验通过
      */
-    private Object doRepeatSubmitCheck(ProceedingJoinPoint pjp, HttpServletRequest request) {
+    private Object doRepeatSubmitCheck(Method method, HttpServletRequest request) {
         //校验重复提交，若重复
         if (StringUtils.isNoneBlank(redisService.get(request.getSession().getId() + "_repeatCheck"))) {
-            Method method = JoinPointUtils.getMethod(pjp);
             assert method != null;
             Class<?> clazz = method.getReturnType();
             if (request.getHeader("X-Requested-With").equalsIgnoreCase("XMLHttpRequest")) {//如果请求是ajax请求
                 //这里只处理三种情况
                 if (clazz.equals(BackMsg.class)) {
-                    return new BackMsg<>(DsmConcepts.WARRING, null, "请勿重复提交！");
+                    return new BackMsg<>(DsmConcepts.WARRING, null, "请勿频繁操作！");
                 } else if (clazz.equals(String.class)) {
                     return "warning:请勿重复提交！";
                 } else {

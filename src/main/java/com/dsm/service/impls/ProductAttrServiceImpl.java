@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,10 +32,7 @@ public class ProductAttrServiceImpl implements IProductAttrService {
 
     @Override
     public List<ProductAttrBean> getAttrNameByCat(int catId, int status) {
-        Map<String, Object> m = new HashMap<>();
-        m.put("catId", catId);
-        m.put("status", status);
-        return productAttrDao.getAttrNameByCat(m);
+        return productAttrDao.getAttrNameByCat(catId,status);
     }
 
     @Override
@@ -61,10 +56,7 @@ public class ProductAttrServiceImpl implements IProductAttrService {
 
     @Override
     public List<AttrValueBean> getAttrValues(int attrId, int status) {
-        Map<String, Object> m = new HashMap<>();
-        m.put("attrId", attrId);
-        m.put("status", status);
-        return productAttrDao.getValuesByAttrId(m);
+        return productAttrDao.getValuesByAttrId(attrId,status);
     }
 
     @Override
@@ -73,10 +65,8 @@ public class ProductAttrServiceImpl implements IProductAttrService {
         AttrValueBean bean = new AttrValueBean(valueId,attrValue);
         try {
             if (1 == productAttrDao.updateAttrValue(bean)) {
-                Map<String, Object> m = new HashMap<>();
-                m.put("valueId", bean.getValueId());
-                m.put("status", -1);
-                return productAttrDao.getValueById(m);
+
+                return productAttrDao.getValueById(bean.getValueId(),-1);
             }
         }catch (Exception ex){
             ex.printStackTrace();
@@ -89,10 +79,7 @@ public class ProductAttrServiceImpl implements IProductAttrService {
     public ProductAttrBean updateAttrInfo(ProductAttrBean bean) {
         try {
             if (1 == productAttrDao.updateAttr(bean)) {
-                Map<String, Object> m = new HashMap<>();
-                m.put("attrId", bean.getAttrId());
-                m.put("status", -1);
-                return productAttrDao.getAttrNameById(m);
+                return productAttrDao.getAttrNameById(bean.getAttrId(),-1);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

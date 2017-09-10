@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <jsp:include page="common/commonPath.jsp"/>
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>新用户注册</title>
     <!-- 新 Bootstrap 核心 CSS 文件 -->
@@ -19,7 +19,7 @@
     <%--校验工具--%>
     <script type="text/javascript" src="${rsRoot}/js/ValidateTools.js"></script>
     <script type="text/javascript" src="${rsRoot}/js/ajaxSubmit.js"></script>
-
+    <jsp:include page="common/commonPath.jsp"/>
 </head>
 <body>
 <%--<jsp:include page="common/topNav.jsp" />--%>

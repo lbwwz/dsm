@@ -12,4 +12,6 @@ package com.dsm.common.cache.cacheService;
 public interface IRedisSeniorService{
 
 
+
+
 }

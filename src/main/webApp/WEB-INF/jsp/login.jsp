@@ -4,13 +4,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<jsp:include page="common/commonPath.jsp"/>
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>用户登录</title>
 	<%--<link href="${rsRoot}/css/bootstrap.min.css" rel="stylesheet">--%>
 	<%--<link href="${rsRoot}/css/non-responsive.css" rel="stylesheet">--%>
 	<link href="${rsRoot}/css/style_log.css" rel="stylesheet" type="text/css" media="all" />
 	<script src="${rsRoot}/js/jquery-1.11.3.min.js" type="text/javascript"></script>
+	<jsp:include page="common/commonPath.jsp"/>
 
 </head>
 <body class="login">

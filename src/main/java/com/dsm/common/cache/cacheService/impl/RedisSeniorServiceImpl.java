@@ -10,9 +10,12 @@ import org.springframework.stereotype.Service;
  *
  * @author : Lbwwz
  *         <p>
- *         redis中的高级操作
+ *         redis 对数据结构的封装操作
  */
 @Service("IRedisSeniorService")
 public class RedisSeniorServiceImpl implements IRedisSeniorService {
+
+
+
 
 }

@@ -1,6 +1,13 @@
 package com.test.other;
+
+import com.alibaba.fastjson.JSONObject;
 import com.dsm.common.bean.SendMail;
 import com.dsm.common.utils.MailUtil;
+import com.dsm.model.cart.ShoppingCartItem;
+import com.dsm.model.user.User;
+import org.junit.Test;
+
+import java.util.Arrays;
 
 public class OperateMain {
 	public static void main(String[] args) {
@@ -28,4 +35,31 @@ public class OperateMain {
 //        sendmail.setReceiver(args[3]);//接收者  
 //        MailUtil.sendMail(sendmail);  
 	}
+
+    @Test
+    public void test1(){
+        System.out.println(JSONObject.parseObject(null, ShoppingCartItem.class));
+    }
+
+    @Test
+    public void test2(){
+        System.out.println(JSONObject.toJSONString("123123123"));
+    }
+
+    @Test
+    public void test3(){
+        User[] u = new User[2];
+        u[0] = new User(1,"111");
+        u[1] = new User(2,"222");
+
+        String[] o = Arrays.stream(u).map(JSONObject::toJSONString).toArray(String[]::new);
+//
+//
+        System.out.println(Arrays.toString(o));
+    }
+
+    @Test
+    public void test4(){
+        System.out.println(JSONObject.parse("123123123"));
+    }
 }

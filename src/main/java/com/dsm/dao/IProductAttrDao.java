@@ -3,10 +3,10 @@ package com.dsm.dao;
 
 import com.dsm.model.product.AttrValueBean;
 import com.dsm.model.product.ProductAttrBean;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 产品的属性操作DAO接口
@@ -40,11 +40,11 @@ public interface IProductAttrDao {
     /**
      * 获取某个产品属类目下的全部属性（含属性值）
      *
-     * @param m 封装参数的 map（参数如下）
-     *          ├── catId:类目ID
-     *          └── status:属性名状态字段，负数表示忽略该条件
+     * @param catId  catId:类目ID
+     * @param status status:属性名状态字段，负数表示忽略该条件
+     * @return 商品属性信息列表
      */
-    List<ProductAttrBean> getAttrNameByCat(Map m);
+    List<ProductAttrBean> getAttrNameByCat(@Param("catId") int catId, @Param("status") int status);
 
     /**
      * 根据属性ID查询状态可用属性信息
@@ -57,12 +57,11 @@ public interface IProductAttrDao {
     /**
      * 根据属性ID查询相应的属性信息
      *
-     * @param m 封装参数的 map（参数如下）
-     *          ├── attrId:属性ID
-     *          └── status:属性名状态字段，负数表示忽略该条件
+     * @param attrId :商品属性ID
+     * @param status status:属性名状态字段，负数表示忽略该条件
      * @return id对应的属性名信息
      */
-    ProductAttrBean getAttrNameById(Map m);
+    ProductAttrBean getAttrNameById(@Param("attrId") int attrId, @Param("status") int status);
 
     /**
      * 添加一条商品属性，返回该产品的主键：产品属性ID
@@ -103,22 +102,21 @@ public interface IProductAttrDao {
     /**
      * 根据商品的属性ID获取该属性下所有的初始属性值
      *
-     * @param m 封装参数的 map（参数如下）
-     *          ├── attrId:属性ID
-     *          └── status:属性值状态字段，负数表示忽略该条件
+     * @param attrId attrId:属性ID
+     * @param status status:属性值状态字段，负数表示忽略该条件
+     * @return 山沟in属性值信息列表
      */
-    List<AttrValueBean> getValuesByAttrId(Map m);
+    List<AttrValueBean> getValuesByAttrId(@Param("attrId") int attrId, @Param("status") int status);
 
     /**
-     *
-     * @param m
      * @return
      */
-    AttrValueBean getValueById(Map m);
+    AttrValueBean getValueById(@Param("valueId") int valueId, @Param("status") int status);
 
 
     /**
      * 更新属性信息
+     *
      * @param bean
      * @return
      */
@@ -133,6 +131,7 @@ public interface IProductAttrDao {
 
     /**
      * 查询叶子类目下的key属性信息
+     *
      * @param catId 类目ID
      * @return 属性列表
      */

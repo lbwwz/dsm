@@ -17,5 +17,9 @@ import java.lang.annotation.*;
 @Documented
 public @interface RepeatSubmitCheck {
 
+    //判断重复提交时间间隔，单位：秒
+    int timeInterval() default 3;
 
+    //操作成功继续校验
+    boolean successCheck() default true;
 }

@@ -21,6 +21,7 @@
         <result column="shop_name" property="shopName"/>
         <result column="brand_id" property="brandId"/>
         <result column="product_name" property="productName"/>
+        <result column="main_img" property="mainImage"/>
         <result column="sku_id" property="skuId"/>
         <result column="properties_name" property="propertiesName"/>
         <result column="quantity" property="quantity"/>
@@ -60,7 +61,7 @@
             warn_number,product_brief, main_img, product_grade, product_status,
             is_best, is_new, is_hot,sku_id,properties_name, quantity, sku_price, shop_sn
         FROM vdsm_user_product_base,dsm_product_sku
-        WHERE vdsm_user_product_base.product_id = dsm_product_sku.product_id AND dsm_product_sku.sku_id=#{skuId}
+        WHERE vdsm_user_product_base.product_id = dsm_product_sku.product_id AND dsm_product_sku.sku_id=#{skuId} AND product_status = 1
     </select>
 
     <!--查询sku单品的库存-->

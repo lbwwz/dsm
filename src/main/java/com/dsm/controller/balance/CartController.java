@@ -1,6 +1,8 @@
 package com.dsm.controller.balance;
 
-import com.dsm.common.annotation.TestAnnotation;
+import com.alibaba.fastjson.JSONObject;
+import com.dsm.common.annotation.RepeatSubmitCheck;
+import com.dsm.controller.common.BaseController;
 import com.dsm.model.BackMsg;
 import com.dsm.service.interfaces.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("cart")
-public class CartController {
+public class CartController extends BaseController{
 
     @Autowired
     private ICartService cartService;
@@ -41,21 +43,47 @@ public class CartController {
     }
 
     /**
-     * 将商品加入购物车
+     * 添加或减少商品到购物车
      * @param skuId skuId
      * @param count 商品数量
+     * @param returnWithData 是否返回购物车商品信息
      * @param cookieEnabled 浏览器是否禁用cookie,若禁用，则引到用户登录
      * @return
      */
-    @TestAnnotation
+    @RepeatSubmitCheck(successCheck = false)
     @ResponseBody
-    @RequestMapping("addToCart")
-    public BackMsg<String> addToCart(Integer skuId,@RequestParam(defaultValue = "1") Integer count,boolean cookieEnabled){
-
+    @RequestMapping("addOrMinusToCart")
+    public BackMsg<String> addOrMinusToCart(Integer skuId,
+                                            @RequestParam(defaultValue = "1") Integer count,
+                                            @RequestParam(defaultValue = "0") Integer returnWithData,
+                                            boolean cookieEnabled){
+        count = count== null?1:count;
         BackMsg<String> msg = cartService.addOrMinusToCart(skuId,count,cookieEnabled);
-        return null;
+        if(msg.getError() == 0 && returnWithData == 1){
+            //操作成功
+            msg.setData(JSONObject.toJSONString(cartService.getMyShoppingCart()));
 
+        }
+        return msg;
     }
+
+
+    /**
+     *
+     * @param id skuId or shopId
+     * @param type 选中的类型（枚举）：sku；shop；all
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("changeSelected")
+    public BackMsg<String> changeSelected(Integer id,@RequestParam(defaultValue = "sku")String type,int isSelected){
+        BackMsg<String> msg = cartService.changeItemsSelected(id,isSelected,type);
+
+
+        return msg;
+    }
+
+
 
 
 }

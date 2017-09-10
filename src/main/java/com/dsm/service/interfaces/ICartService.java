@@ -13,6 +13,12 @@ import com.dsm.model.cart.ShoppingCart;
  *         执行购物车操作的service
  */
 public interface ICartService {
+
+    /**
+     * 查询当前用户的购物车信息
+     */
+    ShoppingCart getMyShoppingCart();
+
     /**
      * 增减商品到购物车
      * @param skuId 商品sku
@@ -23,8 +29,6 @@ public interface ICartService {
     BackMsg<String> addOrMinusToCart(Integer skuId, int changeCount, boolean cookieEnabled);
 
 
-    ShoppingCart getMyShoppingCart();
-
-
+    BackMsg<String> changeItemsSelected(Integer id, int isSelected, String type);
 
 }

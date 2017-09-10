@@ -2,7 +2,7 @@ package com.dsm.model.cart;
 
 import com.dsm.model.product.ProductSkuItem;
 
-import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,6 +15,7 @@ import java.math.BigDecimal;
  */
 public class ShoppingCartItem extends ProductSkuItem{
 
+    private static final long serialVersionUID = -4560145330523945661L;
     //购物车主键id
     private Integer cartItemId;
 
@@ -28,7 +29,11 @@ public class ShoppingCartItem extends ProductSkuItem{
     //购物车中商品选中状态
     private Integer isSelected;
 
-    private BigDecimal itemTotalAmount;
+    public ShoppingCartItem() {
+        super();
+        this.createTime = new Timestamp(System.currentTimeMillis());
+        this.lastUpdateTime = new Timestamp(System.currentTimeMillis());
+    }
 
     public Integer getCartItemId() {
         return cartItemId;
@@ -59,16 +64,9 @@ public class ShoppingCartItem extends ProductSkuItem{
     }
 
     public void setIsSelected(Integer isSelected) {
-        this.isSelected = isSelected;
+        this.isSelected = isSelected == null?0:isSelected;
     }
 
-    public BigDecimal getItemTotalAmount() {
-        return itemTotalAmount;
-    }
-
-    public void setItemTotalAmount(BigDecimal itemTotalAmount) {
-        this.itemTotalAmount = itemTotalAmount;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -100,7 +98,6 @@ public class ShoppingCartItem extends ProductSkuItem{
                 ", userId=" + userId +
                 ", cartItemNum=" + cartItemNum +
                 ", isSelected=" + isSelected +
-                ", itemTotalAmount=" + itemTotalAmount +
                 ", skuId=" + skuId +
                 ", propertiesName='" + propertiesName + '\'' +
                 ", mainImage='" + mainImage + '\'' +

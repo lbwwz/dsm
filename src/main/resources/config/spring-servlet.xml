@@ -11,22 +11,16 @@
           http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!--===== 配置spring-mvc的环境 =====-->
-    <!--配置ico容器管理的bean-->
-    <context:component-scan base-package="com.dsm.dao">
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
-    </context:component-scan>
-    <context:component-scan base-package="com.dsm.service">
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
-    </context:component-scan>
+
+
 
     <!--spring mvc 要扫描的 controller 位置-->
     <context:component-scan base-package="com.dsm.controller">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
-    <context:component-scan base-package="com.dsm.common.expanding"></context:component-scan>
-    <context:component-scan base-package="com.dsm.common.cache"></context:component-scan>
-    <aop:aspectj-autoproxy expose-proxy="true"/>
+
+    <aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
 
     <!--开启注解映射-->
     <mvc:annotation-driven/>

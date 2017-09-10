@@ -17,3 +17,5 @@
     var webRoot="${webRoot}";
     var rsRoot="${rsRoot}";
 </script>
+<script src="${webRoot}/js/basic.js" type="text/javascript"></script>
+

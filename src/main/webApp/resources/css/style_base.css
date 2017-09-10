@@ -168,8 +168,8 @@ a:hover{text-decoration:none}
 .cart_panel a{color:#3c3c3c}
 .cart_item{ height: auto;}
 
-.cartItem_header{ position: relative;height: 38px;background: #fff;overflow: hidden;}
-.cartItem_header .ct_shop_name{ line-height: 20px; font-size: 14px;}
+.cartItem_header{ position: relative;height: 30px;background: #fff;overflow: hidden;}
+.cartItem_header .ct_shop_name{ line-height: 20px; font-size: 12px;}
 .cartItem_body{border: 1px solid #ccc;background: #fcfcfc;}
 .cartItem_body li{min-height:120px; position:relative;padding:0}
 
@@ -192,7 +192,7 @@ a:hover{text-decoration:none}
 .dsm_sum{width:120px}
 .dsm_op{width:120px}
 .cart_header{font-size: 14px;}
-.cart_list{margin-top:30px}
+.cart_list{margin-top:20px}
 .cartItem_body .dsm_item .ct_item_content{margin-left:90px; padding-right: 5px; }
 .cartItem_body .dsm_item .ct_item_content .ct_name{height:40px; }
 
@@ -217,7 +217,7 @@ a:hover{text-decoration:none}
 .cart_label span{top:0 }
 .cart_radio{display:none}
 .cart_radioInput{background-color:#fff;border:1px solid rgba(0,0,0,0.3);display:inline-block;height:14px;margin-right:10px;vertical-align:middle;width:14px}
-.cart_checkbox{color:#f40}
+.cart_checkbox_span{color:#f40}
 
 
 

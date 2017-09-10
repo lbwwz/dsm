@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<jsp:include page="../../common/commonPath.jsp"/>
+
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>D.S Mall 个人设置</title>
 	<link href="${rsRoot}/css/bootstrap.min.css" rel="stylesheet">
@@ -22,6 +22,7 @@
 
 	<!--[if lt IE 9]>
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<jsp:include page="../../common/commonPath.jsp"/>
 </head>
 
 

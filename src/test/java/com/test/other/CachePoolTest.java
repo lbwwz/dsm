@@ -3,11 +3,14 @@ package com.test.other;
 
 import com.dsm.common.DsmConcepts;
 import com.dsm.common.cache.cacheService.IRedisService;
+import com.dsm.model.user.User;
 import com.test.common.BaseJunitTest;
 import org.junit.Test;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,4 +52,34 @@ public class CachePoolTest extends BaseJunitTest{
 
         System.out.println(redisService.expire("test8", DsmConcepts.MINUTE));
     }
+    @Test
+    public void Test5(){
+        Object o = redisService.getHSet("test8", "sd");
+        System.out.println(o);
+    }
+
+
+    @Test
+    public void Test6(){
+        User[] u = new User[2];
+        u[0] = new User(1,"111");
+        u[1] = new User(2,"222");
+        redisService.addList("test111",u);
+    }
+
+    @Test
+    public void Test7(){
+        List<User> u = new ArrayList<>();
+        u.add(new User(1,"111"));
+        u.add(new User(2,"222"));
+        redisService.addList("test222",u);
+    }
+
+    @Test
+    public void Test8(){
+       Map m = redisService.getHsetAll("cartCache_2fbdd3aa-ddaa-42b8-8314-662b8d55f175");
+        System.out.println(m);
+    }
+
+
 }

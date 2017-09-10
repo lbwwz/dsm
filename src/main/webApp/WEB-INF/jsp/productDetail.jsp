@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:include page="common/commonPath.jsp"/>
+
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -16,6 +16,8 @@
 
     <script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <jsp:include page="common/commonPath.jsp"/>
+
 
 </head>
 
@@ -100,7 +102,7 @@
                 .sku_item_count font{padding-left:10px;line-height: 40px;color:#999;font-size:14px}
                 .countBox_btn{width:32px;margin-left: 2px;}
                 #countBox_input{height: 40px;color: #999}
-                .countBox_btn a{width:30px;border:1px solid #ccc; display: block;text-align: center;color:#ccc;padding:2px 4px;}
+                .countBox_btn a{width:30px;border:1px solid #ccc; display: block;text-align: center;color:#ccc;line-height: 16px;}
                 .countBox_btn a:first-of-type{margin-bottom: 4px;}
             </style>
             <ul class="sku_item_count">
@@ -177,12 +179,19 @@
     </div>
 </div>
 
-<script src="js/dsm-jqzoom.js" type="text/javascript"></script>
 
 <script>
     var skuList = ${skuList}
 </script>
+<script src="${rsRoot}/front-lib/layer/layer.js"></script>
+<script src="js/dsm-jqzoom.js" type="text/javascript"></script>
 <script src="js/productDetail.js" type="text/javascript"></script>
+<script>
+//    layer.msg("123", {
+//        icon: 1,
+//        time: 100000
+//    });
+</script>
 
 </body>
 </html>

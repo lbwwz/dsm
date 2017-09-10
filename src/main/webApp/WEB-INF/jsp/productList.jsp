@@ -2,7 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<jsp:include page="common/commonPath.jsp"/>
+
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -16,7 +16,7 @@
     <link href="${webRoot}/css/style_base.css" rel="stylesheet">
     <script src="${webRoot}/js/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="${webRoot}/js/bootstrap.min.js" type="text/javascript"></script>
-
+    <jsp:include page="common/commonPath.jsp"/>
     <style>
     </style>
 </head>

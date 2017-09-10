@@ -4,6 +4,9 @@
 
 //图片预览小图移动效果,页面加载时触发
 $(function(){
+    /**
+     * 灯箱放大镜
+     */
     var tempLength = 0; //临时变量,当前移动的长度
     var viewNum = 5; //设置每次显示图片的个数量
     var moveNum = 2; //每次移动的数量
@@ -46,7 +49,13 @@ $(function(){
 
     $(".jqzoom").jqueryzoom({xzoom:500,yzoom:500});
 
+
+
+
+
 });
+
+
 
 /*sku生成算法*/
 
@@ -66,7 +75,6 @@ $(function(){
     //初始化sku显示列表
     initSkuCheckPanel(skuList);
     $("#saleSelect em").click(function(){
-
         if($(this).attr("class")=="yListrclickem"){
             $(this).removeClass("yListrclickem");
 
@@ -130,12 +138,15 @@ function deepCopy(source) {
     }
     return result;
 }
+var checkedSku;
 function setDataToInput(skuItem){
     var a, b,temp;
-    for(var i = 0; i<skuList.length;i++){
-
-        if(skuList[i].skuId == skuItem.skuId){
-            temp =skuList[i].skuPrice+"";
+    //for(var i = 0; i<skuList.length;i++){
+    //
+    //    if(skuList[i].skuId == skuItem.skuId){
+            checkedSku = skuItem.skuId
+            //显示价格
+            temp =skuItem.skuPrice+"";
             a = temp.indexOf(".")
             if(a != -1){
                 if(b = temp.length-a<3){
@@ -147,11 +158,10 @@ function setDataToInput(skuItem){
             }else{
                 $("#sku_price").text(temp+".00")
             }
-            $(".sku_item_count font").text("剩余"+skuList[1].quantity+"件")
-
-
-        }
-    }
+            //显示剩余库存
+            $(".sku_item_count font").text("剩余"+skuItem.quantity+"件")
+    //    }
+    //}
 }
 
 function formatPrice(price){
@@ -223,6 +233,8 @@ $(function(){
      * 加入购物车
      */
     $("#addToCart").click(function(){
+
+
         var $_chooseItems = $("#saleSelect li");
         for(var i = 0;i<$_chooseItems.length;i++){
             if($($_chooseItems[i]).find(".yListrclickem").length==0){
@@ -230,7 +242,17 @@ $(function(){
                 return false;
             }
         }
+        if(checkedSku == undefined){
+            return
+        }
+
+        var count = $("#countBox_input").val();
         //选项完整
+        //加入购物车
+        addOrMinusToCart(checkedSku,count,function(data){
+            console.log(data);
+        });
+
     })
 
 });
