@@ -67,7 +67,6 @@ public class ShoppingCartItem extends ProductSkuItem{
         this.isSelected = isSelected == null?0:isSelected;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

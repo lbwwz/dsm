@@ -124,9 +124,27 @@ function addOrMinusToCart(sku,changeCount,success,returnWithData){
         url: "/cart/addOrMinusToCart",
         type:"post",
         cache: false,
-        data:{skuId:sku,count:changeCount,returnWithData:returnWithData,cookieEnabled:navigator.cookieEnabled},
+        data:{skuId:sku,count:changeCount,returnWithData:returnWithData},
         success:success
     })
+}
+
+/**
+ * 格式化价格显示
+ * @param price 价格
+ * @returns {string|*}
+ */
+function priceNumFormat(price) {
+    price = price + "";
+    var priceArr = price.split(".");
+    if (priceArr.length < 2) {
+        price = price + ".00";
+    } else {
+        for (var i = 2; i > priceArr[1].length; i--) {
+            price = price + "0";
+        }
+    }
+    return price;
 }
 
 

@@ -20,24 +20,41 @@ public class CartDaoTest extends BaseJunitTest {
     private ICartDao cartDao;
 
     @Test
-    public void getShoppingCartItemTest(){
+    public void getShoppingCartItemTest() {
         System.out.println(cartDao.getShoppingCartItem(1));
     }
 
     @Test
-    public void getShoppingCartInfoTest(){
+    public void getShoppingCartInfoTest() {
         System.out.println(cartDao.getShoppingCartInfoAll(1));
     }
 
     @Test
-    public void updateCartTest(){
-            ShoppingCartItemPO scPO = new ShoppingCartItemPO();
-            scPO.setUserId(1);
-            scPO.setShopId(1);
-            scPO.setIsSelected(0);
-            scPO.setCartItemNum(10);
-            int i= cartDao.updateCart(scPO);
-            System.out.println(i);
-        }
+    public void updateCartItemTest() {
+        ShoppingCartItemPO scPO = new ShoppingCartItemPO();
+        scPO.setUserId(1);
+        scPO.setShopId(1);
+        scPO.setIsSelected(0);
+        scPO.setCartItemNum(10);
+        long i = cartDao.updateCartItem(scPO);
+        System.out.println(i);
+    }
+
+    @Test
+    public void addCartItemTest() {
+        ShoppingCartItemPO scPO = new ShoppingCartItemPO();
+        scPO.setUserId(1);
+        scPO.setSkuId(1);
+        scPO.setShopId(1);
+        scPO.setIsSelected(0);
+        scPO.setCartItemNum(10);
+        long i = cartDao.addCartItem(scPO);
+        System.out.println(scPO);
+    }
+
+    @Test
+    public void deleteCartItemTest(){
+        cartDao.deleteCartItem(5);
+    }
 
 }

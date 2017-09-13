@@ -311,7 +311,7 @@ public interface IRedisService {
     <T> T getHSetAsObject(String key, String field, Class<T> clazz);
 
     /**
-     *
+     *获得 HashSet 中某个域的值信息列表（一个 field 保存一个list）
      * @param key   键
      * @param field 域名
      * @param clazz 类

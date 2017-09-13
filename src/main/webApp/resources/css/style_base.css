@@ -5,6 +5,7 @@ a:hover{text-decoration:none}
 /* 主页CSS样式表 */
 
 .container{min-width:1180px;}
+.form-control,.form-control:focus{-webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,.075); box-shadow: inset 0 0px 0px rgba(0,0,0,.075); }
 .navbar-collapse{padding-right: 0; }
 #search_box{ border: 2px solid #5bc0de; padding:0px; margin-top:10px;}
 #search{border-width:0px;}
@@ -166,7 +167,6 @@ a:hover{text-decoration:none}
 /*===== 购物车页面 =====*/
 .cart_panel{margin-top:20px;font-style: normal;font-variant-ligatures: normal;font-variant-caps: normal;font-variant-numeric: normal;font-weight: normal;font-stretch: normal;font-size: 12px;line-height: 1.5;font-family: tahoma, arial, "Hiragino Sans GB", 宋体, sans-serif;}
 .cart_panel a{color:#3c3c3c}
-.cart_item{ height: auto;}
 
 .cartItem_header{ position: relative;height: 30px;background: #fff;overflow: hidden;}
 .cartItem_header .ct_shop_name{ line-height: 20px; font-size: 12px;}
@@ -178,7 +178,7 @@ a:hover{text-decoration:none}
 .item_content_selected{background: #fff8e1;}
 
 .cart-inline{padding:0}
-.cart_item ul{margin-bottom: 0}
+.item_content ul{margin-bottom: 0}
 .cart-inline li{display: block;float: left;}
 .div_inner{padding-top:20px;}
 .div_inner a,.div_inner p,.div_inner span{word-break:break-all;margin:0;}
@@ -189,6 +189,7 @@ a:hover{text-decoration:none}
 .dsm_info{width: 250px;}
 .dsm_price{width: 100px}
 .dsm_amount{width:160px}
+
 .dsm_sum{width:120px}
 .dsm_op{width:120px}
 .cart_header{font-size: 14px;}
@@ -207,11 +208,12 @@ a:hover{text-decoration:none}
 
 .cartItem_body .dsm_amount .item_amount a {display: block;height: 23px;width: 17px;border: 1px solid #e5e5e5;background: #f0f0f0;text-align: center;line-height: 23px;color: #444;position: absolute; }
 .cartItem_body .dsm_amount .item_amount{margin: 0 20px;position: relative;}
+.cartItem_body .dsm_amount .amount_msg{padding: 30px 0 0 20px;color:#999}
 
 .cartItem_body .dsm_amount .text_amount {width: 39px;height: 23px;line-height: 15px;border: 1px solid #aaa;color: #343434;text-align: center;padding: 4px 0;background-color: #fff;position: absolute;z-index: 2;left: 18px;  }
 .ct_plus{left: 58px;}
-.item_sum_number{color: #f40;font-weight: 700}
-.dsm_op a{display: block; padding-left: 10px;}
+.item_sum_number{font-family: Verdana,Tahoma,arial; color: #f40;font-weight: 700}
+.dsm_op a{display: block; padding-left: 10px; }
 
 .cart_label{margin-left:15px }
 .cart_label span{top:0 }

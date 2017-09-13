@@ -21,21 +21,21 @@ public interface ICartDao {
      *
      * @param shoppingCartItemPO 持久化购物车子项数据对象
      */
-    Integer addToCart(ShoppingCartItemPO shoppingCartItemPO);
+    long addCartItem(ShoppingCartItemPO shoppingCartItemPO);
 
     /**
      * 更新购物车中的商品信息
      *
      * @param shoppingCartItemPO 持久化购物车子项数据对象
      */
-    Integer updateCart(ShoppingCartItemPO shoppingCartItemPO);
+    long updateCartItem(ShoppingCartItemPO shoppingCartItemPO);
 
     /**
      * 删除购物车中的某一个子项
      *
      * @param cartItemId 购物车一项的唯一标识id
      */
-    Integer deleteCartItem(int cartItemId);
+    long deleteCartItem(int cartItemId);
 
 
     /**
@@ -43,7 +43,7 @@ public interface ICartDao {
      *
      * @param userId 用户ID
      */
-    Integer cleanCartAll(int userId);
+    long cleanCartAll(int userId);
 
     /**
      * 根据cartItemId 获取购物车中的商品信息
