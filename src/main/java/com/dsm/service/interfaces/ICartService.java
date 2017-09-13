@@ -64,6 +64,7 @@ public interface ICartService {
 
     /**
      * 将未登录时用户购物车中的购物车信息合并到购物车数据库中保存
+     * <p>用于登录操作时合并</p>
      */
     void MergeNoLoginCacheToCart();
 

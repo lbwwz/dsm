@@ -83,7 +83,6 @@ public class CartController extends BaseController {
      *
      * @param skuId        商品skuId
      * @param changedCount 变更的商品数量
-     * @return
      */
     @RepeatSubmitCheck(successCheck = false)
     @ResponseBody

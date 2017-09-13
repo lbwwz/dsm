@@ -262,9 +262,10 @@ public class RedisServiceImpl implements IRedisService{
      * @param t 信息值
      * @return 操作状态
      */
+    @SafeVarargs
     @Override
-    public <T> boolean addList(String key, T... t) {
-        if (key == null || t == null) {
+    public final <T> boolean addList(String key, T... t) {
+        if (key == null || t == null || t.length == 0) {
             return false;
         }
         ShardedJedis shardedJedis = null;
@@ -304,8 +305,9 @@ public class RedisServiceImpl implements IRedisService{
      * @param value   信息值
      * @return 操作状态
      */
+    @SafeVarargs
     @Override
-    public <T> boolean addList(String key, int seconds, T... value) {
+    public final <T> boolean addList(String key, int seconds, T... value) {
         boolean result = addList(key, value);
         if (result) {
             long i = expire(key, seconds);
@@ -660,7 +662,6 @@ public class RedisServiceImpl implements IRedisService{
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = redisDataSource.getResource();
-            String str = shardedJedis.hget(key, field);
             return shardedJedis.hget(key, field);
         } catch (Exception ex) {
             logger.error("getHSet error.", ex);
@@ -679,7 +680,6 @@ public class RedisServiceImpl implements IRedisService{
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = redisDataSource.getResource();
-            String str = shardedJedis.hget(key, field);
             return JSONObject.parseArray(shardedJedis.hget(key, field),clazz);
         } catch (Exception ex) {
             logger.error("getHSet error.", ex);

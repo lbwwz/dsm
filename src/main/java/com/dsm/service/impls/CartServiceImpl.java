@@ -400,6 +400,10 @@ public class CartServiceImpl implements ICartService {
     @Override
     public void MergeNoLoginCacheToCart() {
         /**
+         * 检查是否需要执行合并操作
+         */
+
+        /**
          * 1.查询数据库中数据项，和缓存中对比，得到需要更新的列表项信息和需要新增的列表项目信息
          */
 
