@@ -35,6 +35,7 @@ import java.util.stream.Stream;
  * Date: 2017/6/15
  *
  * @author : Lbwwz
+ * 购物车操作的相关业务逻辑
  */
 @Service("ICartService")
 public class CartServiceImpl implements ICartService {
@@ -51,10 +52,6 @@ public class CartServiceImpl implements ICartService {
 
     public static Logger logger = LoggerFactory.getLogger(CartServiceImpl.class);
 
-    private final String noLogin_cart_prov = "cartCache_";
-    private final String login_cart_prov = "cart_";
-
-
     @Override
     public ShoppingCart getMyShoppingCart() {
         //校验是否登录
@@ -63,11 +60,11 @@ public class CartServiceImpl implements ICartService {
 
         List<ShoppingCartItem> cartItemList = null;
         if (user != null) {
-            cartItemList = getCartItemListFromCache(login_cart_prov + user.getId());
+            cartItemList = getCartItemListFromCache(DsmConcepts.LOGIN_CART_PROV + user.getId());
             if (cartItemList == null) {
                 //如果不存在，从数据库中读取一次
                 cartItemList = cartDao.getShoppingCartInfoAll(user.getId());
-                setCartItemListToCache(login_cart_prov + user.getId(), cartItemList);
+                setCartItemListToCache(DsmConcepts.LOGIN_CART_PROV + user.getId(), cartItemList);
             }
         } else {
             //未登录用户使用用户唯一标志符查找缓存中的购物车信息
@@ -77,7 +74,7 @@ public class CartServiceImpl implements ICartService {
                 //标志key不存在，设置唯一标志key
                 CookieUtil.addCookie(DsmConcepts.DSM_USER_KEY, UUID.randomUUID().toString(), DsmConcepts.DAY, true);
             } else {
-                cartItemList = getCartItemListFromCache(noLogin_cart_prov + userKey);
+                cartItemList = getCartItemListFromCache(DsmConcepts.NO_LOGIN_CART_PROV + userKey);
             }
         }
 
@@ -222,7 +219,7 @@ public class CartServiceImpl implements ICartService {
             User user = SessionToolUtils.getUser();
             String redisCartKey;
             if (user != null) {     //登录的用户
-                redisCartKey = login_cart_prov + user.getId();
+                redisCartKey = DsmConcepts.LOGIN_CART_PROV + user.getId();
             } else { //未登录用户
                 String unLoginUserKey = CookieUtil.getCookieByName(DsmConcepts.DSM_USER_KEY);
                 if (StringUtils.isBlank(unLoginUserKey)) {
@@ -230,7 +227,7 @@ public class CartServiceImpl implements ICartService {
                     unLoginUserKey = UUID.randomUUID().toString();
                     CookieUtil.addCookie(DsmConcepts.DSM_USER_KEY, unLoginUserKey, DsmConcepts.MONTH, true);
                 }
-                redisCartKey = noLogin_cart_prov + unLoginUserKey;
+                redisCartKey = DsmConcepts.NO_LOGIN_CART_PROV + unLoginUserKey;
             }
             ShoppingCartItem cartItem = redisService.getHSetAsObject(redisCartKey, skuId + "", ShoppingCartItem.class);
 //            if (cartItem == null && changeCount < 0) {
@@ -330,13 +327,13 @@ public class CartServiceImpl implements ICartService {
         try {
             boolean success;
             if (user != null) {
-                ShoppingCartItem item = redisService.getHSetAsObject(login_cart_prov + user.getId(), skuId + "", ShoppingCartItem.class);
+                ShoppingCartItem item = redisService.getHSetAsObject(DsmConcepts.LOGIN_CART_PROV + user.getId(), skuId + "", ShoppingCartItem.class);
                 if (item == null) {
                     throw new CustomErrorMsgException("请求信息数据过期，请刷新购物车重试！");
                 }
                 success = cartDao.deleteCartItem(item.getCartItemId()) > 0;
                 if (success) {
-                    redisService.del(login_cart_prov + user.getId());
+                    redisService.del(DsmConcepts.LOGIN_CART_PROV + user.getId());
                 }
 
             } else {
@@ -344,7 +341,7 @@ public class CartServiceImpl implements ICartService {
                 if (StringUtils.isBlank(unLoginUserKey)) {
                     throw new CustomErrorMsgException("请求信息数据过期，请刷新购物车重试！");
                 }
-                success = redisService.delHSet(noLogin_cart_prov + unLoginUserKey, skuId + "") > 0;
+                success = redisService.delHSet(DsmConcepts.NO_LOGIN_CART_PROV + unLoginUserKey, skuId + "") > 0;
             }
             //校验删除情况
             if (!success) {
@@ -371,14 +368,14 @@ public class CartServiceImpl implements ICartService {
             if (user != null) {
                 success = cartDao.cleanCartAll(user.getId()) > 0;
                 if (success) {
-                    redisService.del(login_cart_prov + user.getId());
+                    redisService.del(DsmConcepts.LOGIN_CART_PROV + user.getId());
                 }
             } else {
                 String unLoginUserKey = CookieUtil.getCookieByName(DsmConcepts.DSM_USER_KEY);
                 if (StringUtils.isBlank(unLoginUserKey)) {
                     throw new CustomErrorMsgException("请求信息数据过期，请刷新购物车重试！");
                 }
-                success = redisService.del(noLogin_cart_prov + unLoginUserKey);
+                success = redisService.del(DsmConcepts.NO_LOGIN_CART_PROV + unLoginUserKey);
             }
             //校验删除情况
             if (!success) {
@@ -467,7 +464,7 @@ public class CartServiceImpl implements ICartService {
         if (user != null) {
             if ("sku".equals(type)) {//选中单品
                 ShoppingCartItem item = cartDao.getShoppingCartItemBySkuId(user.getId(), id);
-                redisService.setHSet(login_cart_prov + user.getId(), item.getSkuId() + "", item);
+                redisService.setHSet(DsmConcepts.LOGIN_CART_PROV + user.getId(), item.getSkuId() + "", item);
             } else {
                 List<ShoppingCartItem> list;
                 if ("shop".equals(type)) {// 选中店铺所有单品
@@ -480,19 +477,19 @@ public class CartServiceImpl implements ICartService {
                     //遍历将信息更新到redis缓存中
                     list.stream().forEach(cartItem -> {
                         cartItem.setIsSelected(isSelected);
-                        redisService.setHSet(login_cart_prov + user.getId(), cartItem.getSkuId() + "", cartItem);
+                        redisService.setHSet(DsmConcepts.LOGIN_CART_PROV + user.getId(), cartItem.getSkuId() + "", cartItem);
                     });
                 }
             }
         } else {
             String unLoginUserKey = CookieUtil.getCookieByName(DsmConcepts.DSM_USER_KEY);
             if ("sku".equals(type)) {    //选中单品操作
-                ShoppingCartItem shoppingCartItem = redisService.getHSetAsObject(noLogin_cart_prov + unLoginUserKey, id + "", ShoppingCartItem.class);
+                ShoppingCartItem shoppingCartItem = redisService.getHSetAsObject(DsmConcepts.NO_LOGIN_CART_PROV + unLoginUserKey, id + "", ShoppingCartItem.class);
                 shoppingCartItem.setIsSelected(isSelected);
-                redisService.setHSet(noLogin_cart_prov + unLoginUserKey, shoppingCartItem.getSkuId() + "", shoppingCartItem);
+                redisService.setHSet(DsmConcepts.NO_LOGIN_CART_PROV + unLoginUserKey, shoppingCartItem.getSkuId() + "", shoppingCartItem);
             } else {     //  店铺商品多选和全部商品多选操作
                 //获取购物车所有项
-                List<String> list = redisService.hvals(noLogin_cart_prov + unLoginUserKey);
+                List<String> list = redisService.hvals(DsmConcepts.NO_LOGIN_CART_PROV + unLoginUserKey);
 
                 if (list != null) {
                     //流操作
@@ -502,7 +499,7 @@ public class CartServiceImpl implements ICartService {
                     }
                     stream.forEach(afterItem -> {
                         afterItem.setIsSelected(isSelected);
-                        redisService.setHSet(noLogin_cart_prov + unLoginUserKey, afterItem.getSkuId() + "", afterItem);
+                        redisService.setHSet(DsmConcepts.NO_LOGIN_CART_PROV + unLoginUserKey, afterItem.getSkuId() + "", afterItem);
                     });
                 }
             }

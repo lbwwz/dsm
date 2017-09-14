@@ -140,7 +140,7 @@
                         <li class="dsm_op">
                             <div class="div_inner">
                                 <a href="#">收藏商品</a>
-                                <a href="#">删除</a>
+                                <a href="javascript:;" class="deleteCartItem">删除</a>
                             </div>
                         </li>
                         <div class="clearfix"></div>
@@ -154,21 +154,6 @@
     </c:forEach>
 
     <style>
-        .cart_footer{height: 50px;overflow: hidden;  background: #e5e5e5; margin-top:20px;}
-        .float_bar_wrapper{position: relative;line-height: 48px}
-        .float_bar_right{float: right;position: relative; right: 0;top: 0;z-index: 4;padding-left: 20px;}
-
-        .amount_sum,.check_cod,.ct_pipe,.ct_price_sum,.btn_area,.operations{
-            padding-left:20px;}
-
-        .operations a{padding:0 5px;}
-        .float_bar_right .btn_area{position: relative;height: 50px;}
-        .float_bar_right .btn_area .submit_btn{background: #5bc0de;color: #fff;display: inline-block;border-left: 1px solid #e7e7e7;width: 119px;height: 50px;
-            text-align: center;font-family: 'Lantinghei SC','Microsoft Yahei';line-height: 50px;font-size: 20px;text-decoration: none;}
-        .float_bar_right .btn_area .btn_no{background:#B0B0B0;cursor: not-allowed;}
-        .float_bar_right .ct_price_sum .price{color: #f40;font-weight: 400;font-size: 18px;line-height: 48px;font-family: Arial;vertical-align: middle;}
-        .float_bar_right .ct_price_sum .price em{font-weight: 700;font-size: 22px;padding: 0 3px;}
-        .float_bar_right .ct_price_sum .price .total_symbol{font-weight: 400;font-size: 14px;font-family: verdana;}
 
     </style>
     <div class="cart_footer">
@@ -181,7 +166,7 @@
                 &nbsp;全选
             </div>
             <div class="operations pull-left">
-                <a href="#" hidefocus="true" class="ct_deleteSelected">删除</a>
+                <a href="javascript:;" id="cleanCartAll" class="ct_deleteSelected">删除</a>
                 <a href="#" hidefocus="true"  class="ct_clearInvalid hidden">清除失效宝贝</a>
                 <a href="#" hidefocus="true" class="ct_batchFav">移入收藏夹</a>
                 <a href="#" hidefocus="true" class="ct_batchShare">分享</a>
@@ -201,274 +186,14 @@
                 <div class="ct_price_sum pull-left"><span class="txt">合计（不含运费）：</span>
                     <strong class="price"><em ><span class="total_symbol">￥&nbsp;</span><font id="totalPrice">${cartInfo.totalPrice}</font></em></strong>
                 </div>
-                <div class="btn_area pull-right"><a href="javascript:void(0)" class="submit_btn <c:if test="${cartInfo.selectTotalNum<1}">btn_no</c:if>"><span>结&nbsp;算</span><b></b></a></div>
+                <div class="btn_area pull-right"><a href="javascript:void(0)" id="cartToOrderCheck" class="submit_btn <c:if test="${cartInfo.selectTotalNum<1}">btn_no</c:if>"><span>结&nbsp;算</span><b></b></a></div>
             </div>
         </div>
     </div>
     </c:if>
-
 </div>
 </body>
 
 <script src="${rsRoot}/front-lib/layer/layer.js"></script>
-<script>
-
-
-    $(function(){
-        $(".dsm_chk").on("click",".cart_checkBox",function(){ //单商品选择
-            var $_this = $(this);
-            var skuId = $_this.parents(".item_content ").attr("data_skuId");
-            $.ajax({
-                url: "/cart/changeSelected",
-                type:"post",
-                cache: false,
-                data:{id:skuId,type:"sku",isSelected:1-$_this.attr("attr_checked")},
-                success:function(data){
-                    if (data.error == 0){
-                        data = JSON.parse(data.data);
-                        /**
-                         * 底部信息显示条信息变更
-                         */
-                        $("#J_SelectedItemsCount").text(data.selectTotalNum);
-                        $("#totalPrice").text(priceNumFormat(data.totalPrice));
-                        if(data.selectTotalNum == 0){
-                            $(".submit_btn").addClass("btn_no")
-                        }else{
-                            $(".submit_btn").removeClass("btn_no")
-                        }
-
-                        /**
-                         * 选中状态变更
-                         */
-                        var $_itemHeadCheckBox = $_this.parents(".cart_list").find(".cartItem_header").find(".cart_checkBox")
-                        if($_this.attr("attr_checked") == "1"){
-                            $_this.children(".cart_checkbox_span").removeClass("glyphicon glyphicon-ok");
-                            $_this.parents(".item_content").removeClass("item_content_selected");
-                            $_this.parents(".cart_list").children(".item_content");
-                            $_this.attr("attr_checked","0");
-
-                            //移除店铺全选
-                            $_itemHeadCheckBox.attr("attr_checked","0");
-                            $_itemHeadCheckBox.find(".cart_checkbox_span").removeClass("glyphicon glyphicon-ok");
-
-                            //移除全量全选
-                            $("[id^='cart_selectAll']").attr("attr_checked","0");
-                            $("[id^='cart_selectAll']").find(".cart_checkbox_span").removeClass("glyphicon glyphicon-ok");
-                        }else{
-                            $_this.children(".cart_checkbox_span").addClass("glyphicon glyphicon-ok");
-                            $_this.parents(".item_content").addClass("item_content_selected");
-                            $_this.attr("attr_checked","1");
-
-                            //店铺全选是否选中
-                            if($_this.parents(".cartItem_body").find(".item_content").length == $_this.parents(".cartItem_body").find(".item_content_selected").length){
-                                $_itemHeadCheckBox.find(".cart_checkbox_span").addClass("glyphicon glyphicon-ok");
-                                $_itemHeadCheckBox.attr("attr_checked","1");
-                            }
-                            //全体选中是否选中
-                            if($(".cartItem_header").find("[attr_checked='1']").length == $(".cart_list").length){
-                                $("[id^='cart_selectAll']").attr("attr_checked","1");
-                                $("[id^='cart_selectAll']").find(".cart_checkbox_span").addClass("glyphicon glyphicon-ok");
-                            }
-                        }
-                    }
-                }
-            });
-        });
-
-        $(".cartItem_header").on("click",".cart_checkBox",function(){ //店铺选择
-            var $_this = $(this);
-            var shopId = $_this.parents(".cart_list ").attr("data_shopId");
-            $.ajax({
-                url: "/cart/changeSelected",
-                type:"post",
-                cache: false,
-                data:{id:shopId,type:"shop",isSelected:1-$_this.attr("attr_checked")},
-                success:function(data){
-                    if(data.error == 0){
-                        data = JSON.parse(data.data);
-                        /**
-                         * 底部信息显示条信息变更
-                         */
-                        $("#J_SelectedItemsCount").text(data.selectTotalNum);
-                        $("#totalPrice").text(priceNumFormat(data.totalPrice));
-                        if(data.selectTotalNum == 0){
-                            $(".submit_btn").addClass("btn_no")
-                        }else{
-                            $(".submit_btn").removeClass("btn_no")
-                        }
-
-
-                        var $_itemContents = $_this.parents(".cart_list").find(".item_content");
-                        if($_this.attr("attr_checked") == "1"){
-                            $_this.children(".cart_checkbox_span").removeClass("glyphicon glyphicon-ok");
-                            $_itemContents.removeClass("item_content_selected");
-                            $_itemContents.find(".cart_checkbox_span").removeClass("glyphicon glyphicon-ok");
-                            $_this.add($_itemContents.find(".cart_checkbox")).attr("attr_checked","0");
-
-                            //移除全量全选
-                            $("[id^='cart_selectAll']").attr("attr_checked","0").find(".cart_checkbox_span").removeClass("glyphicon glyphicon-ok");
-                        }else{
-                            $_this.children(".cart_checkbox_span").addClass("glyphicon glyphicon-ok");
-                            $_itemContents.addClass("item_content_selected");
-                            $_itemContents.find(".cart_checkbox_span").addClass("glyphicon glyphicon-ok");
-                            $_this.add($_itemContents.find(".cart_checkbox")).attr("attr_checked","1");
-
-                            //全体选中是否选中
-                            if($(".cartItem_header").find("[attr_checked='1']").length == $(".cart_list").length){
-                                $("[id^='cart_selectAll']").attr("attr_checked","1").find(".cart_checkbox_span").addClass("glyphicon glyphicon-ok");
-                            }
-                        }
-                    }
-                }
-            });
-        });
-
-        $("body").on("click","[id^='cart_selectAll']",function(){
-            var $_this = $(this);
-            $.ajax({
-                url: "/cart/changeSelected",
-                type:"post",
-                cache: false,
-                data:{type:"all",isSelected:1-$_this.attr("attr_checked")},
-                success:function(data){
-                    if(data.error == 0) {
-                        data = JSON.parse(data.data);
-
-                        if($_this.attr("attr_checked") == "1"){
-                            $(".cart_checkBox").attr("attr_checked","0").find(".cart_checkbox_span").removeClass("glyphicon glyphicon-ok");
-                            $(".item_content").removeClass("item_content_selected")
-                        }else{
-                            $(".cart_checkBox").attr("attr_checked","1").find(".cart_checkbox_span").addClass("glyphicon glyphicon-ok");
-                            $(".item_content").addClass("item_content_selected")
-                        }
-                        /**
-                         * 底部信息显示条信息变更
-                         */
-                        $("#J_SelectedItemsCount").text(data.selectTotalNum);
-                        $("#totalPrice").text(priceNumFormat(data.totalPrice));
-                        if (data.selectTotalNum == 0) {
-                            $(".submit_btn").addClass("btn_no")
-                        } else {
-                            $(".submit_btn").removeClass("btn_no")
-                        }
-                    }else{
-                        layer.msg(data.message, {
-                            icon: 0,
-                            time: 2000
-                        })
-                    }
-                }
-            });
-        })
-
-        /**
-         *
-         */
-        $(".ct_minus").add($(".ct_plus")).click(function(){
-
-            var $_this = $(this);
-            var shopId = $_this.parents(".cart_list ").attr("data_shopId");
-            var skuId = $_this.parents(".item_content").attr("data_skuId");
-            var changeCount;
-            if($_this.attr("class") == "ct_plus"){
-                changeCount=1;
-            }else{
-                changeCount=-1;
-            }
-            var $_numInput = $_this.parent().find("input");
-            addOrMinusToCart(skuId,changeCount,function(data){
-                //这里要进行更新页面数据的操作
-                if(data.error == 0||6){
-                    if (data.error == 6) { //商品库存不足，设置选中数为最大库存
-                        layer.msg(data.message, {
-                            icon: 0,
-                            time: 2000
-                        });
-                        return;
-                    }
-                    data = JSON.parse(data.data);
-                    $("#J_SelectedItemsCount").text(data.selectTotalNum);
-                    $("#totalPrice").text(priceNumFormat(data.totalPrice));
-                    var cartNewItemNum;
-                    var itemNewPrice;
-                    outer:
-                    for(var i= 0;i<data.cartPackages.length;i++){
-                        if(data.cartPackages[i].shopId == shopId){
-                            for(var j = 0; j<data.cartPackages[i].cartItems.length;j++){
-                                var cartItem = data.cartPackages[i].cartItems[j];
-                                if(cartItem.skuId == skuId){
-                                    cartNewItemNum = cartItem.cartItemNum;
-                                    itemNewPrice = cartItem.skuPrice;
-                                    break outer;
-                                }
-                            }
-                        }
-                    }
-                    $_this.parents(".item_content").find(".item_sum_number").text("￥"+priceNumFormat(cartNewItemNum*itemNewPrice))
-                    $_numInput.val(cartNewItemNum).attr("data_num",cartNewItemNum);
-
-                }else{
-                    layer.msg(data.message, {
-                        icon: 0,
-                        time: 2000
-                    })
-                }
-
-            },1);
-        });
-    });
-    $(".cart_list").on("blur",".text_amount",function(){
-        var $_this = $(this);
-        var changedCount = $(this).val();
-        var shopId = $_this.parents(".cart_list ").attr("data_shopId");
-        var skuId = $_this.parents(".item_content").attr("data_skuId");
-        $.ajax({
-            url: "/cart/changeNumInCart",
-            type:"post",
-            cache: false,
-            data:{skuId:skuId,changedCount:changedCount},
-            success: function (data) {
-
-                if (data.error == 0 || 6) {
-                    if (data.error == 6) { //商品库存不足，设置选中数为最大库存
-                        layer.msg(data.message, {
-                            icon: 0,
-                            time: 2000
-                        })
-                    }
-                    data = JSON.parse(data.data);
-
-                    $("#J_SelectedItemsCount").text(data.selectTotalNum);
-                    $("#totalPrice").text(priceNumFormat(data.totalPrice));
-                    var cartNewItemNum;
-                    var itemNewPrice;
-                    outer:
-                            for(var i= 0;i<data.cartPackages.length;i++){
-                                if(data.cartPackages[i].shopId == shopId){
-                                    for(var j = 0; j<data.cartPackages[i].cartItems.length;j++){
-                                        var cartItem = data.cartPackages[i].cartItems[j];
-                                        if(cartItem.skuId == skuId){
-                                            cartNewItemNum = cartItem.cartItemNum;
-                                            itemNewPrice = cartItem.skuPrice;
-                                            break outer;
-                                        }
-                                    }
-                                }
-                            }
-                    $_this.parents(".item_content").find(".item_sum_number").text("￥"+priceNumFormat(cartNewItemNum*itemNewPrice));
-                    $_this.val(cartNewItemNum).attr("data_num",cartNewItemNum);
-
-
-                } else {
-                    layer.msg(data.message, {
-                        icon: 2,
-                        time: 1000
-                    })
-
-                }
-            }
-        })
-    })
-
-</script>
+<script src="${rsRoot}/js/cart.js"></script>
 </html>

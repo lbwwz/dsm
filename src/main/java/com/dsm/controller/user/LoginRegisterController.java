@@ -145,17 +145,17 @@ public class LoginRegisterController extends BaseController {
     @RequestMapping("register")
     public BackMsg<String> register(UserRegisterDTO userRegisterDTO) {
 
-        BackMsg<String> backMsg = null;
-//        // 检查用户提交的信息是否合法
-//        backMsg = checkRegisterInfo(userRegisterDTO);
-//        if (backMsg.getError() == BackMsg.CORRECT) {// 验证通过
-//            // 提交注册信息
-//            String errorMsg = userService.register(userRegisterDTO);
-//            if (errorMsg == null)
-//                backMsg .set(BackMsg.CORRECT, "regSuccess", "注册用户成功");
-//            else
-//                backMsg.set(BackMsg.ERROR, null, errorMsg);
-//        }
+        BackMsg<String> backMsg;
+        // 检查用户提交的信息是否合法
+        backMsg = checkRegisterInfo(userRegisterDTO);
+        if (backMsg.getError() == BackMsg.CORRECT) {// 验证通过
+            // 提交注册信息
+            String errorMsg = userService.register(userRegisterDTO);
+            if (errorMsg == null)
+                backMsg .set(BackMsg.CORRECT, "regSuccess", "注册用户成功");
+            else
+                backMsg.set(BackMsg.ERROR, null, errorMsg);
+        }
         return backMsg;
     }
 

@@ -39,6 +39,5 @@ public interface IProductService {
      * @param ev        多选属性筛选条件
      * @return 商品列表信息
      */
-    @Transactional(timeout = 10000)
     Map<String,Object> getProductListByCat(Integer catId, int pageIndex, int num, int sortType, String ev);
 }

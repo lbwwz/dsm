@@ -47,7 +47,11 @@ public class DsmConcepts {
     public static final String LAST_ACCESS_URL ="lastAccessUrl"; //上页路径
     public static final String DSM_SHOPPING_CART ="dsmShoppingCart"; //cookie中创建的购物车名
 
+    public static final String NO_LOGIN_CART_PROV = "cartCache_";   //未登录购物车缓存前缀
+    public static final String LOGIN_CART_PROV = "cart_";           //登录购物车缓存前缀
     public static final String DSM_USER_KEY = "user_key";//用来标志未登录用户的某些权益的唯一标志名
+
+
 
     public static final String MD5 = "MD5";
     public static final String SHA = "SHA";

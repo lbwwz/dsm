@@ -177,22 +177,23 @@ a:hover{text-decoration:none}
 .item_content:last-of-type{border-width: 0}
 .item_content_selected{background: #fff8e1;}
 
-.cart-inline{padding:0}
+.cart-inline{padding:0; }
 .item_content ul{margin-bottom: 0}
 .cart-inline li{display: block;float: left;}
 .div_inner{padding-top:20px;}
 .div_inner a,.div_inner p,.div_inner span{word-break:break-all;margin:0;}
-
 .div_inner p{margin:0 10px;}
+
 .dsm_chk{width:45px;}
 .dsm_item{width: 350px}
 .dsm_info{width: 250px;}
 .dsm_price{width: 100px}
 .dsm_amount{width:160px}
-
 .dsm_sum{width:120px}
+
 .dsm_op{width:120px}
-.cart_header{font-size: 14px;}
+.cart_header{font-size: 14px;;padding-top: 10px}
+.cart_header .cart-inline{padding-top: 20px; border-top: 3px solid #e5e5e5;}
 .cart_list{margin-top:20px}
 .cartItem_body .dsm_item .ct_item_content{margin-left:90px; padding-right: 5px; }
 .cartItem_body .dsm_item .ct_item_content .ct_name{height:40px; }
@@ -220,6 +221,19 @@ a:hover{text-decoration:none}
 .cart_radio{display:none}
 .cart_radioInput{background-color:#fff;border:1px solid rgba(0,0,0,0.3);display:inline-block;height:14px;margin-right:10px;vertical-align:middle;width:14px}
 .cart_checkbox_span{color:#f40}
+
+.cart_footer{height: 50px;overflow: hidden;  background: #e5e5e5; margin-top:20px;}
+.float_bar_wrapper{position: relative;line-height: 48px}
+.float_bar_right{float: right;position: relative; right: 0;top: 0;z-index: 4;padding-left: 20px;}
+.amount_sum,.check_cod,.ct_pipe,.ct_price_sum,.btn_area,.operations{padding-left:20px;}
+.operations a{padding:0 5px;}
+.float_bar_right .btn_area{position: relative;height: 50px;}
+.float_bar_right .btn_area .submit_btn{background: #5bc0de;color: #fff;display: inline-block;border-left: 1px solid #e7e7e7;width: 119px;height: 50px; text-align: center;font-family: 'Lantinghei SC','Microsoft Yahei';line-height: 50px;font-size: 20px;text-decoration: none;}
+.float_bar_right .btn_area .btn_no{background:#B0B0B0;cursor: not-allowed;}
+.float_bar_right .ct_price_sum .price{color: #f40;font-weight: 400;font-size: 18px;line-height: 48px;font-family: Arial;vertical-align: middle;}
+.float_bar_right .ct_price_sum .price em{font-weight: 700;font-size: 22px;padding: 0 3px;}
+.float_bar_right .ct_price_sum .price .total_symbol{font-weight: 400;font-size: 14px;font-family: verdana;}
+
 
 
 

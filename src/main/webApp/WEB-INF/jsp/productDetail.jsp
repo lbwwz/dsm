@@ -186,12 +186,6 @@
 <script src="${rsRoot}/front-lib/layer/layer.js"></script>
 <script src="js/dsm-jqzoom.js" type="text/javascript"></script>
 <script src="js/productDetail.js" type="text/javascript"></script>
-<script>
-//    layer.msg("123", {
-//        icon: 1,
-//        time: 100000
-//    });
-</script>
 
 </body>
 </html>

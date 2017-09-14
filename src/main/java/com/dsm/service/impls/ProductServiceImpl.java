@@ -203,8 +203,8 @@ public class ProductServiceImpl implements IProductService {
         } else {
             productDetail = productDao.getProductDetailInfo(productId);
             if (productDetail != null) {
-                //设置商品的缓存时间为20分钟过
-                redisService.set("productDetail_" + productId, JSONObject.toJSONString(productDetail), 600);
+                //设置商品的缓存时间为10分钟过期
+                redisService.set("productDetail_" + productId, JSONObject.toJSONString(productDetail), DsmConcepts.MINUTE*10);
             }
         }
         /**
@@ -271,11 +271,10 @@ public class ProductServiceImpl implements IProductService {
         try {
             List<BaseAttrBean> attrBeans = ParamUtils.formatAttrSelectParamToBean(ev);//抛出非法参数异常
 
-
             List<ProductBean> list;
-
+            String cacheKey = "productList_" + catId + "_" + totalNum + "_" + sortType + "_" + ev;
             //这里可以考虑使用缓存
-            String productList = redisService.get("productList_" + totalNum + "_" + sortType + "_" + ev);
+            String productList = redisService.get(cacheKey);
 
             if (StringUtils.isNoneBlank(productList)) {
                 list =  JSONObject.parseArray(productList, ProductBean.class);
@@ -292,8 +291,8 @@ public class ProductServiceImpl implements IProductService {
                         list = productDao.getPageByCategoryWithPriceNew(catId, totalNum, 1, attrBeans,attrBeans == null?0:attrBeans.size());
                     }
                 }
-                //设置商品列表的缓存时间为15分钟
-                redisService.set("productList_" + totalNum + "_" + sortType + "_" + ev, JSONObject.toJSONString(list), 10);
+                //设置商品列表的缓存时间为10分钟
+                redisService.set(cacheKey, JSONObject.toJSONString(list), DsmConcepts.MINUTE*10);
             }
 
             if (list != null && list.size() > 0) {

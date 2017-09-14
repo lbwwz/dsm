@@ -30,12 +30,34 @@ public class UserCenterController extends BaseController {
         //判断用户是否已经开店
         if(sessionUser.getRole() == 0){
             //未开店铺
-            return "/userHome/userCenter-applyShop";
+            return "/user/userCenter/userCenter-applyShop";
         }else{
 //已开设店铺
 //          Shop shop = shopDao.getShopByUserId(sessionUser.getId());
 //          request.getSession().setAttribute("sessionShop", shop);
             return InternalResourceViewResolver.REDIRECT_URL_PREFIX + "/user/seller/";
         }
+    }
+
+    /**
+     * 个人中心主页
+     * @param m
+     * @return
+     */
+    @RequestMapping("my_dsm.htm")
+    public String centerIndex(Map<String,Object> m) {
+        return "/user/userCenter/userCenter-index";
+    }
+
+
+
+    /**
+     * 查看订单-全部订单
+     * @param m
+     * @return
+     */
+    @RequestMapping("allOrder")
+    public String allOrder(Map<String,Object> m) {
+        return "/user/userCenter/userCenter-allOrder";
     }
 }

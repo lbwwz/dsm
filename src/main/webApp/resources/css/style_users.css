@@ -9,13 +9,12 @@ a:link,a:visited,a:hover,a:active{text-decoration:none;}
 .user-pageTab ul li{color: #fff; margin:0 10px; font-size: 16px; font-weight: 400; line-height: 54.4px; position: relative;}
 .user-pageTab ul li>a{color: #fff; height:54.4px; display:block; transition: color 0.3s ease-in-out; ;}
 .user-pageTab ul li>a:hover{color:#dddddd; }
-.block-angle{position: absolute; left:39%; top:44px; border-style: solid; border-width: 6px;
-border-color: #f40 #f40 #fff; }
+.block-angle{position: absolute; left:39%; top:44px; border-style: solid; border-width: 6px; border-color: #f40 #f40 #fff; }
 
 
 /* user-Center 页面css配置 */
 .side-list{padding: 5px;}
-.side-list h4{margin-top:0px; color: #f40;}
+.side-list h4{margin-top:0px; color: #f40; font-size: 16px;}
 .side-list ul li{padding:4px 0px; color: #cccccc;}
 .side-list ul li>a{color: #8f8f8f;}
 .side-list ul li>a:hover{color: #373737;}
@@ -29,14 +28,17 @@ border-color: #f40 #f40 #fff; }
 .goods-operate-list{width:814px; margin:0;}
 .goods-operate-list>li{padding:0; width:19.61%; border-right: 1px solid #ddd; text-align: center;line-height: 26px;}
 .goods-operate-list>li:last-of-type{border-right-width:0px;}
-.goods-operate-list>li a{display: block; width:100%; height: 26px; color:#6f6f6f;}
+.goods-operate-list>li a{display: block; width:100%; height: 20px; color:#333;line-height: 20px}
 .goods-operate-list>li a:hover{color:#f40;}
 
-/* 订单页面——"t-**" */
-.translation-list-panel{position: relative; border-bottom: 2px solid #ddd; height: 35px;}
-.translation-list-panel ul{width:600px;position: absolute;}
-.translation-list>li{width:16.1%; border-right: 2px solid #ddd;}
-.translation-list>li a{font-weight: bold; font-family: 'Microsoft YaHei'; font-size: 16px;}
+/* 订单页面——"**Order" */
+.transaction-list-panel{position: relative; border-bottom: 2px solid #e8e8e8; height: 32px;margin-top: 18px}
+.transaction-list-panel ul{width:600px;position: absolute;}
+.transaction-list>li{width:16.1%; border-right: 1px solid #e8e8e8;}
+.transaction-list>li a{font-weight: bold; font-family: 'Microsoft YaHei'; font-size: 16px;}
+
+.transaction-items-panel{margin:30px 0 20px;}
+.transaction-item{border: 1px solid #ececec}
 
 /* 店铺申请和开店form页面 */
 .breadcrumb{border:1px solid #ddd;}

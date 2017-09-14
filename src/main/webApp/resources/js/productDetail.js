@@ -250,7 +250,17 @@ $(function(){
         //选项完整
         //加入购物车
         addOrMinusToCart(checkedSku,count,function(data){
-            console.log(data);
+            if(data.error == 0){
+                layer.msg(data.message,{
+                    icon: 1,
+                    time: 2000
+                })
+            }else{
+                layer.msg(data.message,{
+                    icon: 2,
+                    time: 2000
+                })
+            }
         });
 
     })
