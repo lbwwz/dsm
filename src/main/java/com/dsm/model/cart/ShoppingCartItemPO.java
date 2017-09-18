@@ -23,7 +23,7 @@ public class ShoppingCartItemPO {
 
     private Integer cartItemNum;
 
-    private Integer isSelected;
+    private Integer isSelected = 1;
 
     private Timestamp createTime;
     private Timestamp updateTime;

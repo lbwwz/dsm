@@ -8,7 +8,6 @@ import com.dsm.common.exception.CustomErrorMsgException;
 import com.dsm.common.utils.CookieUtil;
 import com.dsm.common.utils.SessionToolUtils;
 import com.dsm.dao.ICartDao;
-import com.dsm.dao.IProductSkuDao;
 import com.dsm.model.BackMsg;
 import com.dsm.model.cart.CartPackage;
 import com.dsm.model.cart.ShoppingCart;
@@ -16,16 +15,19 @@ import com.dsm.model.cart.ShoppingCartItem;
 import com.dsm.model.cart.ShoppingCartItemPO;
 import com.dsm.model.product.ProductSkuItem;
 import com.dsm.model.user.User;
+import com.dsm.service.base.IBusinessCacheService;
 import com.dsm.service.interfaces.ICartService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -36,6 +38,10 @@ import java.util.stream.Stream;
  *
  * @author : Lbwwz
  * 购物车操作的相关业务逻辑
+ *
+ * <p>
+ *     注意点：涉及到数量更新操作的位置都需要检验库存（强制查询数据库）：
+ * </p>
  */
 @Service("ICartService")
 public class CartServiceImpl implements ICartService {
@@ -43,28 +49,46 @@ public class CartServiceImpl implements ICartService {
     @Resource
     private ICartDao cartDao;
 
-    @Resource
-    private IProductSkuDao productSkuDao;
-
 
     @Resource
     private IRedisService redisService;
+
+    //基本操作的缓存服务
+    @Autowired
+    private IBusinessCacheService businessCacheService;
+
 
     public static Logger logger = LoggerFactory.getLogger(CartServiceImpl.class);
 
     @Override
     public ShoppingCart getMyShoppingCart() {
+        List<ShoppingCartItem> cartInfoList = getShoppingCartItems();
+
+        ShoppingCart cartInfo = null;
+        if (cartInfoList != null) {
+            //这里进行购物车信息的封装和计算处理
+            cartInfo = arrangeCartInfo(cartInfoList);
+        }
+        return cartInfo;
+
+    }
+
+    /**
+     * 获取 当前访客的 careItemList
+     *
+     */
+    private List<ShoppingCartItem> getShoppingCartItems() {
         //校验是否登录
         User user = SessionToolUtils.getUser();
 //        String
 
-        List<ShoppingCartItem> cartItemList = null;
+        List<ShoppingCartItemPO> cartItemPOList;
         if (user != null) {
-            cartItemList = getCartItemListFromCache(DsmConcepts.LOGIN_CART_PROV + user.getId());
-            if (cartItemList == null) {
+            cartItemPOList = getCartItemListFromCache(DsmConcepts.LOGIN_CART_PROV + user.getId());
+            if (cartItemPOList == null) {
                 //如果不存在，从数据库中读取一次
-                cartItemList = cartDao.getShoppingCartInfoAll(user.getId());
-                setCartItemListToCache(DsmConcepts.LOGIN_CART_PROV + user.getId(), cartItemList);
+                cartItemPOList = cartDao.getShoppingCartInfoAll(user.getId());
+                setCartItemListToCache(DsmConcepts.LOGIN_CART_PROV + user.getId(), cartItemPOList);
             }
         } else {
             //未登录用户使用用户唯一标志符查找缓存中的购物车信息
@@ -73,18 +97,11 @@ public class CartServiceImpl implements ICartService {
             if (StringUtils.isBlank(userKey)) {
                 //标志key不存在，设置唯一标志key
                 CookieUtil.addCookie(DsmConcepts.DSM_USER_KEY, UUID.randomUUID().toString(), DsmConcepts.DAY, true);
-            } else {
-                cartItemList = getCartItemListFromCache(DsmConcepts.NO_LOGIN_CART_PROV + userKey);
             }
-        }
+            cartItemPOList = getCartItemListFromCache(DsmConcepts.NO_LOGIN_CART_PROV + userKey);
 
-        ShoppingCart cartInfo = null;
-        if (cartItemList != null) {
-            //这里进行购物车信息的封装和计算处理
-            cartInfo = arrangeCartInfo(cartItemList);
         }
-        return cartInfo;
-
+        return getCartInfoListFromDataBase(cartItemPOList);
     }
 
 
@@ -94,15 +111,17 @@ public class CartServiceImpl implements ICartService {
      * @param cartKey 缓存key
      * @return 购物车子项列表信息
      */
-    private List<ShoppingCartItem> getCartItemListFromCache(String cartKey) {
+    private List<ShoppingCartItemPO> getCartItemListFromCache(String cartKey) {
         if (redisService.exists(cartKey)) {
             List<String> List = redisService.hvals(cartKey);
-            redisService.expire(cartKey, DsmConcepts.DAY);
-            List<ShoppingCartItem> cartItemList = new ArrayList<>();
-            for (String str : List) {
-                cartItemList.add(JSON.parseObject(str, ShoppingCartItem.class));
+            if(SessionToolUtils.checkLogin() == 0){
+                redisService.expire(cartKey, DsmConcepts.DAY);
             }
-            return cartItemList;
+            List<ShoppingCartItemPO> cartItemPOList = new ArrayList<>();
+            for (String str : List) {
+                cartItemPOList.add(JSON.parseObject(str,ShoppingCartItemPO.class));
+            }
+            return cartItemPOList;
         }
         return null;
     }
@@ -113,32 +132,44 @@ public class CartServiceImpl implements ICartService {
      * @param cartKey      redis中购物车项的缓存的key
      * @param cartItemList 购物车条目信息列表
      */
-    private boolean setCartItemListToCache(String cartKey, List<ShoppingCartItem> cartItemList) {
-        Map<String, ShoppingCartItem> m = new HashMap<>();
-        for (ShoppingCartItem item : cartItemList) {
+    private boolean setCartItemListToCache(String cartKey, List<ShoppingCartItemPO> cartItemList) {
+        Map<String, ShoppingCartItemPO> m = new HashMap<>();
+        for (ShoppingCartItemPO item : cartItemList) {
             m.put(item.getSkuId() + "", item);
         }
         if (redisService.setHmset(cartKey, m)) {
-            redisService.expire(cartKey, DsmConcepts.DAY);
+            redisService.expire(cartKey, getExpireTime());
             return true;
         }
         return false;
     }
 
+
+
+    private int getExpireTime() {
+        int expireTime = DsmConcepts.DAY;
+        //登录的用户缓存时间为30分钟
+        if(SessionToolUtils.checkLogin() !=0){
+            expireTime = DsmConcepts.MINUTE*30;
+        }
+        return expireTime;
+    }
+
+
     /**
      * 整理购物信息
      *
-     * @param cartItemList 待处理的购物车元数据列表
+     * @param cartInfoList 待处理的购物车元数据列表
      * @return 购物车数据对象
      */
-    private ShoppingCart arrangeCartInfo(List<ShoppingCartItem> cartItemList) {
+    private ShoppingCart arrangeCartInfo(List<ShoppingCartItem> cartInfoList) {
 
         Map<String, List<ShoppingCartItem>> map = new HashMap<>();
 
         //日期新的排在前面
-        Collections.sort(cartItemList, (o1, o2) -> o1.getCreateTime().compareTo(o2.getCreateTime()));
+        Collections.sort(cartInfoList, (o1, o2) -> o1.getCreateTime().compareTo(o2.getCreateTime()));
         List<ShoppingCartItem> tempList;
-        for (ShoppingCartItem item : cartItemList) {
+        for (ShoppingCartItem item : cartInfoList) {
             tempList = map.get(item.getShopId() + "");
             if (tempList != null) {
                 tempList.add(item);
@@ -209,7 +240,7 @@ public class CartServiceImpl implements ICartService {
      */
     private BackMsg<String> changeNumInCart(int skuId, Integer changeCount, Integer changedCount) {
 
-        ProductSkuItem thisSkuItem = productSkuDao.getProductSkuItem(skuId);
+        ProductSkuItem thisSkuItem = businessCacheService.getProductSkuItemFromCache(skuId,true);
         if (thisSkuItem == null) {
             return new BackMsg<>(DsmConcepts.WARRING, null, "操作的该商品项不可用！");
         }
@@ -217,65 +248,58 @@ public class CartServiceImpl implements ICartService {
         String msg = null;
         try {
             User user = SessionToolUtils.getUser();
-            String redisCartKey;
-            if (user != null) {     //登录的用户
-                redisCartKey = DsmConcepts.LOGIN_CART_PROV + user.getId();
-            } else { //未登录用户
-                String unLoginUserKey = CookieUtil.getCookieByName(DsmConcepts.DSM_USER_KEY);
-                if (StringUtils.isBlank(unLoginUserKey)) {
-                    //user_key 为空，则生成并设置到cookie中
-                    unLoginUserKey = UUID.randomUUID().toString();
-                    CookieUtil.addCookie(DsmConcepts.DSM_USER_KEY, unLoginUserKey, DsmConcepts.MONTH, true);
-                }
-                redisCartKey = DsmConcepts.NO_LOGIN_CART_PROV + unLoginUserKey;
-            }
-            ShoppingCartItem cartItem = redisService.getHSetAsObject(redisCartKey, skuId + "", ShoppingCartItem.class);
+            String redisCartKey = getCartCacheKey(user);
+            ShoppingCartItemPO cartItemPO = redisService.getHSetAsObject(redisCartKey, skuId + "", ShoppingCartItemPO.class);
 //            if (cartItem == null && changeCount < 0) {
 //                return new BackMsg<>(DsmConcepts.WARRING, null, "无效的操作!");
 //            }
             if (changeCount != null) {
-                changedCount = changeCount + (cartItem == null ? 0 : cartItem.getCartItemNum());
+                changedCount = changeCount + (cartItemPO == null ? 0 : cartItemPO.getCartItemNum());
             }
-            if (thisSkuItem.getQuantity() < changedCount) {
+            if (thisSkuItem.getQuantity() < changedCount  ) {
                 changedCount = thisSkuItem.getQuantity();
-                errorCode = DsmConcepts.PRODUCT_NO_STOCK;
-                msg = "最大库存不足！";
+                if(changeCount >0){
+                    errorCode = DsmConcepts.PRODUCT_NO_STOCK;
+                    msg = "最大库存不足！";
+                }
             }
                 /*
                  *  2.查询缓存中该用户对应的购物车信息，若存在则更新，若不存在，则新增
                  */
-            if (cartItem != null && changedCount <= 0) {
+            if (cartItemPO != null && changedCount <= 0) {
                 //？可以更新为删除操作
                 throw new CustomErrorMsgException("修改操作不能将商品数量变为0！");
             }
             if (user != null) {
-                ShoppingCartItemPO shoppingCartItemPO;
                 long opFlag;
-                if (cartItem == null) {
-                    shoppingCartItemPO = new ShoppingCartItemPO(user.getId(), thisSkuItem.getShopId(),
+                if (cartItemPO == null) {
+                    cartItemPO = new ShoppingCartItemPO(user.getId(), thisSkuItem.getShopId(),
                             skuId, changedCount, 1);
-                    opFlag = cartDao.addCartItem(shoppingCartItemPO);
+
+                    opFlag = cartDao.addCartItem(cartItemPO);
                 } else {
-                    shoppingCartItemPO = new ShoppingCartItemPO(user.getId(), thisSkuItem.getShopId(),
-                            skuId, changedCount, cartItem.getIsSelected());
-                    opFlag = cartDao.updateCartItem(shoppingCartItemPO);
+                    cartItemPO.setCartItemNum(changedCount);
+                    cartItemPO.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+                    opFlag = cartDao.updateCartItem(cartItemPO);
                 }
                 if (opFlag <= 0) {
                     throw new Exception();
                 }
 
-                cartItem = cartDao.getShoppingCartItem(cartItem == null ? shoppingCartItemPO.getCartItemId() : cartItem.getCartItemId());
+                cartItemPO = cartDao.getShoppingCartItem(cartItemPO.getCartItemId());
             } else {
-                if (cartItem == null) {
-                    cartItem = new ShoppingCartItem();
-                    BeanUtils.copyProperties(thisSkuItem, cartItem);
-                    cartItem.setIsSelected(1);
+                if (cartItemPO == null) {
+                    cartItemPO = new ShoppingCartItemPO(null,thisSkuItem.getShopId(),thisSkuItem.getSkuId(),changedCount,1);
+                    cartItemPO.setCreateTime(new Timestamp(System.currentTimeMillis()));
+                    cartItemPO.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+                }else{
+                    cartItemPO.setCartItemNum(changedCount);
+                    cartItemPO.setUpdateTime(new Timestamp(System.currentTimeMillis()));
                 }
-                cartItem.setCartItemNum(changedCount);
             }
             //3.将最新的信息，更新到redis缓存
-            redisService.setHSet(redisCartKey, skuId + "", cartItem);
-            redisService.expire(redisCartKey, DsmConcepts.DAY);
+            redisService.setHSet(redisCartKey, skuId + "", cartItemPO);
+            redisService.expire(redisCartKey, getExpireTime());
             msg = (errorCode == DsmConcepts.CORRECT) ? "购物车商品修改成功" : msg;
         } catch (Exception ex) {
             errorCode = DsmConcepts.ERROR;
@@ -284,29 +308,30 @@ public class CartServiceImpl implements ICartService {
         return new BackMsg<>(errorCode, null, msg);
     }
 
+    private String getCartCacheKey(User user) {
+        String redisCartKey;
+        if (user != null) {     //登录的用户
+            redisCartKey = DsmConcepts.LOGIN_CART_PROV + user.getId();
+        } else { //未登录用户
+            String unLoginUserKey = CookieUtil.getCookieByName(DsmConcepts.DSM_USER_KEY);
+            if (StringUtils.isBlank(unLoginUserKey)) {
+                //user_key 为空，则生成并设置到cookie中
+                unLoginUserKey = UUID.randomUUID().toString();
+                CookieUtil.addCookie(DsmConcepts.DSM_USER_KEY, unLoginUserKey, DsmConcepts.MONTH, true);
+            }
+            redisCartKey = DsmConcepts.NO_LOGIN_CART_PROV + unLoginUserKey;
+        }
+        return redisCartKey;
+    }
+
 
     @Override
     public BackMsg<String> changeItemsSelected(Integer id, int isSelected, String type) {
 
-        User user = SessionToolUtils.getUser();
-
         int errorCode;
         String msg;
         try {
-            if (user != null) {
-                /**
-                 * 1.构造用于更新操作的购物车元数据对象
-                 */
-                ShoppingCartItemPO scPO = buildUpdateSciPo(user, id, isSelected, type);
-                long i = cartDao.updateCartItem(scPO);
-                if (i < 1) {
-                    throw new CustomErrorMsgException("无效的购物车更新操作：" + type + "=" + id);
-                }
-            }
-            /**
-             * 2.更新成功，查询更新后的对应的购物车信息，并更新到缓存中
-             */
-            updateShoppingCartSelectedToCache(user, id, isSelected, type);
+            updateShoppingCartSelectedToCache(id, isSelected, type);
             errorCode = DsmConcepts.CORRECT;
             msg = "购物车商品修改成功！";
         } catch (Exception ex) {
@@ -450,61 +475,82 @@ public class CartServiceImpl implements ICartService {
     }
 
     /**
-     * 更新缓存中的购物车信息
-     * <p>
-     * 这里只有用户信息不为空的时候才查询数据库更新，未登录用户直接更新信息
-     * </p>
+     * 更新缓存中的购物车选中信息
      *
-     * @param user       用户信息，只有登录用户才有该信息
      * @param id         根据type的不同表示不同的含义，可以是skuId或者shopId
      * @param isSelected 选中状态，0表示不选中，1表示选中
      * @param type       类型，可以是sku shop 和 all
      */
-    private void updateShoppingCartSelectedToCache(User user, Integer id, int isSelected, String type) {
-        if (user != null) {
-            if ("sku".equals(type)) {//选中单品
-                ShoppingCartItem item = cartDao.getShoppingCartItemBySkuId(user.getId(), id);
-                redisService.setHSet(DsmConcepts.LOGIN_CART_PROV + user.getId(), item.getSkuId() + "", item);
-            } else {
-                List<ShoppingCartItem> list;
-                if ("shop".equals(type)) {// 选中店铺所有单品
-                    list = cartDao.getShoppingCartItemByShopId(user.getId(), id);
-                } else {
-                    list = cartDao.getShoppingCartInfoAll(user.getId());
-                }
+    private void updateShoppingCartSelectedToCache(Integer id, int isSelected, String type) {
+        String cacheKey = getCartCacheKey(SessionToolUtils.getUser());
+        if ("sku".equals(type)) {    //选中单品操作
+            ShoppingCartItemPO shoppingCartItemPO = redisService.getHSetAsObject(cacheKey, id + "", ShoppingCartItemPO.class);
+            shoppingCartItemPO.setIsSelected(isSelected);
+            redisService.setHSet(cacheKey, shoppingCartItemPO.getSkuId() + "", shoppingCartItemPO);
+        } else {     //  店铺商品多选和全部商品多选操作
+            //获取购物车所有项
+            List<String> list = redisService.hvals(cacheKey);
 
-                if (list != null) {
-                    //遍历将信息更新到redis缓存中
-                    list.stream().forEach(cartItem -> {
-                        cartItem.setIsSelected(isSelected);
-                        redisService.setHSet(DsmConcepts.LOGIN_CART_PROV + user.getId(), cartItem.getSkuId() + "", cartItem);
-                    });
+            if (list != null) {
+                //流操作
+                Stream<ShoppingCartItemPO> stream = list.stream().map(s -> JSONObject.parseObject(s, ShoppingCartItemPO.class));
+                if ("shop".equals(type)) { //店铺全选操作
+                    stream = stream.filter(item -> Objects.equals(item.getShopId(), id));
                 }
-            }
-        } else {
-            String unLoginUserKey = CookieUtil.getCookieByName(DsmConcepts.DSM_USER_KEY);
-            if ("sku".equals(type)) {    //选中单品操作
-                ShoppingCartItem shoppingCartItem = redisService.getHSetAsObject(DsmConcepts.NO_LOGIN_CART_PROV + unLoginUserKey, id + "", ShoppingCartItem.class);
-                shoppingCartItem.setIsSelected(isSelected);
-                redisService.setHSet(DsmConcepts.NO_LOGIN_CART_PROV + unLoginUserKey, shoppingCartItem.getSkuId() + "", shoppingCartItem);
-            } else {     //  店铺商品多选和全部商品多选操作
-                //获取购物车所有项
-                List<String> list = redisService.hvals(DsmConcepts.NO_LOGIN_CART_PROV + unLoginUserKey);
-
-                if (list != null) {
-                    //流操作
-                    Stream<ShoppingCartItem> stream = list.stream().map(s -> JSONObject.parseObject(s, ShoppingCartItem.class));
-                    if ("shop".equals(type)) { //店铺全选操作
-                        stream = stream.filter(item -> Objects.equals(item.getShopId(), id));
-                    }
-                    stream.forEach(afterItem -> {
-                        afterItem.setIsSelected(isSelected);
-                        redisService.setHSet(DsmConcepts.NO_LOGIN_CART_PROV + unLoginUserKey, afterItem.getSkuId() + "", afterItem);
-                    });
-                }
+                stream.forEach(afterItem -> {
+                    afterItem.setIsSelected(isSelected);
+                    redisService.setHSet(cacheKey, afterItem.getSkuId() + "", afterItem);
+                });
             }
         }
+        redisService.expire(cacheKey,getExpireTime());
+    }
 
+
+
+    /**
+     * 由ShoppingCartItemPO对象获取完整的 ShoppingCartItem 对象信息;
+     * @param cartItemPo 购物车po数据对象
+     */
+    private ShoppingCartItem getCartItemFromDataBase(ShoppingCartItemPO cartItemPo){
+        if(cartItemPo == null || cartItemPo.getSkuId() == null){
+            return null;
+        }
+        try{
+            ShoppingCartItem item = new ShoppingCartItem();
+            BeanUtils.copyProperties(businessCacheService.getProductSkuItemFromCache(cartItemPo.getSkuId(),false),item);
+            //库存超出时不能选中
+            if(cartItemPo.getCartItemNum()>item.getQuantity()){
+                cartItemPo.setIsSelected(0);
+                redisService.setHSet(getCartCacheKey(SessionToolUtils.getUser()),cartItemPo.getSkuId()+"",cartItemPo);
+                //设置库存充足属性为否
+                item.setIsEnough(false);
+            }
+            BeanUtils.copyProperties(cartItemPo,item);
+
+            return item;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+
+    /**
+     * 由ShoppingCartItemPO对象列表获取完整的 ShoppingCartItem 对象列表信息;
+     * @param cartItemPoList 购物车po数据对象列表
+     */
+    private List<ShoppingCartItem> getCartInfoListFromDataBase(List<ShoppingCartItemPO> cartItemPoList){
+        if(cartItemPoList == null)return null;
+
+        List<ShoppingCartItem> list = new ArrayList<>();
+        ShoppingCartItem cartItem;
+        for(ShoppingCartItemPO cartItemPO : cartItemPoList){
+            //查询sku的信息
+            if((cartItem = getCartItemFromDataBase(cartItemPO))!=null){
+                list.add(cartItem);
+            }
+        }
+        return list;
     }
 
 

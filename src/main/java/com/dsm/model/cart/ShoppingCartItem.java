@@ -29,6 +29,10 @@ public class ShoppingCartItem extends ProductSkuItem{
     //购物车中商品选中状态
     private Integer isSelected;
 
+    //库存是否满足
+    private boolean isEnough = true;
+
+
     public ShoppingCartItem() {
         super();
         this.createTime = new Timestamp(System.currentTimeMillis());
@@ -67,6 +71,14 @@ public class ShoppingCartItem extends ProductSkuItem{
         this.isSelected = isSelected == null?0:isSelected;
     }
 
+    public boolean getIsEnough() {
+        return isEnough;
+    }
+
+    public void setIsEnough(boolean enough) {
+        isEnough = enough;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -97,6 +109,7 @@ public class ShoppingCartItem extends ProductSkuItem{
                 ", userId=" + userId +
                 ", cartItemNum=" + cartItemNum +
                 ", isSelected=" + isSelected +
+                ", isEnough=" + isEnough +
                 ", skuId=" + skuId +
                 ", propertiesName='" + propertiesName + '\'' +
                 ", mainImage='" + mainImage + '\'' +

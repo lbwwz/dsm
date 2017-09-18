@@ -71,6 +71,15 @@ public interface IRedisService {
      */
     String get(String key);
 
+
+    /**
+     * 获取缓存中的对象
+     * @param key 键
+     * @param clazz 对象类型
+     */
+    <T> T getAsObject(String key,Class<T> clazz);
+
+
     /**
      * 获取缓存
      *
@@ -283,6 +292,16 @@ public interface IRedisService {
      * @return 操作状态
      */
     <T> boolean setHSet(String key, String field, T value);
+
+    /**
+     * 设置 HashSet 对象
+     *
+     * @param key   键值
+     * @param field 域名
+     * @param value Json String or String value
+     * @return 操作状态
+     */
+    <T> boolean setHSet(String key, String field, T value,int expireTime);
 
     /**
      * 设置map结构的key

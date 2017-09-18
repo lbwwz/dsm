@@ -35,47 +35,53 @@
         <result column="shop_sn" property="shopSn"/>
         <result column="status" property="status"/>
         <result column="cart_item_num" property="cartItemNum"/>
-        <result column="is_selected" property="isSelected"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="lastUpdateTime"/>
     </resultMap>
 
 
     <!--获取购物车信息的sql-->
-    <sql id="shoppingCartInfo">
-        SELECT cart_item_id,user_id,cart_item_num,is_selected, dsm_product_sku.product_id , cat_id, product_sn, product_name, click_count, brand_id,
+    <sql id="shoppingCartDetailInfo">
+        SELECT cart_item_id,user_id,cart_item_num, dsm_product_sku.product_id , cat_id, product_sn, product_name, click_count, brand_id,
             vdsm_user_product_base.shop_id, shop_name, warn_number,product_brief, main_img, product_grade, product_status, is_best, is_new, is_hot,
             dsm_product_sku.sku_id,properties_name, quantity, sku_price, shop_sn, dsm_user_shopping_cart.create_time, dsm_user_shopping_cart.update_time
         FROM vdsm_user_product_base,dsm_product_sku,dsm_user_shopping_cart
         WHERE vdsm_user_product_base.product_id = dsm_product_sku.product_id
         AND dsm_product_sku.sku_id=dsm_user_shopping_cart.sku_id
-
+        AND vdsm_user_product_base.product_status = 1
     </sql>
-    <select id="getShoppingCartItem" resultMap="shoppingCartItemResult" >
+
+
+    <sql id="shoppingCartInfo">
+        SELECT cart_item_id, user_id,shop_id,sku_id,cart_item_num, create_time, update_time
+        FROM dsm_user_shopping_cart
+    </sql>
+
+    <select id="getShoppingCartItem" resultMap="shoppingCartItemPOResult" >
         <include refid="shoppingCartInfo"/>
-            AND dsm_user_shopping_cart.cart_item_id=#{cartItemId}
+        WHERE dsm_user_shopping_cart.cart_item_id=#{cartItemId}
     </select>
 
-    <select id="getShoppingCartItemBySkuId" resultMap="shoppingCartItemResult" >
+    <select id="getShoppingCartItemBySkuId" resultMap="shoppingCartItemPOResult" >
         <include refid="shoppingCartInfo"/>
-        AND dsm_user_shopping_cart.user_id=#{userId}
+        WHERE dsm_user_shopping_cart.user_id=#{userId}
         AND dsm_user_shopping_cart.sku_id=#{skuId}
     </select>
 
-    <select id="getShoppingCartInfoAll" resultMap="shoppingCartItemResult" parameterType="int">
+    <select id="getShoppingCartInfoAll" resultMap="shoppingCartItemPOResult" parameterType="int">
         <include refid="shoppingCartInfo"/>
-        AND dsm_user_shopping_cart.user_id=#{userId}
+        WHERE dsm_user_shopping_cart.user_id=#{userId}
     </select>
 
-    <select id="getShoppingCartItemByShopId" resultMap="shoppingCartItemResult" parameterType="int">
+    <select id="getShoppingCartItemByShopId" resultMap="shoppingCartItemPOResult" parameterType="int">
         <include refid="shoppingCartInfo"/>
-        AND dsm_user_shopping_cart.user_id=#{userId}
+        WHERE dsm_user_shopping_cart.user_id=#{userId}
         AND dsm_user_shopping_cart.shop_id=#{shopId}
     </select>
 
     <insert id="addCartItem" parameterType="ShoppingCartItemPO" useGeneratedKeys="true" keyProperty="cartItemId">
-        INSERT INTO dsm_user_shopping_cart(user_id, shop_id, sku_id, cart_item_num, is_selected, create_time, update_time)
-        VALUES(#{userId},#{shopId},#{skuId},#{cartItemNum},#{isSelected},NOW(),NOW())
+        INSERT INTO dsm_user_shopping_cart(user_id, shop_id, sku_id, cart_item_num, create_time, update_time)
+        VALUES(#{userId},#{shopId},#{skuId},#{cartItemNum},NOW(),NOW())
     </insert>
 
     <update id="updateCartItem" parameterType="ShoppingCartItemPO">
@@ -83,9 +89,6 @@
         <set>
             <if test="cartItemNum != null">
                 cart_item_num=#{cartItemNum},
-            </if>
-            <if test="isSelected != null">
-                is_selected=#{isSelected},
             </if>
             update_time=now()
         </set>

@@ -3,7 +3,6 @@ package com.dsm.service.interfaces;
 import com.dsm.model.BackMsg;
 import com.dsm.model.formData.ReleaseProductFormDTO;
 import com.dsm.model.product.ProductDetail;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -27,7 +26,13 @@ public interface IProductService {
      */
     BackMsg releaseProduct(ReleaseProductFormDTO dto);
 
+    /**
+     * 获取商品详情信息
+     * @param productId 商品主键ID
+     */
     ProductDetail getProductDetail(Integer productId);
+
+
 
     /**
      * 条件查询类目下的商品列表

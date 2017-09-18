@@ -168,6 +168,10 @@ a:hover{text-decoration:none}
 .cart_panel{margin-top:20px;font-style: normal;font-variant-ligatures: normal;font-variant-caps: normal;font-variant-numeric: normal;font-weight: normal;font-stretch: normal;font-size: 12px;line-height: 1.5;font-family: tahoma, arial, "Hiragino Sans GB", 宋体, sans-serif;}
 .cart_panel a{color:#3c3c3c}
 
+#empty{padding: 88px 0 100px 156px;
+	background: url(/resources/images/empty_cart.png) no-repeat 40px 86px;
+	position: relative;}
+
 .cartItem_header{ position: relative;height: 30px;background: #fff;overflow: hidden;}
 .cartItem_header .ct_shop_name{ line-height: 20px; font-size: 12px;}
 .cartItem_body{border: 1px solid #ccc;background: #fcfcfc;}
@@ -176,6 +180,7 @@ a:hover{text-decoration:none}
 .item_content{border-bottom: 1px dashed #ddd}
 .item_content:last-of-type{border-width: 0}
 .item_content_selected{background: #fff8e1;}
+.item_unenough{background: #faf7f7}
 
 .cart-inline{padding:0; }
 .item_content ul{margin-bottom: 0}
@@ -194,11 +199,13 @@ a:hover{text-decoration:none}
 .dsm_op{width:120px}
 .cart_header{font-size: 14px;;padding-top: 10px}
 .cart_header .cart-inline{padding-top: 20px; border-top: 3px solid #e5e5e5;}
-.cart_list{margin-top:20px}
+.cart_list{margin-top:20px;float: left}
 .cartItem_body .dsm_item .ct_item_content{margin-left:90px; padding-right: 5px; }
 .cartItem_body .dsm_item .ct_item_content .ct_name{height:40px; }
 
-.cartItem_body .dsm_item .ct_pic{width: 80px;height: 80px;border: 1px solid #eee;overflow: hidden;}
+.cartItem_body .dsm_item .ct_pic{width: 80px;height: 80px;border: 1px solid #eee;overflow: hidden; position:relative}
+.cartItem_body .dsm_item .ct_pic span{position: absolute;	display: block;	top: 0;	left: 0; right: 0;	bottom: 0; background: rgba(0, 0, 0, 0.4); }
+.cartItem_body .dsm_item .ct_pic p{color: rgba(255, 255, 255, 0.5);	font-size: 18px;font-family: sans-serif;padding: 8px;font-weight: 600;}
 .cartItem_body .dsm_item .ct_item_content .ct_tips{margin:25px 90px 0 0;}
 .cartItem_body .dsm_info .ct_sku_content{padding:0 10px}
 .cartItem_body .dsm_info .ct_sku_content p{margin: 0 5px 0 15px;color: #9c9c9c;overflow: hidden;text-overflow: ellipsis;  }

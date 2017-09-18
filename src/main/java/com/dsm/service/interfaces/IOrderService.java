@@ -11,5 +11,6 @@ import com.dsm.model.BackMsg;
  */
 public interface IOrderService {
 
-    BackMsg<String> checkOrder();
+
+    BackMsg<String> checkCartItem();
 }

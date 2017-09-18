@@ -7,6 +7,7 @@ import com.dsm.common.utils.CookieUtil;
 import com.dsm.common.utils.SessionToolUtils;
 import com.dsm.controller.common.BaseController;
 import com.dsm.model.BackMsg;
+import com.dsm.model.cart.ShoppingCart;
 import com.dsm.service.interfaces.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,10 +47,16 @@ public class CartController extends BaseController {
         if (SessionToolUtils.checkLogin() == 0 && !CookieUtil.checkCookieAbleToUsed()) {
             return InternalResourceViewResolver.REDIRECT_URL_PREFIX + "/showLogin";
         }
-        m.put("cartInfo", cartService.getMyShoppingCart());
+
 
         return "/cart";
 
+    }
+
+    @ResponseBody
+    @RequestMapping("getCartInfo")
+    public ShoppingCart getCartInfo(){
+        return cartService.getMyShoppingCart();
     }
 
     /**

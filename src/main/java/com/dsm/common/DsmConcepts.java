@@ -73,11 +73,11 @@ public class DsmConcepts {
     public static final int YEAR = DAY*365;
 
     //时间常量（单位：毫秒）
-    public static final int TIMESTAMP_MINUTE = MINUTE*1000;
-    public static final int TIMESTAMP_HOUR = HOUR*1000;
-    public static final int TIMESTAMP_DAY = DAY*1000;
-    public static final int TIMESTAMP_MONTH = MONTH*1000;
-    public static final int TIMESTAMP_YEAR = YEAR*1000;
+    public static final long TIMESTAMP_MINUTE = MINUTE*1000;
+    public static final long TIMESTAMP_HOUR = HOUR*1000;
+    public static final long TIMESTAMP_DAY = DAY*1000;
+    public static final long TIMESTAMP_MONTH = (long)MONTH*1000;
+    public static final long TIMESTAMP_YEAR = (long)YEAR*1000;
 
     /***** 业务中的常量 *****/
 

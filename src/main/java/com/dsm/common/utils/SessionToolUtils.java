@@ -4,9 +4,6 @@ import com.dsm.common.DsmConcepts;
 import com.dsm.model.user.User;
 import org.apache.shiro.SecurityUtils;
 
-import javax.servlet.http.HttpSession;
-import java.util.List;
-
 /**
  * Created with IntelliJ IDEA.
  * Project: dsm
@@ -17,6 +14,11 @@ import java.util.List;
  * 操作session中的相关对象信息
  */
 public class SessionToolUtils {
+
+    public static int NO_LOGIN = 0;
+    public static int USER_LOGIN = 1;
+    public static int ADMIN_LOGIN = 2;
+
 
 
     public static User getUser(){
@@ -30,12 +32,12 @@ public class SessionToolUtils {
      * @return 0：未登录；1：登录普通用户；2：登录管理员
      */
     public static int checkLogin(){
-        int type = 0;
+        int type = NO_LOGIN;
         if(SecurityUtils.getSubject().getSession().getAttribute(DsmConcepts.SESSION_USER)!=null){
-            type = 1;
+            type = USER_LOGIN;
         }
         if(SecurityUtils.getSubject().getSession().getAttribute(DsmConcepts.SESSION_ADMIN)!=null){
-            type = 2;
+            type = ADMIN_LOGIN;
         }
         return type;
     }

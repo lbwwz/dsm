@@ -1,6 +1,5 @@
 package com.dsm.dao;
 
-import com.dsm.model.cart.ShoppingCartItem;
 import com.dsm.model.cart.ShoppingCartItemPO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -51,13 +50,13 @@ public interface ICartDao {
      * @param cartItemId 购物车一项的唯一标识id
      * @return 购物车一条子项
      */
-    ShoppingCartItem getShoppingCartItem(int cartItemId);
+    ShoppingCartItemPO getShoppingCartItem(int cartItemId);
 
 
     /**
      * 根据商品的skuId和用户ID 获取购物车项
      */
-    ShoppingCartItem getShoppingCartItemBySkuId(@Param("userId")int userId, @Param("skuId")int skuId);
+    ShoppingCartItemPO getShoppingCartItemBySkuId(@Param("userId")int userId, @Param("skuId")int skuId);
 
 
     /**
@@ -67,7 +66,7 @@ public interface ICartDao {
      * @param shopId 店铺ID
      * @return 购物车商品信息列表
      */
-    List<ShoppingCartItem> getShoppingCartItemByShopId(@Param("userId") int userId, @Param("shopId") int shopId);
+    List<ShoppingCartItemPO> getShoppingCartItemByShopId(@Param("userId") int userId, @Param("shopId") int shopId);
 
 
     /**
@@ -76,7 +75,7 @@ public interface ICartDao {
      * @param userId 用户ID
      * @return 购物车所有子项
      */
-    List<ShoppingCartItem> getShoppingCartInfoAll(int userId);
+    List<ShoppingCartItemPO> getShoppingCartInfoAll(int userId);
 
 
 }

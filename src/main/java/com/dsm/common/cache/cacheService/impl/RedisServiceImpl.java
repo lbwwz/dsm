@@ -186,6 +186,11 @@ public class RedisServiceImpl implements IRedisService{
         return get(key,null);
     }
 
+    @Override
+    public <T> T getAsObject(String key, Class<T> clazz) {
+        return JSONObject.parseObject(get(key,null),clazz);
+    }
+
     /**
      * 删除缓存
      *
@@ -599,6 +604,7 @@ public class RedisServiceImpl implements IRedisService{
 
     /********** HashSet(map) 的相关操作 *********/
 
+
     /**
      * 设置 HashSet 对象
      *
@@ -626,6 +632,11 @@ public class RedisServiceImpl implements IRedisService{
         } finally {
             returnResource(shardedJedis);
         }
+        return false;
+    }
+
+    @Override
+    public <T> boolean setHSet(String key, String field, T value, int expireTime) {
         return false;
     }
 

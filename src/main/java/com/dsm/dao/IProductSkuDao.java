@@ -2,7 +2,6 @@ package com.dsm.dao;
 
 import com.dsm.model.product.ProductSkuItem;
 import com.dsm.model.product.Sku;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -15,7 +14,6 @@ import java.util.List;
  *         <p>
  *         商品sku操作的dao
  */
-@Component
 public interface IProductSkuDao {
     /**
      * 为sku表添加sku信息

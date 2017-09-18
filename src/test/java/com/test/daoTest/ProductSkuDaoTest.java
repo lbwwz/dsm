@@ -2,9 +2,12 @@ package com.test.daoTest;
 
 import com.dsm.dao.IProductDao;
 import com.dsm.dao.IProductSkuDao;
+import com.dsm.model.cart.ShoppingCartItem;
+import com.dsm.model.product.ProductSkuItem;
 import com.dsm.model.product.Sku;
 import com.test.common.BaseJunitTest;
 import org.junit.Test;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
@@ -67,7 +70,12 @@ public class ProductSkuDaoTest extends BaseJunitTest{
 
     @Test
     public void getProductSkuItemTest(){
-        System.out.println(productSkuDao.getProductSkuItem(12));
+
+        ProductSkuItem item = productSkuDao.getProductSkuItem(12);
+        ShoppingCartItem cartItem = new ShoppingCartItem();
+        BeanUtils.copyProperties(item,cartItem);
+
+        System.out.println(cartItem);
     }
 
 

@@ -23,10 +23,11 @@ public class OrderController {
     @Autowired
     private IOrderService orderService;
 
-    @RequestMapping("checkOrder")
+
+    @RequestMapping("checkCartItem")
     public BackMsg checkOrder(){
 
-        BackMsg<String> msg = orderService.checkOrder();
+        BackMsg<String> msg = orderService.checkCartItem();
         return null;
     }
 }

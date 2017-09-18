@@ -219,6 +219,8 @@ public class ProductServiceImpl implements IProductService {
         return productDetail;
     }
 
+
+
     /**
      * 将sku对象结果集转换为销售属性信息列表
      *

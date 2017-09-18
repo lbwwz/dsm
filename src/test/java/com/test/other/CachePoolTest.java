@@ -75,11 +75,17 @@ public class CachePoolTest extends BaseJunitTest{
         redisService.addList("test222",u);
     }
 
+
+
+
     @Test
-    public void Test8(){
-       Map m = redisService.getHsetAll("cartCache_2fbdd3aa-ddaa-42b8-8314-662b8d55f175");
-        System.out.println(m);
+    public void Test9(){
+        String a = "1231321231231";
+        System.out.println(a.split("#").length);
     }
+
+
+
 
 
 }
