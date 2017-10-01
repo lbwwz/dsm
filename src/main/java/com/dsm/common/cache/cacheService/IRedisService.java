@@ -130,7 +130,7 @@ public interface IRedisService {
      * @param value 信息值
      * @return 操作状态
      */
-    <T> boolean addList(String key, T... value);
+    <T> boolean lpush(String key, T... value);
 
 
     /**
@@ -140,27 +140,9 @@ public interface IRedisService {
      * @param list 新增的列表元素
      * @return 操作状态
      */
-    <T> boolean addList(String key, List<T> list);
+    <T> boolean lpush(String key, List<T> list);
 
-    /**
-     * 添加 List（同时设置过期时间）
-     *
-     * @param key     key值
-     * @param seconds 过期时间 单位s
-     * @param value   信息值
-     * @return 操作状态
-     */
-    <T> boolean addList(String key, int seconds, T... value);
 
-    /**
-     * 添加 List（同时设置过期时间）
-     *
-     * @param key     key值
-     * @param seconds 过期时间 单位s
-     * @param list   信息值列表
-     * @return 操作状态
-     */
-    <T> boolean addList(String key, int seconds, List<T> list);
 
 
     /**
@@ -231,10 +213,35 @@ public interface IRedisService {
      * @param key key值
      * @return list长度
      */
-    long countList(String key);
+    long listLen(String key);
+
+    /**
+     * 左出栈
+     * @param key key值
+     */
+    String lpop(String key);
+
+    /**
+     * 右出栈
+     * @param key key值
+     */
+    String rpop(String key);
+
+    /**
+     * 左出栈
+     * @param key key值
+     */
+    <T> T lpop(String key, Class<T> clazz);
+
+    /**
+     * 右出栈
+     * @param key key值
+     */
+    <T> T rpop(String key, Class<T> clazz);
 
 
     /********** set 的相关操作 *********/
+
 
     /**
      * 添加 Set
@@ -293,15 +300,6 @@ public interface IRedisService {
      */
     <T> boolean setHSet(String key, String field, T value);
 
-    /**
-     * 设置 HashSet 对象
-     *
-     * @param key   键值
-     * @param field 域名
-     * @param value Json String or String value
-     * @return 操作状态
-     */
-    <T> boolean setHSet(String key, String field, T value,int expireTime);
 
     /**
      * 设置map结构的key
@@ -466,4 +464,6 @@ public interface IRedisService {
      * @return score值
      */
     Double getScore(String key, String member);
+
+
 }

@@ -16,10 +16,10 @@ function refreshCartHtmlInfo(cartInfo) {
         content =
             '<div id="crumbs">' +
             '   <ol class="breadcrumb">' +
-            '       <li><strong>您的位置：</strong></a></li> ' +
+            '       <li><strong>您的位置：</strong></li> ' +
             '       <li> <a href="/">首页</a></li>' +
             '       <li class="active">购物车</li>' +
-            '       <span class="pull-right">购物车帮您一次性完成批量购买与付款，下单更便捷，付款更简单！<a href="//service.taobao.com/support/help-11746.htm?spm=a1z0d.1.0.0.ogEwpx" target="_blank" data-spm-anchor-id="a1z0d.1.0.0">如何使用购物车</a></span>' +
+            '       <span class="pull-right">购物车帮您一次性完成批量购买与付款，下单更便捷，付款更简单！<a href="//service.taobao.com/support/help-11746.htm?spm=a1z0d.1.0.0.ogEwpx" target="_blank">如何使用购物车</a></span>' +
             '   </ol>'+
             '</div>'+
 
@@ -179,7 +179,7 @@ function refreshCartHtmlInfo(cartInfo) {
             '       <div class="ct_price_sum pull-left"><span class="txt">合计（不含运费）：</span>' +
             '           <strong class="price"><em ><span class="total_symbol">￥&nbsp;</span><font id="totalPrice">' + priceNumFormat(cartInfo.totalPrice) + '</font></em></strong> ' +
             '       </div> ' +
-            '       <div class="btn_area pull-right"><a href="javascript:void(0)" id="cartToOrderCheck" class="submit_btn ' + (cartInfo.selectTotalNum < 1 ? "btn_no" : "") + '"><span>结&nbsp;算</span><b></b></a></div> ' +
+            '       <div class="btn_area pull-right"><a href="javascript:void(0)" id="submit_confirm_info" class="submit_btn ' + (cartInfo.selectTotalNum < 1 ? "btn_no" : "") + '"><span>结&nbsp;算</span><b></b></a></div> ' +
             '   </div> ' +
             '   </div> ' +
             '</div> ';
@@ -413,23 +413,27 @@ $(function () {
     /**
      * 去结算
      */
-    $(document).on("click", "#cartToOrderCheck", function () {
+    $(document).on("click", "#submit_confirm_info", function () {
         $.ajax({
-            url: "/order/checkOrder",
+            url: "/order/checkOrderInfo",
             type: "post",
             cache: false,
             data: {},
-            success: function (data) {
-                if (data.error == 0) {
-                    window.location.href=webRoot+"/order/confirm_order.htm?spm="+data.data;
-                } else {
-                    layer.msg(data.message, {
-                        icon: 2,
-                        time: 1000
+            success:function(data){
+                if(data.error == 0){
+                    $("#items").val(data.data);
+                    $("#source_time").val(Date.now());
+                    $("#confirm_order").submit();
+                }else{
+                    layer.msg(data.message,{
+                        icon: 0,
+                        time: 2000
                     })
                 }
+
             }
         })
+
     });
 
 

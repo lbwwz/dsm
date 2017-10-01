@@ -3,7 +3,7 @@ package com.dsm.model.address;
 import java.io.Serializable;
 
 /**
- * 用户的收发货地址
+ * 用户的收发货地址信息
  *
  * @author lbwwz
  */
@@ -13,9 +13,6 @@ public class ShippingAddress implements Serializable{
     //收发货地址ID
     private int addressId;
     private int userId;
-
-    //地址库中具体的地址id
-    private int locationId;
 
     private Location location;
 
@@ -29,26 +26,10 @@ public class ShippingAddress implements Serializable{
     //是否是默认地址：1是，0不是
     private int isDefault;
 
+    //订单结算页，订单地址选中
+    private boolean checkOrderSelected = false;
+
     public ShippingAddress() {
-    }
-
-    //
-    public ShippingAddress(int addressId, String zipCode, String realName, String mobilePhone) {
-        super();
-        this.addressId = addressId;
-        this.zipCode = zipCode;
-        this.realName = realName;
-        this.mobilePhone = mobilePhone;
-    }
-
-    //对应物流地址表的bean封装
-    public ShippingAddress(int userId, int locationId, String zipCode, String realName, String mobilePhone) {
-        super();
-        this.userId = userId;
-        this.locationId = locationId;
-        this.zipCode = zipCode;
-        this.realName = realName;
-        this.mobilePhone = mobilePhone;
     }
 
 
@@ -66,14 +47,6 @@ public class ShippingAddress implements Serializable{
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public int getLocationId() {
-        return locationId;
-    }
-
-    public void setLocationId(int locationId) {
-        this.locationId = locationId;
     }
 
     public Location getLocation() {
@@ -116,17 +89,25 @@ public class ShippingAddress implements Serializable{
         this.isDefault = isDefault;
     }
 
+    public boolean isCheckOrderSelected() {
+        return checkOrderSelected;
+    }
+
+    public void setCheckOrderSelected(boolean checkOrderSelected) {
+        this.checkOrderSelected = checkOrderSelected;
+    }
+
     @Override
     public String toString() {
         return "ShippingAddress{" +
                 "addressId=" + addressId +
                 ", userId=" + userId +
-                ", locationId=" + locationId +
                 ", location=" + location +
                 ", zipCode='" + zipCode + '\'' +
                 ", realName='" + realName + '\'' +
                 ", mobilePhone='" + mobilePhone + '\'' +
                 ", isDefault=" + isDefault +
+                ", checkOrderSelected=" + checkOrderSelected +
                 '}';
     }
 }

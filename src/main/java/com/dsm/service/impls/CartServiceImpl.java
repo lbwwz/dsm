@@ -240,7 +240,7 @@ public class CartServiceImpl implements ICartService {
      */
     private BackMsg<String> changeNumInCart(int skuId, Integer changeCount, Integer changedCount) {
 
-        ProductSkuItem thisSkuItem = businessCacheService.getProductSkuItemFromCache(skuId,true);
+        ProductSkuItem thisSkuItem = businessCacheService.getProductSkuItemFromCache(true,skuId);
         if (thisSkuItem == null) {
             return new BackMsg<>(DsmConcepts.WARRING, null, "操作的该商品项不可用！");
         }
@@ -518,7 +518,7 @@ public class CartServiceImpl implements ICartService {
         }
         try{
             ShoppingCartItem item = new ShoppingCartItem();
-            BeanUtils.copyProperties(businessCacheService.getProductSkuItemFromCache(cartItemPo.getSkuId(),false),item);
+            BeanUtils.copyProperties(businessCacheService.getProductSkuItemFromCache(false,cartItemPo.getSkuId()),item);
             //库存超出时不能选中
             if(cartItemPo.getCartItemNum()>item.getQuantity()){
                 cartItemPo.setIsSelected(0);

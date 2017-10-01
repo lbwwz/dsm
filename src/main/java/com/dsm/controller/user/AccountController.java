@@ -288,13 +288,11 @@ public class AccountController extends BaseController {
     @RequestMapping("shippingAddress")
     public ModelAndView toShoppingAddressPage(ModelAndView view, String isSuccess) {
 
-        User user = (User) getSession().getAttribute("user");
-
         //返回设置省份信息
         view.addObject("provinces", locationService.getProvinces());
 
         //获取用户的收获地址信息，并将其封装到request中
-        view.addObject("addresses", shippingAddressService.getConsigneeAddressList(user.getId()));
+        view.addObject("addresses", shippingAddressService.getConsigneeAddressList());
 
         if ("1".equals(isSuccess)) {
             view.addObject("backMsg", "地址信息设置成功！");
@@ -367,7 +365,6 @@ public class AccountController extends BaseController {
     @RequestMapping("reviseConsigneeAddress")
     public ModelAndView reviseConsigneeAddress(ModelAndView view, Integer addressId) {
 
-        User user = (User) getSession().getAttribute("user");
         ShippingAddress consigneeAddressItem = shippingAddressService.getShippingAddressByAddressId(addressId);
 
         //返回设置省份, 城市/县/市, 区域 list信息
@@ -378,7 +375,7 @@ public class AccountController extends BaseController {
         //返回需要修改的用户的收获地址信息和地址库信息
         view.addObject("consigneeAddressItem", consigneeAddressItem);
 
-        view.addObject("addresses", shippingAddressService.getConsigneeAddressList(user.getId()));
+        view.addObject("addresses", shippingAddressService.getConsigneeAddressList());
         view.setViewName("/user/userHome/shippingAddress");
         return view;
     }

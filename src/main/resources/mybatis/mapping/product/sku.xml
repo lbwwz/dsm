@@ -42,8 +42,7 @@
         dsm_product_sku(product_id, properties, properties_name, sku_price, quantity, shop_sn, update_time, create_time)
         VALUES
         <foreach collection="list" item="bean" index="index" separator="," >
-            (#{bean.productId},#{bean.properties},#{bean.propertiesName}, #{bean.skuPrice}, #{bean.quantity},
-            #{bean.shopSn},NOW(),NOW())
+            (#{bean.productId},#{bean.properties},#{bean.propertiesName}, #{bean.skuPrice}, #{bean.quantity}, #{bean.shopSn},NOW(),NOW())
         </foreach>
     </insert>
 
@@ -62,6 +61,16 @@
             is_best, is_new, is_hot,sku_id,properties_name, quantity, sku_price, shop_sn
         FROM vdsm_user_product_base,dsm_product_sku
         WHERE vdsm_user_product_base.product_id = dsm_product_sku.product_id AND dsm_product_sku.sku_id=#{skuId} AND product_status = 1
+    </select>
+
+    <select id="getProductSkuItems" resultMap="ProductSkuItemResult" >
+        <foreach collection="array" item="skuId"  separator="UNION ALL" >
+        SELECT dsm_product_sku.product_id , cat_id, product_sn, product_name, click_count, brand_id, shop_id, shop_name,
+        warn_number,product_brief, main_img, product_grade, product_status,
+        is_best, is_new, is_hot,sku_id,properties_name, quantity, sku_price, shop_sn
+        FROM vdsm_user_product_base,dsm_product_sku
+        WHERE vdsm_user_product_base.product_id = dsm_product_sku.product_id AND product_status = 1 AND dsm_product_sku.sku_id = #{skuId}
+        </foreach>
     </select>
 
     <!--查询sku单品的库存-->

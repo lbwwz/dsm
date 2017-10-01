@@ -1,5 +1,6 @@
 package com.dsm.service.impls;
 
+import com.dsm.common.utils.SessionToolUtils;
 import com.dsm.dao.ILocationDao;
 import com.dsm.dao.IShippingAddressDao;
 import com.dsm.model.address.ShippingAddress;
@@ -33,17 +34,23 @@ public class ShippingAddressServiceImpl extends BaseService implements IShipping
     private IShippingAddressDao shippingAddressDao;
 
     @Override
-    public List<ShippingAddress> getConsigneeAddressList(int userId) {
-        List<ShippingAddress> consigneeAddressList = shippingAddressDao.getConsigneeAddressList(userId);
+    public List<ShippingAddress> getConsigneeAddressList() {
+
+        User user = SessionToolUtils.getUser();
+        List<ShippingAddress> consigneeAddressList = shippingAddressDao.getConsigneeAddressList(user.getId());
 
         //查询为空，则直接返回
         if (consigneeAddressList == null) {
             return null;
         }
-//        //检查地址列中是否有默认地址，若没有默认地址，则设置最新添加的地址为默认地址
-//        if(!hasDefaultAddress(consigneeAddressList)){
-//            //设置默认地址
-//        }
+
+        ShippingAddress defaultAddress = user.getDefaultAddress();
+        for (ShippingAddress itemIddress : consigneeAddressList) {
+            if (itemIddress.getAddressId() == defaultAddress.getAddressId()) {
+                itemIddress.setIsDefault(1);
+                break;
+            }
+        }
 
         return consigneeAddressList;
 

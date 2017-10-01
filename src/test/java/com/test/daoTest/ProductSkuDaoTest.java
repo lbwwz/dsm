@@ -25,6 +25,7 @@ import java.util.List;
  * 商品相关操作的dao测试类
  */
 public class ProductSkuDaoTest extends BaseJunitTest{
+
     @Autowired
     private IProductSkuDao productSkuDao;
 
@@ -66,6 +67,11 @@ public class ProductSkuDaoTest extends BaseJunitTest{
     @Test
     public void getSkuListByProductIdTest(){
         System.out.println(productSkuDao.getSkuListByProductId(1));
+    }
+
+    @Test
+    public void getProductSkuItemsTest(){
+        System.out.println(productSkuDao.getProductSkuItems(1,null,15));
     }
 
     @Test

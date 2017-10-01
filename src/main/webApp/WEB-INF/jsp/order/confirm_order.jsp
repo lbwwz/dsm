@@ -14,39 +14,50 @@
     <link href="${webRoot}/css/style_base.css" rel="stylesheet">
     <script src="${webRoot}/js/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="${webRoot}/js/bootstrap.min.js" type="text/javascript"></script>
-    <jsp:include page="common/commonPath.jsp"/>
+    <jsp:include page="../common/commonPath.jsp"/>
 </head>
 
 <body>
-<jsp:include page="common/topNav.jsp" />
+<jsp:include page="../common/topNav.jsp" />
 <div class="container">
     <div class="row">
-        <div class="col-xs-5"><a href="index.jsp"><img src="images/logo.png"/></a></div>
+        <div class="col-xs-5 dsm_ico"><a href="index.jsp"><img src="${rsRoot}/images/logo.png"/></a><font>结算页</font></div>
         <div  class="col-xs-7">
-            <div id="search_box">
-                <form class="form-inline" style="margin:0;">
-                    <div class="input-group col-xs-12">
-                        <input id="search" name="search" class="form-control input-md" type="search" placeholder="商品搜索" />
-                    <span id="search_btn" class="input-group-btn">
-                    <button class="btn btn-info btn-md" type="button">搜索</button>
-                    </span> </div>
-                </form>
-            </div>
+
         </div>
     </div>
 </div>
 
-<!--购物车页面 -->
-<div class="container cart_panel">
+<!--结算页面主体 -->
+<div class="container orderCheck_panel">
 </div>
 <form action="order/confirm_order.htm" method ="post" id="confirm_order">
-    <input type="hidden" value="" id="items" name="items"/>
+    <input type="hidden" value="${items}" id="items" name="items"/>
     <input type="hidden" value="cart" name="buyerFrom"/>
     <input type="hidden" value="" name="source_time" id="source_time"/>
-
 </form>
 </body>
 
 <script src="${rsRoot}/front-lib/layer/layer.js"></script>
-<script src="${rsRoot}/js/cart.js"></script>
+<script>
+    $(function(){
+        $(".orderCheck_panel").on("click","[name=address]",function(){
+            if($(this).parents(".selected_address").length == 0){
+                alert($(this).attr("id").split("-")[1]);
+                $(".address_list").find("li").removeClass("selected_address");
+                $(this).parents("li").addClass("selected_address")
+            }
+        });
+
+        $.ajax({
+            url: "/order/getOrderCheckInfo",
+            type: "post",
+            cache: false,
+            data: {items:$("#items").val()},
+            success:function(data){
+                $(".orderCheck_panel").html(data);
+            }
+        })
+    })
+</script>
 </html>

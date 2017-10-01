@@ -14,25 +14,25 @@ public class OrderSkuItem extends ProductSkuItem{
 
     private static final long serialVersionUID = 1788969762956664341L;
     //结算数量
-    public Integer ItemNum;
+    public Integer itemNum;
 
     //库存是否充足
-    public boolean isEnough;
+    public boolean isEnough = true;
 
 
     public Integer getItemNum() {
-        return ItemNum;
+        return itemNum;
     }
 
     public void setItemNum(Integer itemNum) {
-        ItemNum = itemNum;
+        this.itemNum = itemNum;
     }
 
-    public boolean isEnough() {
+    public boolean getIsEnough() {
         return isEnough;
     }
 
-    public void setEnough(boolean enough) {
+    public void setIsEnough(boolean enough) {
         isEnough = enough;
     }
 
@@ -54,7 +54,7 @@ public class OrderSkuItem extends ProductSkuItem{
                 ", status=" + status +
                 ", createTime=" + createTime +
                 ", lastUpdateTime=" + lastUpdateTime +
-                ", ItemNum=" + ItemNum +
+                ", itemNum=" + itemNum +
                 ", isEnough=" + isEnough +
                 '}';
     }

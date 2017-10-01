@@ -1,5 +1,6 @@
 package com.dsm.common.cache.cacheService.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.dsm.common.cache.cacheDatabase.RedisDataSource;
 import com.dsm.common.cache.cacheService.IRedisService;
@@ -269,14 +270,14 @@ public class RedisServiceImpl implements IRedisService{
      */
     @SafeVarargs
     @Override
-    public final <T> boolean addList(String key, T... t) {
+    public final <T> boolean lpush(String key, T... t) {
         if (key == null || t == null || t.length == 0) {
             return false;
         }
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = redisDataSource.getResource();
-            shardedJedis.lpush(key, Arrays.stream(t).map(JSONObject::toJSONString).toArray(String[]::new));
+            shardedJedis.lpush(key, Arrays.stream(t).map(item-> (item instanceof String)?item:JSONObject.toJSONString(item)).toArray(String[]::new));
             return true;
         } catch (Exception ex) {
             logger.error("setList error.", ex);
@@ -294,42 +295,14 @@ public class RedisServiceImpl implements IRedisService{
      * @return 操作状态
      */
     @Override
-    public <T> boolean addList(String key, List<T> list) {
+    public <T> boolean lpush(String key, List<T> list) {
         if (key == null || list == null || list.size() == 0) {
             return false;
         }
-        addList(key, list.stream().toArray());
+        lpush(key, list.stream().toArray());
         return true;
     }
 
-    /**
-     * 添加 List（同时设置过期时间）
-     *
-     * @param key     key值
-     * @param seconds 过期时间 单位s
-     * @param value   信息值
-     * @return 操作状态
-     */
-    @SafeVarargs
-    @Override
-    public final <T> boolean addList(String key, int seconds, T... value) {
-        boolean result = addList(key, value);
-        if (result) {
-            long i = expire(key, seconds);
-            return i == 1;
-        }
-        return false;
-    }
-
-    @Override
-    public <T> boolean addList(String key, int seconds, List<T> list) {
-        boolean result = addList(key, list);
-        if (result) {
-            long i = expire(key, seconds);
-            return i == 1;
-        }
-        return false;
-    }
 
     /**
      * 从list中删除value
@@ -472,7 +445,7 @@ public class RedisServiceImpl implements IRedisService{
      * @return list长度
      */
     @Override
-    public long countList(String key) {
+    public long listLen(String key) {
         if (key == null) {
             return 0;
         }
@@ -486,6 +459,45 @@ public class RedisServiceImpl implements IRedisService{
             returnResource(shardedJedis);
         }
         return 0;
+    }
+
+    @Override
+    public String lpop(String key) {
+        return pop("left",key);
+    }
+
+    @Override
+    public String rpop(String key) {
+        return pop("right",key);
+    }
+
+    @Override
+    public <T> T lpop(String key, Class<T> clazz) {
+        return JSON.parseObject(lpop(key),clazz);
+    }
+
+    @Override
+    public <T> T rpop(String key, Class<T> clazz) {
+        return JSON.parseObject(rpop(key),clazz);
+    }
+
+    private String pop(String type,String key){
+        if (key == null) {
+            return null;
+        }
+        ShardedJedis shardedJedis = null;
+        try {
+            shardedJedis = redisDataSource.getResource();
+            if(type.equals("left")){
+                return shardedJedis.lpop(key);
+            }
+            return shardedJedis.rpop(key);
+        } catch (Exception ex) {
+            logger.error("rpop error.", ex);
+        } finally {
+            returnResource(shardedJedis);
+        }
+        return null;
     }
 
 
@@ -635,10 +647,7 @@ public class RedisServiceImpl implements IRedisService{
         return false;
     }
 
-    @Override
-    public <T> boolean setHSet(String key, String field, T value, int expireTime) {
-        return false;
-    }
+
 
 
     @Override

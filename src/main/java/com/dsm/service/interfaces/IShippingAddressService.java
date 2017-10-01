@@ -19,7 +19,7 @@ public interface IShippingAddressService {
      *
      * @return 地址列表
      */
-    List<ShippingAddress> getConsigneeAddressList(int userId);
+    List<ShippingAddress> getConsigneeAddressList();
 
     /**
      * 根据userId查询用户的发货地址信息列表

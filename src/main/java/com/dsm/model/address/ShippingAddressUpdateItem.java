@@ -2,7 +2,7 @@ package com.dsm.model.address;
 
 /**
  * 用户收货地址的提交结果封装
- * 数据库dsm_user_shipping_address表的映射
+ * 数据库dsm_user_shipping_address表的映射（弃用）
  *
  * @author lbwwz
  */
