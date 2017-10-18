@@ -10,37 +10,37 @@ import java.io.Serializable;
 public class AttrValueBean implements Comparable<AttrValueBean>,Serializable {
 
 	private static final long serialVersionUID = 499388446522218050L;
-	private int valueId;
+	private Long valueId;
 	
 	private String valueName;
 	
-	private int attrId;
+	private Long attrId;
 	
 	private Integer catId;
 	
-	private Integer valueSort;
+	private int valueSort;
 
 	//属性状态，0：禁用； 1：正常
-	private Integer status;
+	private int status;
 	
 	public AttrValueBean() {}
 
-	public AttrValueBean(String valueName, int attrId, Integer status) {
+	public AttrValueBean(String valueName, long attrId, Integer status) {
 		this.valueName = valueName;
 		this.attrId = attrId;
 		this.status = status;
 	}
 
-	public AttrValueBean(int valueId, String valueName) {
+	public AttrValueBean(Long valueId, String valueName) {
 		this.valueId = valueId;
 		this.valueName = valueName;
 	}
 
-	public int getValueId() {
+	public Long getValueId() {
 		return valueId;
 	}
 
-	public void setValueId(int valueId) {
+	public void setValueId(Long valueId) {
 		this.valueId = valueId;
 	}
 
@@ -52,11 +52,11 @@ public class AttrValueBean implements Comparable<AttrValueBean>,Serializable {
 		this.valueName = valueName;
 	}
 
-	public int getAttrId() {
+	public Long getAttrId() {
 		return attrId;
 	}
 
-	public void setAttrId(int attrId) {
+	public void setAttrId(long attrId) {
 		this.attrId = attrId;
 	}
 
@@ -64,23 +64,23 @@ public class AttrValueBean implements Comparable<AttrValueBean>,Serializable {
 		return catId;
 	}
 
-	public void setCatId(Integer catId) {
+	public void setCatId(int catId) {
 		this.catId = catId;
 	}
 
-	public Integer getValueSort() {
+	public int getValueSort() {
 		return valueSort;
 	}
 
-	public void setValueSort(Integer valueSort) {
+	public void setValueSort(int valueSort) {
 		this.valueSort = valueSort;
 	}
 
-	public Integer getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
@@ -91,23 +91,23 @@ public class AttrValueBean implements Comparable<AttrValueBean>,Serializable {
 
 		AttrValueBean that = (AttrValueBean) o;
 
-		if (valueId != that.valueId) return false;
-		if (attrId != that.attrId) return false;
+		if (valueSort != that.valueSort) return false;
+		if (status != that.status) return false;
+		if (valueId != null ? !valueId.equals(that.valueId) : that.valueId != null) return false;
 		if (valueName != null ? !valueName.equals(that.valueName) : that.valueName != null) return false;
-		if (catId != null ? !catId.equals(that.catId) : that.catId != null) return false;
-		if (valueSort != null ? !valueSort.equals(that.valueSort) : that.valueSort != null) return false;
-		return status != null ? status.equals(that.status) : that.status == null;
+		if (attrId != null ? !attrId.equals(that.attrId) : that.attrId != null) return false;
+		return catId != null ? catId.equals(that.catId) : that.catId == null;
 
 	}
 
 	@Override
 	public int hashCode() {
-		int result = valueId;
+		int result = valueId != null ? valueId.hashCode() : 0;
 		result = 31 * result + (valueName != null ? valueName.hashCode() : 0);
-		result = 31 * result + attrId;
+		result = 31 * result + (attrId != null ? attrId.hashCode() : 0);
 		result = 31 * result + (catId != null ? catId.hashCode() : 0);
-		result = 31 * result + (valueSort != null ? valueSort.hashCode() : 0);
-		result = 31 * result + (status != null ? status.hashCode() : 0);
+		result = 31 * result + valueSort;
+		result = 31 * result + status;
 		return result;
 	}
 

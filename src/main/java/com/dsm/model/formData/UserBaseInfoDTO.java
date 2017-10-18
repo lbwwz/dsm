@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class UserBaseInfoDTO implements Serializable{
 
     private static final long serialVersionUID = 4628299305561757242L;
-    private int userId;
+    private long userId;
 
     private String sex;
 
@@ -32,16 +32,16 @@ public class UserBaseInfoDTO implements Serializable{
     public UserBaseInfoDTO() {}
 
     //头像信息构造
-    public UserBaseInfoDTO(int userId, String headImage) {
+    public UserBaseInfoDTO(long userId, String headImage) {
         this.userId = userId;
         this.headImage = headImage;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

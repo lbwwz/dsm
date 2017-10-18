@@ -13,13 +13,13 @@ import java.sql.Timestamp;
  */
 public class ShoppingCartItemPO {
 
-    private Integer cartItemId;
+    private Long cartItemId;
 
-    private Integer userId;
+    private Long userId;
 
-    private Integer shopId;
+    private Long shopId;
 
-    private Integer skuId;
+    private Long skuId;
 
     private Integer cartItemNum;
 
@@ -31,7 +31,7 @@ public class ShoppingCartItemPO {
     public ShoppingCartItemPO() {
     }
 
-    public ShoppingCartItemPO(Integer userId, Integer shopId, Integer skuId, Integer cartItemNum, Integer isSelected) {
+    public ShoppingCartItemPO(Long userId, Long shopId, Long skuId, Integer cartItemNum, Integer isSelected) {
         this.userId = userId;
         this.shopId = shopId;
         this.skuId = skuId;
@@ -39,35 +39,35 @@ public class ShoppingCartItemPO {
         this.isSelected = isSelected;
     }
 
-    public Integer getCartItemId() {
+    public Long getCartItemId() {
         return cartItemId;
     }
 
-    public void setCartItemId(Integer cartItemId) {
+    public void setCartItemId(long cartItemId) {
         this.cartItemId = cartItemId;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
-    public Integer getShopId() {
+    public Long getShopId() {
         return shopId;
     }
 
-    public void setShopId(Integer shopId) {
+    public void setShopId(long shopId) {
         this.shopId = shopId;
     }
 
-    public Integer getSkuId() {
+    public Long getSkuId() {
         return skuId;
     }
 
-    public void setSkuId(Integer skuId) {
+    public void setSkuId(long skuId) {
         this.skuId = skuId;
     }
 

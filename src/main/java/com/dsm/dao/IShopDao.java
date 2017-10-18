@@ -30,7 +30,7 @@ public interface IShopDao {
      * 根据店主查询店铺信息
      * @param userId 卖家ID
      */
-    Shop getShopByUserId(int userId);
+    Shop getShopByUserId(long userId);
 
     /**
      * 根据店铺ID查询店铺信息

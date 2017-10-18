@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace必须是接口的全类名  -->
+<mapper namespace="com.dsm.dao.IOrderDao">
+
+    <!--location属性别名与字段之间映射-->
+
+
+</mapper>

@@ -32,7 +32,7 @@ public class ProductBean extends ProductBaseBean implements Serializable{
 
     public ProductBean() {}
 
-    public ProductBean(String keywords,String productBrief, String mainImage, String productName, Integer brandId, Integer catId, Integer shopId) {
+    public ProductBean(String keywords,String productBrief, String mainImage, String productName, Integer brandId, Integer catId, Long shopId) {
         this.keywords = keywords;
         this.productBrief = productBrief;
         this.mainImage = mainImage;

@@ -8,9 +8,9 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class IdentifyInfo {
 
-	private Integer IdentifyId;
+	private Long IdentifyId;
 
-	private Integer userId;
+	private Long userId;
 	//用户的真实姓名
 	private String realName;
 	private String idCardNum;
@@ -20,7 +20,7 @@ public class IdentifyInfo {
 	public IdentifyInfo() {}
 
 	
-	public IdentifyInfo(Integer userId, String realName, String idCardNum, String imageUrls) {
+	public IdentifyInfo(Long userId, String realName, String idCardNum, String imageUrls) {
 		super();
 		this.userId = userId;
 		this.realName = realName;
@@ -28,19 +28,19 @@ public class IdentifyInfo {
 		this.imageUrls = imageUrls;
 	}
 
-	public int getIdentifyId() {
+	public long getIdentifyId() {
 		return IdentifyId;
 	}
 
-	public void setIdentifyId(int identifyId) {
+	public void setIdentifyId(long identifyId) {
 		IdentifyId = identifyId;
 	}
 
-	public int getUserId() {
+	public long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
 

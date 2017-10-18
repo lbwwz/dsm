@@ -19,7 +19,7 @@ public interface IIdentifyInfoDao {
      * @param userId
      * @return
      */
-    IdentifyInfo getIdentifyInfo(int userId);
+    IdentifyInfo getIdentifyInfo(long userId);
 
 
     /**

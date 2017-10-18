@@ -198,7 +198,8 @@ $(function () {
         cache: false,
         data:{},
         success:function(data){
-            refreshCartHtmlInfo(data);
+
+            refreshCartHtmlInfo(data.data);
         }
     });
 
@@ -316,10 +317,22 @@ $(function () {
                 data = JSON.parse(data.data);
                 refreshCartHtmlInfo(data);
 
-            } else {
+            }else {
                 layer.msg(data.message, {
                     icon: 0,
                     time: 2000
+                },function(){
+                    if(data.error == 110){
+                        $.ajax({
+                            url: "/cart/getCartInfo",
+                            type: "post",
+                            cache: false,
+                            data:{},
+                            success:function(data){
+                                refreshCartHtmlInfo(data.data);
+                            }
+                        });
+                    }
                 })
             }
 

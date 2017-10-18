@@ -16,17 +16,17 @@ public class ProductDetailAttrInfo implements Serializable{
 
     private static final long serialVersionUID = -5182449799919024544L;
     //详情商品基本属性ID
-    private Integer baseAttrId;
+    private Long baseAttrId;
     //详情自定义基本属性ID
-    private Integer customAttrId;
+    private Long customAttrId;
     //商品id
-    private Integer productId;
+    private Long productId;
     //固有属性id
-    private Integer attrId;
+    private Long attrId;
     //固有属性对应的属性名
     private String attrName;
     //固有属性对定的属性值ID
-    private Integer valueId;
+    private Long valueId;
     //固有属性对定的属性值
     private String attrValue;
 
@@ -42,53 +42,53 @@ public class ProductDetailAttrInfo implements Serializable{
     public ProductDetailAttrInfo(){
 
     }
-    public ProductDetailAttrInfo(Integer productId,Integer attrId,String attrName,Integer valueId,String attrValue){
+    public ProductDetailAttrInfo(Long productId,Long attrId,String attrName,Long valueId,String attrValue){
         this.productId = productId;
         this.attrId = attrId;
         this.attrName = attrName;
         this.valueId = valueId;
         this.attrValue = attrValue;
     }
-    public ProductDetailAttrInfo(Integer productId,String attrName,String attrValue){
+    public ProductDetailAttrInfo(Long productId,String attrName,String attrValue){
         this.productId = productId;
         this.attrName = attrName;
         this.attrValue = attrValue;
     }
-    public ProductDetailAttrInfo(Integer attrId,String attrName,Set<AttrValueBean> saleAttrValues){
+    public ProductDetailAttrInfo(Long attrId,String attrName,Set<AttrValueBean> saleAttrValues){
         this.attrId = attrId;
         this.attrName = attrName;
         this.saleAttrValues = saleAttrValues;
     }
 
-    public Integer getBaseAttrId() {
+    public Long getBaseAttrId() {
         return baseAttrId;
     }
 
-    public void setBaseAttrId(Integer baseAttrId) {
+    public void setBaseAttrId(Long baseAttrId) {
         this.baseAttrId = baseAttrId;
     }
 
-    public Integer getCustomAttrId() {
+    public Long getCustomAttrId() {
         return customAttrId;
     }
 
-    public void setCustomAttrId(Integer customAttrId) {
+    public void setCustomAttrId(Long customAttrId) {
         this.customAttrId = customAttrId;
     }
 
-    public Integer getProductId() {
+    public Long getProductId() {
         return productId;
     }
 
-    public void setProductId(Integer productId) {
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
 
-    public Integer getAttrId() {
+    public Long getAttrId() {
         return attrId;
     }
 
-    public void setAttrId(Integer attrId) {
+    public void setAttrId(Long attrId) {
         this.attrId = attrId;
     }
 
@@ -100,11 +100,11 @@ public class ProductDetailAttrInfo implements Serializable{
         this.attrName = attrName;
     }
 
-    public Integer getValueId() {
+    public Long getValueId() {
         return valueId;
     }
 
-    public void setValueId(Integer valueId) {
+    public void setValueId(Long valueId) {
         this.valueId = valueId;
     }
 

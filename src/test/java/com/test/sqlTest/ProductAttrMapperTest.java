@@ -126,7 +126,7 @@ public class ProductAttrMapperTest {
         String statement = "com.dsm.dao.IProductAttrDao.updateAttrValue";//映射sql的标识字符串
 
         //执行查询返回一个唯一user对象的sql
-        AttrValueBean bean = new AttrValueBean(33,"电阻屏");
+        AttrValueBean bean = new AttrValueBean(33L,"电阻屏");
         int i = session.update(statement,bean);
         System.out.println("打印对象："+i);
     }

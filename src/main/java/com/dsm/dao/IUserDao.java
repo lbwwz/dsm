@@ -50,12 +50,12 @@ public interface IUserDao {
      * @param id
      * @return
      */
-    User getUserById(int id);
+    User getUserById(long id);
 
     /**
      * 更新用户的最后登录时间
      */
-    void setLastVisit(int id);
+    void setLastVisit(long id);
 
     /**
      * 更新用户的基本信息（baseInfo页面使用:用户性别，QQ，生日，家乡，居住地）
@@ -84,7 +84,7 @@ public interface IUserDao {
      *
      * @param userId
      */
-    void becomeSeller(int userId);
+    void becomeSeller(long userId);
 
 
     /**
@@ -92,7 +92,7 @@ public interface IUserDao {
      *
      * @param userId
      */
-    Integer changeStatus(int userId);
+    Integer changeStatus(long userId);
 
     /**
      * 更改用户的身份验证状态

@@ -14,9 +14,9 @@ public class ProductAttrBean implements Comparable<ProductAttrBean>,Serializable
 
 
 	private static final long serialVersionUID = -3470095136542536895L;
-	private int attrId;
+	private Long attrId;
 
-	private int catId;
+	private Integer catId;
 
 	private String attrName;
 
@@ -52,11 +52,11 @@ public class ProductAttrBean implements Comparable<ProductAttrBean>,Serializable
 
 
 
-	public int getAttrId() {
+	public Long getAttrId() {
 		return attrId;
 	}
 
-	public void setAttrId(int attrId) {
+	public void setAttrId(Long attrId) {
 		this.attrId = attrId;
 	}
 
@@ -146,8 +146,8 @@ public class ProductAttrBean implements Comparable<ProductAttrBean>,Serializable
 
 		ProductAttrBean that = (ProductAttrBean) o;
 
-		if (attrId != that.attrId) return false;
-		if (catId != that.catId) return false;
+		if (attrId != null ? !attrId.equals(that.attrId) : that.attrId != null) return false;
+		if (catId != null ? !catId.equals(that.catId) : that.catId != null) return false;
 		if (attrName != null ? !attrName.equals(that.attrName) : that.attrName != null) return false;
 		if (attrSort != null ? !attrSort.equals(that.attrSort) : that.attrSort != null) return false;
 		if (isSale != null ? !isSale.equals(that.isSale) : that.isSale != null) return false;
@@ -160,8 +160,8 @@ public class ProductAttrBean implements Comparable<ProductAttrBean>,Serializable
 
 	@Override
 	public int hashCode() {
-		int result = attrId;
-		result = 31 * result + catId;
+		int result = attrId != null ? attrId.hashCode() : 0;
+		result = 31 * result + (catId != null ? catId.hashCode() : 0);
 		result = 31 * result + (attrName != null ? attrName.hashCode() : 0);
 		result = 31 * result + (attrSort != null ? attrSort.hashCode() : 0);
 		result = 31 * result + (isSale != null ? isSale.hashCode() : 0);

@@ -11,22 +11,22 @@ public class BaseAttrBean implements Serializable,Comparable<BaseAttrBean>{
 
 
 	private static final long serialVersionUID = -7989853405230150197L;
-	private Integer attrId;
+	private Long attrId;
 	private String attrName;
 
-	private Integer valueId;
+	private Long valueId;
 	private String attrValue;
 	private int sort;
 
 	public BaseAttrBean() {
 	}
 
-	public BaseAttrBean(Integer attrId,Integer valueId) {
+	public BaseAttrBean(Long attrId,Long valueId) {
 		this.valueId = valueId;
 		this.attrId = attrId;
 	}
 
-	public BaseAttrBean(int attrId, String attrName, int valueId, String valueName, int sort) {
+	public BaseAttrBean(Long attrId, String attrName, Long valueId, String valueName, int sort) {
 		this.attrId = attrId;
 		this.attrName = attrName;
 		this.valueId = valueId;
@@ -34,11 +34,11 @@ public class BaseAttrBean implements Serializable,Comparable<BaseAttrBean>{
 		this.sort = sort;
 	}
 
-	public Integer getAttrId() {
+	public Long getAttrId() {
 		return attrId;
 	}
 
-	public void setAttrId(Integer attrId) {
+	public void setAttrId(Long attrId) {
 		this.attrId = attrId;
 	}
 
@@ -50,11 +50,11 @@ public class BaseAttrBean implements Serializable,Comparable<BaseAttrBean>{
 		this.attrName = attrName;
 	}
 
-	public Integer getValueId() {
+	public Long getValueId() {
 		return valueId;
 	}
 
-	public void setValueId(Integer valueId) {
+	public void setValueId(Long valueId) {
 		this.valueId = valueId;
 	}
 

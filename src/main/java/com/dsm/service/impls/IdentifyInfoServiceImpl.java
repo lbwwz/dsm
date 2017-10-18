@@ -113,7 +113,7 @@ public class IdentifyInfoServiceImpl implements IIdentifyInfoService {
     }
 
     @Override
-    public IdentifyInfo getIdentifyInfo(int userId) {
+    public IdentifyInfo getIdentifyInfo(long userId) {
         return identifyInfoDao.getIdentifyInfo(userId);
     }
 

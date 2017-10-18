@@ -9,7 +9,7 @@
 <%--@elvariable id="orderCheckInfo" type="com.dsm.model.order.OrderCheckInfo"--%>
 <c:if test="${orderCheckInfo != null}">
 <div class="row">
-    <c:if test="${!orderCheckInfo.isEnough}">
+    <c:if test="${orderCheckInfo.isEnough}">
     <div class="col-xs-12 address_list">
         <h5 class="title_h5">确认收货地址</h5>
         <ul class="list-unstyled">
@@ -22,6 +22,10 @@
             </c:if>
 
             <c:forEach items="${orderCheckInfo.addressList}" var="address">
+                <c:if test="${address.checkOrderSelected}">
+                    <c:set value="${address.location.province.provinceName} ${address.location.city.cityName} ${address.location.district.districtName} ${address.location.address}" var="detailAddress"></c:set>
+                    <c:set value="${address.realName} ${address.mobilePhone}" var="consigneerInfo"></c:set>
+                </c:if>
                 <li <c:if test="${address.checkOrderSelected}">class="selected_address"</c:if> data_default="${address.isDefault}">
                     <div class="addressBox">
                         <div class="address_tips"><span class="marker glyphicon glyphicon-send"></span><span class="marker_tips" >寄送至</span></div>
@@ -49,7 +53,7 @@
     </c:if>
 
     <%--结算异常项信息提示画幕--%>
-    <c:if test="${orderCheckInfo.isEnough}">
+    <c:if test="${!orderCheckInfo.isEnough}">
     <div class="col-xs-12">
         <div id="crumbs">
 
@@ -93,9 +97,12 @@
                     </div>
                     <div class="clearfix"></div>
                 </div>
+                <style>
+
+                </style>
 
                 <div class="order_package_main">
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled item_list">
                         <c:forEach items="${orderPackage.orderSkuItemList}" var="orderSkuItem">
                             <li >
                                 <div class="buy-td td-0" >
@@ -104,7 +111,10 @@
                                             <img src="${orderSkuItem.mainImage}" width="60" height="60"/>
                                         </div>
                                         <div class="od_desc">
-                                                ${orderSkuItem.productName}
+                                            <a class="itemName" href="#">
+                                                    ${orderSkuItem.productName}
+                                            </a>
+
                                         </div>
                                         <div class="clearfix"></div>
                                     </div>
@@ -117,10 +127,10 @@
                                         </c:forEach>
                                     </div>
                                 </div>
-                                <div class="buy-td td-2" > <div class="div_inner">${orderSkuItem.skuPrice}</div></div>
+                                <div class="buy-td td-2" > <div class="div_inner price_num_style">￥ ${orderSkuItem.skuPrice}</div></div>
                                 <div class="buy-td td-3" > <div class="div_inner">${orderSkuItem.itemNum}</div></div>
                                 <div class="buy-td td-4" > <div class="div_inner">店铺宝贝</div></div>
-                                <div class="buy-td td-5" > <div class="div_inner">${orderSkuItem.skuPrice*orderSkuItem.itemNum}</div></div>
+                                <div class="buy-td td-5" > <div class="div_inner price_num_style">￥ ${orderSkuItem.skuPrice*orderSkuItem.itemNum}</div></div>
                                 <div class="clearfix"></div>
                             </li>
                         </c:forEach>
@@ -129,7 +139,35 @@
 
             </div>
         </c:forEach>
-        <%--${orderCheckInfo}--%>
-    </div>
+        ${orderCheckInfo}
+
+    <style>
+        .order_create_info{margin-top:20px;}
+        .orderCheck_info{border: 1px solid #f40;}
+        .orderCheck_info_box{border: 3px solid #fff0e8;   padding: 10px 10px 10px 20px;}
+        .order_create .order_return,.order_create .create_btn{float: left;line-height: 36px;font-size:16px;padding:4px 20px;}
+        .order_create .order_return{width: 60%; text-align: right}
+        .order_create .create_btn{background:#f40;width: 40%; text-align:center;color:#fff;font-weight: bold; word-spacing:2px}
+        .orderCheck_info_box .price font{color:#aaa;font-size:14px;font-weight: 100 }
+        .orderCheck_info_box .price .price_value{color:#f40;font-size:26px; }
+    </style>
+        <div class="row">
+            <div class="col-xs-offset-7 col-xs-5 order_create_info">
+                <div class="orderCheck_info">
+                    <div class="orderCheck_info_box">
+                        <div class="price"><strong class="pull-right">实付款： <span class="price_num_style"><font class="">￥</font><span class="price_value">${orderCheckInfo.totalPrice}</span></span></strong><div class="clearfix"></div></div>
+                        <div class="detailAddress"><strong>寄送至：</strong>${detailAddress}</div>
+                        <div class="consigneerInfo"><font class="pull-right"><strong>收件人：</strong>${consigneerInfo}</font><div class="clearfix"></div></div>
+
+                    </div>
+                </div>
+                <div class="order_create">
+                    <div class="order_return"><a href="#"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp;返回购物车</a></div>
+                    <div class="create_btn">提交订单</div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+</div>
 </div>
 </c:if>

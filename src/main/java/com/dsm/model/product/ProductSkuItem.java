@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  */
 public class ProductSkuItem extends ProductBaseBean{
     //skuId
-    public Integer skuId;
+    public Long skuId;
     //组合销售属性信息
     public String propertiesName;
     //该商品的数量
@@ -23,11 +23,11 @@ public class ProductSkuItem extends ProductBaseBean{
     //该商品的商品码
     public String shopSn;
 
-    public Integer getSkuId() {
+    public Long getSkuId() {
         return skuId;
     }
 
-    public void setSkuId(Integer skuId) {
+    public void setSkuId(long skuId) {
         this.skuId = skuId;
     }
 

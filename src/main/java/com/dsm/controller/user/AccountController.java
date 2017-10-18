@@ -221,7 +221,7 @@ public class AccountController extends BaseController {
         if (ServletToolUtils.checkRepeatSubmit(getRequest(), "token", "token")) {
             //获取当前用户的信息
             User sessionUser = (User) getSession().getAttribute("user");
-            int userId = sessionUser.getId();
+            long userId = sessionUser.getId();
 
             userBaseInfo.setHometown(new LocationDTO(sessionUser.getDomicile().getLocationId(), domicileProvince, domicileCity, domicileDistrict));
             userBaseInfo.setDomicile(new LocationDTO(sessionUser.getHometown().getLocationId(), hometownProvince, hometownCity, hometownDistrict));
@@ -363,7 +363,7 @@ public class AccountController extends BaseController {
      * @return /user/userHome/shippingAddress.jsp
      */
     @RequestMapping("reviseConsigneeAddress")
-    public ModelAndView reviseConsigneeAddress(ModelAndView view, Integer addressId) {
+    public ModelAndView reviseConsigneeAddress(ModelAndView view, Long addressId) {
 
         ShippingAddress consigneeAddressItem = shippingAddressService.getShippingAddressByAddressId(addressId);
 
@@ -388,7 +388,7 @@ public class AccountController extends BaseController {
      */
     @ResponseBody
     @RequestMapping("deleteConsigneeAddress")
-    public BackMsg deleteConsigneeAddress(Integer addressId) {
+    public BackMsg deleteConsigneeAddress(Long addressId) {
         BackMsg backMsg;
 
         String errorMsg;
@@ -410,7 +410,7 @@ public class AccountController extends BaseController {
      */
     @ResponseBody
     @RequestMapping("changeDefaultAddress")
-    private BackMsg changeDefaultConsigneeAddress(Integer addressId) {
+    private BackMsg changeDefaultConsigneeAddress(Long addressId) {
         BackMsg backMsg;
 
         if (shippingAddressService.resetDefaultAddress(addressId)) {

@@ -15,6 +15,7 @@ public class DsmConcepts {
     public static final int ERROR = 1;      //操作失败
     public static final int WARRING = 2;    //操作警告
     public static final int NO_LOGIN = 100;     //用户未登录
+    public static final int NEED_REFRESH = 110;     //过期，需要刷新信息
     public static final int NEED_REDIRECT = 9;  //需要跳转到其他页面
 
     /* 文件上传 start */
@@ -67,10 +68,10 @@ public class DsmConcepts {
 
     //时间常量（单位：秒）
     public static final int MINUTE = 60;
-    public static final int HOUR = MINUTE*60;
-    public static final int DAY = HOUR*24;
-    public static final int MONTH = DAY*30;
-    public static final int YEAR = DAY*365;
+    public static final int HOUR = MINUTE * 60;
+    public static final int DAY = HOUR * 24;
+    public static final int MONTH = DAY * 30;
+    public static final int YEAR = DAY * 365;
 
     //时间常量（单位：毫秒）
     public static final long TIMESTAMP_MINUTE = MINUTE*1000;

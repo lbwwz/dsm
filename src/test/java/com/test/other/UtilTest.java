@@ -267,5 +267,31 @@ public class UtilTest {
 
     }
 
+    @Test
+    public void test133() {
+        long a = System.currentTimeMillis();
+        System.out.println(a);
+        System.out.println(a&(Long.MAX_VALUE>>0x18));
+        System.out.println(a&(Long.MAX_VALUE>>0x18)|1L<<40);
+        System.out.println((1L<<41)-1);
+
+    }
+
+
+    @Test
+    public void test134() {
+        long a = 1508976391L;
+        a = (a*1000)^0x7FFFFFFF;
+        System.out.println(new Date(a));
+
+    }
+
+@Test
+    public void test135() {
+        long a = 1508976391L;
+//        System.out.println(BusinessUtils.getLastIdStamp(a));
+
+    }
+
 
 }

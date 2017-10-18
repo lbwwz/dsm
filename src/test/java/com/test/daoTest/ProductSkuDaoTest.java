@@ -71,7 +71,7 @@ public class ProductSkuDaoTest extends BaseJunitTest{
 
     @Test
     public void getProductSkuItemsTest(){
-        System.out.println(productSkuDao.getProductSkuItems(1,null,15));
+        System.out.println(productSkuDao.getProductSkuItems(1L,null,15L));
     }
 
     @Test

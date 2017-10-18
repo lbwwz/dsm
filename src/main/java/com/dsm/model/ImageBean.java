@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 public class ImageBean implements Serializable {
     private static final long serialVersionUID = -4785679352152746014L;
     private Integer imgId;
-    private Integer userId;
+    private Long userId;
     private String url;
     private String desc;
     private Long size;
@@ -35,7 +35,7 @@ public class ImageBean implements Serializable {
      * @param size 图片大小
      * @param type 图片类型
      */
-    public ImageBean(Integer userId, String url, String desc, Long size, Integer type) {
+    public ImageBean(Long userId, String url, String desc, Long size, Integer type) {
         this.userId = userId;
         this.url = url;
         this.desc = desc;
@@ -52,11 +52,11 @@ public class ImageBean implements Serializable {
         this.imgId = imgId;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

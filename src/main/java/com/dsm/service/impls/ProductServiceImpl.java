@@ -58,7 +58,7 @@ public class ProductServiceImpl implements IProductService {
          */
         ProductBean productBean = new ProductBean(releaseProductFormDTO.getKeywords(), releaseProductFormDTO.getProduceBrief(),
                 releaseProductFormDTO.getMainImgItem(), releaseProductFormDTO.getProductName(), releaseProductFormDTO.getBrand(),
-                releaseProductFormDTO.getCatId(), Integer.parseInt(SessionToolUtils.getUser().getShop().getShopId()));
+                releaseProductFormDTO.getCatId(), SessionToolUtils.getUser().getShop().getShopId());
         try {
             /**
              * 添加商品基本信息
@@ -69,7 +69,7 @@ public class ProductServiceImpl implements IProductService {
                 ex.printStackTrace();
                 throw new Exception("商品基本信息添加失败！");
             }
-            int productId = productBean.getProductId();
+            long productId = productBean.getProductId();
 
             /**
              * 添加商品的图片列表
@@ -118,7 +118,7 @@ public class ProductServiceImpl implements IProductService {
                 } else {
                     //设置基础属性值
                     baseAttrList.add(
-                            new ProductDetailAttrInfo(productId, Integer.parseInt(keyValue[0]), keyValue[1], Integer.parseInt(keyValue[2]), keyValue[3]));
+                            new ProductDetailAttrInfo(productId, Long.parseLong(keyValue[0]), keyValue[1], Long.parseLong(keyValue[2]), keyValue[3]));
                 }
             }
             String[] customAttrNames = releaseProductFormDTO.getCustomBaseAttrName(), customAttrValues = releaseProductFormDTO.getCustomBaseAttrValue();
@@ -242,8 +242,8 @@ public class ProductServiceImpl implements IProductService {
                         return null;
                     }
                     Set<AttrValueBean> attrValueSet = new HashSet<>();
-                    attrValueSet.add(new AttrValueBean(Integer.parseInt(tempList[1]), tempList[3]));
-                    saleAttrInfoList.add(new ProductDetailAttrInfo(Integer.parseInt(tempList[0]), tempList[2], attrValueSet));
+                    attrValueSet.add(new AttrValueBean(Long.parseLong(tempList[1]), tempList[3]));
+                    saleAttrInfoList.add(new ProductDetailAttrInfo(Long.parseLong(tempList[0]), tempList[2], attrValueSet));
                 }
             } else {
                 for (int j = 0; j < itemInfoList.length; j++) {
@@ -252,7 +252,7 @@ public class ProductServiceImpl implements IProductService {
                         logger.error("录入的sku信息异常，skuId为{}", skuList.get(i).getSkuId());
                         return null;
                     }
-                    saleAttrInfoList.get(j).getSaleAttrValues().add(new AttrValueBean(Integer.parseInt(tempList[1]), tempList[3]));
+                    saleAttrInfoList.get(j).getSaleAttrValues().add(new AttrValueBean(Long.parseLong(tempList[1]), tempList[3]));
                 }
             }
         }

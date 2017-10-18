@@ -32,7 +32,7 @@ public class ParamUtils {
                 if(temp.length != 2){
                     throw new IllegalArgumentException ();
                 }else{
-                    beans.add(new BaseAttrBean(Integer.parseInt(temp[0]),Integer.parseInt(temp[1])));
+                    beans.add(new BaseAttrBean(Long.parseLong(temp[0]),Long.parseLong(temp[1])));
                 }
             }
         }catch (Exception ex){

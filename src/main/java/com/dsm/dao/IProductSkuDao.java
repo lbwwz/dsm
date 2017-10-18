@@ -32,19 +32,19 @@ public interface IProductSkuDao {
      * 通过商品号查询sku列表信息
      * @param productId 商品号
      */
-    List<Sku> getSkuListByProductId(int productId);
+    List<Sku> getSkuListByProductId(long productId);
 
 
 
-    ProductSkuItem getProductSkuItem(int skuId);
+    ProductSkuItem getProductSkuItem(long skuId);
 
-    List<ProductSkuItem> getProductSkuItems(Integer ...  skuIdArr);
+    List<ProductSkuItem> getProductSkuItems(Long ... skuIdArr);
 
 
     /**
      * 查询sku 单品的库存
      */
-    int getSkuQuantity(int skuId);
+    int getSkuQuantity(long skuId);
 
 
 

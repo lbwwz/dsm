@@ -5,6 +5,7 @@ a:hover{text-decoration:none}
 /* 主页CSS样式表 */
 
 .container{min-width:1180px;}
+.price_num_style{font-family: Verdana,Tahoma,arial;}
 .form-control,.form-control:focus{-webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,.075); box-shadow: inset 0 0px 0px rgba(0,0,0,.075); }
 .navbar-collapse{padding-right: 0; }
 .dsm_ico font{    width: 50%; top: 16px;position: absolute;	margin-left: 240px; font-size: 24px;color: #aaa;letter-spacing: 2px;display: block;}
@@ -76,7 +77,7 @@ a:hover{text-decoration:none}
 .item_box .item_sale{padding:0 10px; font-size: 20px;color: #dd3333}
 .item_box .item_sale font,.item_box .item_shop font{line-height: 28px; color:#999}
 .item_box .item_name{padding:0 10px; overflow: hidden;height:36px;}
-.item_box .item_name a{color: #3a3a3a;line-height: 20px}
+.item_box .item_name a{color: #3a3a3a;line-height: 20px;word-break: break-all; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin: 0;}
 .item_box .item_name a:hover{color: #443333}
 
 .item_box .item_shop{padding:10px 10px;}
@@ -110,10 +111,10 @@ a:hover{text-decoration:none}
 /*图片小图预览列表*/
 
 /*sku 选项*/
-.spec-scroll{clear:both;margin-top:5px;width:402px;}
+.spec-scroll{clear:both;margin-top:16px;width:402px;}
 .spec-scroll .prev{float:left;margin-right:4px;}
 .spec-scroll .next{float:right;}
-.spec-scroll .prev,.spec-scroll .next{display:block;text-align:center;width:38px;height:54px; line-height:54px;cursor:pointer;text-decoration:none;padding-top: 11px;}
+.spec-scroll .prev,.spec-scroll .next{display:block;text-align:center;width:38px;height:54px; line-height:54px;cursor:pointer;text-decoration:none;margin-top: -4px;}
 .spec-scroll .items{float:left;position:relative;width:322px;height:56px;overflow:hidden;}
 .spec-scroll .items ul{position:absolute;width:9999px;height:56px;}
 .spec-scroll .items ul li{float:left;width:64px;text-align:center;}
@@ -187,7 +188,7 @@ a:hover{text-decoration:none}
 .item_content ul{margin-bottom: 0}
 .cart-inline li{display: block;float: left;}
 .div_inner{padding-top:20px;}
-.div_inner a,.div_inner p,.div_inner span{word-break:break-all;margin:0;}
+.div_inner a,.div_inner p,.div_inner span{word-break: break-all; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin: 0;}
 .div_inner p{margin:0 10px;}
 
 .dsm_chk{width:45px;}
@@ -243,10 +244,10 @@ a:hover{text-decoration:none}
 .float_bar_right .ct_price_sum .price .total_symbol{font-weight: 400;font-size: 14px;font-family: verdana;}
 
 /* 结算页面*/
-.orderCheck_panel{font: 12px/1.5 tahoma,arial,'Hiragino Sans GB','\5b8b\4f53',sans-serif}
+.orderCheck_panel{font: 12px/1.5 tahoma,arial,'Hiragino Sans GB','\5b8b\4f53',sans-serif;margin-bottom: 40px;}
 
 .orderCheck_panel  .title_h5{line-height: 30px; font-weight: 700;}
-.orderCheck_panel .address_list{margin-top: 10px;}
+.orderCheck_panel .address_list{margin: 10px 0 25px;}
 .orderCheck_panel .address_list h5{border-bottom: 2px solid #e3e3e3;}
 .orderCheck_panel .address_list li{padding-left: 90px; position:relative;margin-bottom: 8px;}
 .orderCheck_panel .address_list li:hover{background: #fff0e8;}
@@ -274,9 +275,12 @@ a:hover{text-decoration:none}
 .order_package{margin-top:15px;}
 .order_package_head{margin-bottom:5px;}
 .order_package_main{border-width: 1px 0;border-style:dotted;border-color:  #ddd;}
-.order_package_main .div_inner{padding:6px 4px 6px 6px;position: relative;}
+.order_package_main .item_list li{border-bottom: 1px dashed #eee;}
+.order_package_main .item_list li:last-of-type{border-width: 0}
+.order_package_main .div_inner{padding:10px 6px 10px 9px;position: relative;}
 .order_package_main .od_pic{width: 60px;height: 60px;border: 1px solid #eee;overflow: hidden;float: left}
-.order_package_main .od_desc{width: 275px;padding-left:5px;overflow: hidden;float: left;text-align: left}
+.order_package_main .od_desc{float: left;width: 275px;padding-left:5px;overflow: hidden;text-align: left}
+.order_package_main .od_desc .itemName{color:#3c3c3c; white-space: nowrap;  overflow: hidden;  text-overflow: ellipsis;  display: block;}
 
 
 

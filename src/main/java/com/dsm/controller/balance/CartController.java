@@ -55,9 +55,20 @@ public class CartController extends BaseController {
 
     @ResponseBody
     @RequestMapping("getCartInfo")
-    public ShoppingCart getCartInfo(){
-        return cartService.getMyShoppingCart();
+    public BackMsg<ShoppingCart> getCartInfo(){
+
+        int errorCode = 0;
+        if(SessionToolUtils.checkLogin() == 0){
+            errorCode = 100;
+        }
+        return new BackMsg<>(errorCode,cartService.getMyShoppingCart(),"获取购物车信息成功！");
     }
+    @ResponseBody
+    @RequestMapping("getCartSize")
+    public BackMsg<Integer> getCartSize(){
+        return new BackMsg<>(0,cartService.getCartSize(),"获取购物车数量成功");
+    }
+
 
     /**
      * 添加或减少商品到购物车

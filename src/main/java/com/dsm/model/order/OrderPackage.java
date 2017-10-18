@@ -13,7 +13,7 @@ import java.util.List;
 public class OrderPackage {
 
     //店铺id
-    private Integer shopId;
+    private Long shopId;
     //店铺名称
     private String shopName;
 
@@ -29,22 +29,19 @@ public class OrderPackage {
     //店铺商品合计
     private BigDecimal shopProductPrice;
 
-    //总价（合计运费和折扣的价格）
-    private BigDecimal totalPrice;
 
 
-
-    public OrderPackage(Integer shopId, String shopName, List<OrderSkuItem> orderSkuItemList) {
+    public OrderPackage(Long shopId, String shopName, List<OrderSkuItem> orderSkuItemList) {
         this.shopId = shopId;
         this.shopName = shopName;
         this.orderSkuItemList = orderSkuItemList;
     }
 
-    public Integer getShopId() {
+    public Long getShopId() {
         return shopId;
     }
 
-    public void setShopId(Integer shopId) {
+    public void setShopId(long shopId) {
         this.shopId = shopId;
     }
 
@@ -79,7 +76,6 @@ public class OrderPackage {
                 ", shopName='" + shopName + '\'' +
                 ", orderSkuItemList=" + orderSkuItemList +
                 ", shopProductPrice=" + shopProductPrice +
-                ", totalPrice=" + totalPrice +
                 '}';
     }
 }

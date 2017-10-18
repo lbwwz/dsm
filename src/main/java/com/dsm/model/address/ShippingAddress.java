@@ -33,7 +33,7 @@ public class ShippingAddress implements Serializable{
     }
 
 
-    public int getAddressId() {
+    public long getAddressId() {
         return addressId;
     }
 

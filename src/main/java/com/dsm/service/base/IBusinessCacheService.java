@@ -23,7 +23,7 @@ public interface IBusinessCacheService {
      *                   <p>false时先从缓存获取，若不存在再从数据库获取，true是忽略缓存，直接从数据库获取并更新到缓存</p>
      * @param skuId      商品skuId
      */
-    ProductSkuItem getProductSkuItemFromCache(boolean mustFromDB, Integer skuId);
+    ProductSkuItem getProductSkuItemFromCache(boolean mustFromDB, Long skuId);
 
     /**
      * 通过缓存获取商品列表信息信息
@@ -32,5 +32,5 @@ public interface IBusinessCacheService {
      * @param skuIdArr   商品skuId
      * @param mustFromDB 是否强制从数据库获取
      */
-    List<ProductSkuItem> getProductSkuItemListFromCache(boolean mustFromDB, Integer... skuIdArr);
+    List<ProductSkuItem> getProductSkuItemListFromCache(boolean mustFromDB, Long... skuIdArr);
 }

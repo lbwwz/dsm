@@ -19,6 +19,12 @@ public interface ICartService {
      */
     ShoppingCart getMyShoppingCart();
 
+
+    /**
+     * 获取当前购物车商品数量
+     */
+    int getCartSize();
+
     /**
      * 增减商品到购物车
      *

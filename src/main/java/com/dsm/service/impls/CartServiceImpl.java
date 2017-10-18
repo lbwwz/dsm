@@ -73,6 +73,11 @@ public class CartServiceImpl implements ICartService {
 
     }
 
+    @Override
+    public int getCartSize(){
+        return getShoppingCartItems() == null ? 0 : getShoppingCartItems().size();
+    }
+
     /**
      * 获取 当前访客的 careItemList
      *
@@ -182,9 +187,11 @@ public class CartServiceImpl implements ICartService {
         ShoppingCart cartInfo = new ShoppingCart();
 
         //设置信息
-        Integer tempShopId;
+        long tempShopId;
         String tempShopName;
         BigDecimal totalAmount = new BigDecimal(0);
+        BigDecimal selectedTotalAmount = new BigDecimal(0);
+        int selectedTotalNum = 0;
         int totalNum = 0;
         for (Map.Entry<String, List<ShoppingCartItem>> entry : map.entrySet()) {
 
@@ -194,14 +201,18 @@ public class CartServiceImpl implements ICartService {
             for (ShoppingCartItem item : entry.getValue()) {
                 if (item.getIsSelected() == 1) {
                     //计算商品总价
-                    totalAmount = totalAmount.add(item.getSkuPrice().multiply(BigDecimal.valueOf(item.getCartItemNum())));
+                    selectedTotalAmount = selectedTotalAmount.add(item.getSkuPrice().multiply(BigDecimal.valueOf(item.getCartItemNum())));
                     //计算选中商品总件数
-                    totalNum += item.getCartItemNum();
+                    selectedTotalNum += item.getCartItemNum();
                 }
+                totalNum += item.getCartItemNum();
+                totalAmount = totalAmount.add(item.getSkuPrice().multiply(BigDecimal.valueOf(item.getCartItemNum())));
             }
         }
+        cartInfo.setSelectedTotalPrice(selectedTotalAmount);
         cartInfo.setTotalPrice(totalAmount);
-        cartInfo.setSelectTotalNum(totalNum);
+        cartInfo.setSelectTotalNum(selectedTotalNum);
+        cartInfo.setTotalNum(totalNum);
 
         return cartInfo;
     }
@@ -238,7 +249,7 @@ public class CartServiceImpl implements ICartService {
      * @param changeCount  商品修改的变化数量
      * @param changedCount 商品修改为数量
      */
-    private BackMsg<String> changeNumInCart(int skuId, Integer changeCount, Integer changedCount) {
+    private BackMsg<String> changeNumInCart(long skuId, Integer changeCount, Integer changedCount) {
 
         ProductSkuItem thisSkuItem = businessCacheService.getProductSkuItemFromCache(true,skuId);
         if (thisSkuItem == null) {
@@ -269,6 +280,8 @@ public class CartServiceImpl implements ICartService {
             if (cartItemPO != null && changedCount <= 0) {
                 //？可以更新为删除操作
                 throw new CustomErrorMsgException("修改操作不能将商品数量变为0！");
+            }else if(cartItemPO == null && changeCount<0){
+                return new BackMsg<>(DsmConcepts.NEED_REFRESH,null,"过期的更新操作！");
             }
             if (user != null) {
                 long opFlag;
@@ -289,6 +302,7 @@ public class CartServiceImpl implements ICartService {
                 cartItemPO = cartDao.getShoppingCartItem(cartItemPO.getCartItemId());
             } else {
                 if (cartItemPO == null) {
+
                     cartItemPO = new ShoppingCartItemPO(null,thisSkuItem.getShopId(),thisSkuItem.getSkuId(),changedCount,1);
                     cartItemPO.setCreateTime(new Timestamp(System.currentTimeMillis()));
                     cartItemPO.setUpdateTime(new Timestamp(System.currentTimeMillis()));

@@ -22,7 +22,7 @@
         SELECT COUNT(shop_id) FROM dsm_shops WHERE shop_name=#{shopName}
     </select>
 
-    <select id="getShopByUserId" parameterType="java.lang.Integer" resultMap="shopResult">
+    <select id="getShopByUserId" parameterType="java.lang.Long" resultMap="shopResult">
         SELECT * FROM dsm_shops WHERE user_id=#{userId}
     </select>
 

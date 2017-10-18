@@ -15,8 +15,8 @@ import java.sql.Timestamp;
 public class GraphicDetail implements Serializable{
 
     private static final long serialVersionUID = 2879399477645150428L;
-    private Integer detailId;
-    private Integer productId;
+    private Long detailId;
+    private Long productId;
     private String detailText;
     private Timestamp updateTime;
     private Timestamp createTime;
@@ -25,24 +25,24 @@ public class GraphicDetail implements Serializable{
 
     }
 
-    public GraphicDetail(Integer productId,String detailText){
+    public GraphicDetail(Long productId,String detailText){
         this.productId = productId;
         this.detailText = detailText;
     }
 
-    public Integer getDetailId() {
+    public Long getDetailId() {
         return detailId;
     }
 
-    public void setDetailId(Integer detailId) {
+    public void setDetailId(long detailId) {
         this.detailId = detailId;
     }
 
-    public Integer getProductId() {
+    public Long getProductId() {
         return productId;
     }
 
-    public void setProductId(Integer productId) {
+    public void setProductId(long productId) {
         this.productId = productId;
     }
 

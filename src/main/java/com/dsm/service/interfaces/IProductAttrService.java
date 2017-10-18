@@ -32,7 +32,7 @@ public interface IProductAttrService {
      * 根据属性ID查询状态可用属性信息
      * @param attrId 属性id
      */
-    ProductAttrBean getUsableAttrById(int attrId);
+    ProductAttrBean getUsableAttrById(long attrId);
 
     /**
      * 添加属性新信息
@@ -56,30 +56,30 @@ public interface IProductAttrService {
      *
      * @param attrId 属性ID
      */
-    boolean changeAttrStatus(Integer attrId);
+    boolean changeAttrStatus(long attrId);
 
 
 
     /******** 属性值操作 start ********/
 
-    List<AttrValueBean> addAttrValueInfo(Integer attrId,Integer status, String ... valuesName);
+    List<AttrValueBean> addAttrValueInfo(long attrId,Integer status, String ... valuesName);
 
     /**
      * 根据商品的属性ID获取该属性下所有的初始属性值
      *
      * @param attrId 属性ID
      */
-    List<AttrValueBean> getAttrValues(int attrId, int status);
+    List<AttrValueBean> getAttrValues(long attrId, int status);
 
 
-    AttrValueBean updateAttrValue(int valueId, String AttrValue);
+    AttrValueBean updateAttrValue(long valueId, String AttrValue);
 
     /**
      * 变更商品的属性值状态
      *
      * @param valueId 属性值ID
      */
-    boolean changeAttrValueStatus(Integer valueId);
+    boolean changeAttrValueStatus(long valueId);
 
 
     List<ProductAttrBean> getKeyAttrList(Integer catId);

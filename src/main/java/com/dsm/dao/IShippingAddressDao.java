@@ -21,7 +21,7 @@ public interface IShippingAddressDao {
      * @param addressId 物流地址ID
      * @return id为addressId的物流地址对象
      */
-    ShippingAddress getShippingAddressById(int addressId);
+    ShippingAddress getShippingAddressById(long addressId);
 
     /**
      * 添加一条新的物流地址
@@ -34,7 +34,7 @@ public interface IShippingAddressDao {
      * 删除物流地址信息
      * @param addressId 物流地址ID
      */
-    void deleteShippingAddress(int addressId);
+    void deleteShippingAddress(long addressId);
 
     /**
      * 更新用户的物流地址
@@ -62,7 +62,7 @@ public interface IShippingAddressDao {
      * @param userId 用户的主键id
      * @return 查询获取的该用户的所有收货信息
      */
-    List<ShippingAddress> getConsigneeAddressList(int userId);
+    List<ShippingAddress> getConsigneeAddressList(long userId);
 
 
     /**
@@ -70,7 +70,7 @@ public interface IShippingAddressDao {
      * @param userId 用户ID
      * @return 最新的一条用户收货地址信息
      */
-    ShippingAddress getNewestConsigneeAddress(int userId);
+    ShippingAddress getNewestConsigneeAddress(long userId);
 
 
     /**
@@ -78,14 +78,14 @@ public interface IShippingAddressDao {
      * @param userId 用户主键id
      * @return 某个用户的所有发货地址
      */
-    List<ShippingAddress> getConsignorAddressList(int userId);
+    List<ShippingAddress> getConsignorAddressList(long userId);
 
     /**
      * 获取用户的默认收获地址
      * @param userId 用户ID
      * @return 用户的默认地址
      */
-    ShippingAddress getDefaultAddress(int userId);
+    ShippingAddress getDefaultAddress(long userId);
 
 
 }

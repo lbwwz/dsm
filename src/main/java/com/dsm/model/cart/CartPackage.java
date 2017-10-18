@@ -12,23 +12,23 @@ import java.util.List;
  */
 public class CartPackage {
 
-    private Integer shopId;
+    private Long shopId;
     private String shopName;
     private boolean isSelected;
 
     private List<ShoppingCartItem> cartItems;
 
-    public CartPackage(Integer shopId, String shopName, List<ShoppingCartItem> cartItems) {
+    public CartPackage(long shopId, String shopName, List<ShoppingCartItem> cartItems) {
         this.shopId = shopId;
         this.shopName = shopName;
         setCartItems(cartItems);
     }
 
-    public Integer getShopId() {
+    public Long getShopId() {
         return shopId;
     }
 
-    public void setShopId(Integer shopId) {
+    public void setShopId(long shopId) {
         this.shopId = shopId;
     }
 

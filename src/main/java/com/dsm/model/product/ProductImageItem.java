@@ -14,8 +14,8 @@ import java.sql.Timestamp;
  */
 public class ProductImageItem implements Serializable{
     private static final long serialVersionUID = -1908995726273257700L;
-    private Integer imgId;
-    private Integer productId;
+    private Long imgId;
+    private Long productId;
     private String imgUrl;
     private int isMain;
     private Integer sort;
@@ -25,25 +25,25 @@ public class ProductImageItem implements Serializable{
     public ProductImageItem() {
     }
 
-    public ProductImageItem(Integer productId,String imgUrl,int isMain) {
+    public ProductImageItem(Long productId,String imgUrl,int isMain) {
         this.productId = productId;
         this.imgUrl = imgUrl;
         this.isMain = isMain;
     }
 
-    public Integer getImgId() {
+    public Long getImgId() {
         return imgId;
     }
 
-    public void setImgId(Integer imgId) {
+    public void setImgId(long imgId) {
         this.imgId = imgId;
     }
 
-    public Integer getProductId() {
+    public Long getProductId() {
         return productId;
     }
 
-    public void setProductId(Integer productId) {
+    public void setProductId(long productId) {
         this.productId = productId;
     }
 

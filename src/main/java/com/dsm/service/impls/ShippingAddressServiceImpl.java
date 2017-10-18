@@ -78,7 +78,7 @@ public class ShippingAddressServiceImpl extends BaseService implements IShipping
     }
 
     @Override
-    public List<ShippingAddress> getConsignorAddressList(int userId) {
+    public List<ShippingAddress> getConsignorAddressList(long userId) {
         return shippingAddressDao.getConsignorAddressList(userId);
     }
 
@@ -110,7 +110,7 @@ public class ShippingAddressServiceImpl extends BaseService implements IShipping
 
     @Transactional
     @Override
-    public int addConsigneeAddress(ShippingAddressDTO shippingAddressDTO) {
+    public long addConsigneeAddress(ShippingAddressDTO shippingAddressDTO) {
         //先将地址信息保存到地址库信息表中
         LocationDTO newLocation = new LocationDTO(shippingAddressDTO.getConsigneeProvince(), shippingAddressDTO.getConsigneeCity(),
                 shippingAddressDTO.getConsigneeDistrict(), shippingAddressDTO.getAddress());
@@ -127,7 +127,7 @@ public class ShippingAddressServiceImpl extends BaseService implements IShipping
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     @Override
-    public String deleteShippingAddress(int addressId) {
+    public String deleteShippingAddress(long addressId) {
         String errorMsg;
         User sessionUser = (User) SecurityUtils.getSubject().getSession().getAttribute("user");
         if (sessionUser.getDefaultAddress().getAddressId() == addressId) {
@@ -151,7 +151,7 @@ public class ShippingAddressServiceImpl extends BaseService implements IShipping
      * @param isDefault 删除的地址是否是默认地址
      * @return 删除地址过程的错误提示，成功则为空
      */
-    private String deleteShippingAddress(int addressId, boolean isDefault) {
+    private String deleteShippingAddress(long addressId, boolean isDefault) {
 
         try{
             //执行删除操作
@@ -163,7 +163,7 @@ public class ShippingAddressServiceImpl extends BaseService implements IShipping
 
                 //用户还有其他收货地址，则设置最新的收获地址为默认地址
                 if (newestAddress != null) {
-                    int defaultAddressId = newestAddress.getAddressId();
+                    long defaultAddressId = newestAddress.getAddressId();
                     //设置最新的添加的收货地址为默认地址
                     shippingAddressDao.updateDefaultRelevant(new ShippingAddressDTO(defaultAddressId, sessionUser.getId()));
                     //更新session中的user的默认地址信息
@@ -197,17 +197,17 @@ public class ShippingAddressServiceImpl extends BaseService implements IShipping
     }
 
     @Override
-    public ShippingAddress getShippingAddressByAddressId(int addressId) {
+    public ShippingAddress getShippingAddressByAddressId(long addressId) {
         return shippingAddressDao.getShippingAddressById(addressId);
     }
 
     @Override
-    public ShippingAddress getDefaultAddressFromUser(int userId) {
+    public ShippingAddress getDefaultAddressFromUser(long userId) {
         return shippingAddressDao.getDefaultAddress(userId);
     }
 
     @Override
-    public boolean resetDefaultAddress(int addressId) {
+    public boolean resetDefaultAddress(long addressId) {
         try{
             shippingAddressDao.updateDefaultRelevant(new ShippingAddressDTO(addressId, getSessionUser().getId()));
             User sessionUser = getSessionUser();

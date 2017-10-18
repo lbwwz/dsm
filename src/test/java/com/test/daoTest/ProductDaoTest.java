@@ -27,7 +27,7 @@ public class ProductDaoTest extends BaseJunitTest{
     public void addProductInfo(){
         ProductBean productBean = new ProductBean("123","",
                 "1.jpg","好吃点蛋卷",12,
-                14, 1);
+                14, 1L);
 
         productDao.addProductInfo(productBean);
     }
@@ -35,7 +35,7 @@ public class ProductDaoTest extends BaseJunitTest{
     public void addProductCustomAttrListTest(){
         ProductDetailAttrInfo info = new ProductDetailAttrInfo();
 
-        info.setProductId(1);
+        info.setProductId(1L);
         info.setAttrName("123");
         info.setAttrValue("qwe");
 
@@ -43,7 +43,7 @@ public class ProductDaoTest extends BaseJunitTest{
         list.add(info);
         info = new ProductDetailAttrInfo();
 
-        info.setProductId(1);
+        info.setProductId(1L);
         info.setAttrName("www");
         info.setAttrValue("aaasssasas");
         list.add(info);
@@ -66,22 +66,22 @@ public class ProductDaoTest extends BaseJunitTest{
 
         List<ProductImageItem> imageList = new ArrayList<>();
 
-        imageList.add(new ProductImageItem(1,"11111",1));
-        imageList.add(new ProductImageItem(1,"222",0));
+        imageList.add(new ProductImageItem(1L,"11111",1));
+        imageList.add(new ProductImageItem(1L,"222",0));
         productDao.addProductImageList(imageList);
     }
 
     @Test
     public void addGraphicDetailTest() {
-        productDao.addGraphicDetail(new GraphicDetail(1,null));
+        productDao.addGraphicDetail(new GraphicDetail(1L,null));
     }
 
 
     @Test
     public void getPageByCategoryWithWeightedTest() {
 
-        BaseAttrBean bean1 = new BaseAttrBean(1,"",21,null,1);
-        BaseAttrBean bean2 = new BaseAttrBean(1,"",4,null,1);
+        BaseAttrBean bean1 = new BaseAttrBean(1L,"",21L,null,1);
+        BaseAttrBean bean2 = new BaseAttrBean(1L,"",4L,null,1);
         List<BaseAttrBean> list = new ArrayList<>();
         list.add(bean1);
         list.add(bean2);

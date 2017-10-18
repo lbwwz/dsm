@@ -23,7 +23,7 @@ public interface IIdentifyInfoService {
      * @param userId
      * @return
      */
-    IdentifyInfo getIdentifyInfo(int userId);
+    IdentifyInfo getIdentifyInfo(long userId);
 
     /**
      * 更新用户的实名验证信息

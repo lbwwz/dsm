@@ -52,7 +52,7 @@ public interface IProductAttrDao {
      * @param AttrId 属性ID
      * @return id对应的属性信息封装
      */
-    ProductAttrBean getUsableAttrById(int AttrId);
+    ProductAttrBean getUsableAttrById(long AttrId);
 
     /**
      * 根据属性ID查询相应的属性信息
@@ -61,7 +61,7 @@ public interface IProductAttrDao {
      * @param status status:属性名状态字段，负数表示忽略该条件
      * @return id对应的属性名信息
      */
-    ProductAttrBean getAttrNameById(@Param("attrId") int attrId, @Param("status") int status);
+    ProductAttrBean getAttrNameById(@Param("attrId") long attrId, @Param("status") int status);
 
     /**
      * 添加一条商品属性，返回该产品的主键：产品属性ID
@@ -82,7 +82,7 @@ public interface IProductAttrDao {
      *
      * @param attrId 属性ID
      */
-    int changeAttrStatus(Integer attrId);
+    int changeAttrStatus(long attrId);
 
     /**
      * 更新产品属性的基本信息
@@ -106,12 +106,12 @@ public interface IProductAttrDao {
      * @param status status:属性值状态字段，负数表示忽略该条件
      * @return 山沟in属性值信息列表
      */
-    List<AttrValueBean> getValuesByAttrId(@Param("attrId") int attrId, @Param("status") int status);
+    List<AttrValueBean> getValuesByAttrId(@Param("attrId") long attrId, @Param("status") int status);
 
     /**
      * @return
      */
-    AttrValueBean getValueById(@Param("valueId") int valueId, @Param("status") int status);
+    AttrValueBean getValueById(@Param("valueId") long valueId, @Param("status") int status);
 
 
     /**
@@ -127,7 +127,7 @@ public interface IProductAttrDao {
      *
      * @param valueId 属性值ID
      */
-    Integer changeValueStatus(Integer valueId);
+    Integer changeValueStatus(long valueId);
 
     /**
      * 查询叶子类目下的key属性信息
@@ -135,5 +135,5 @@ public interface IProductAttrDao {
      * @param catId 类目ID
      * @return 属性列表
      */
-    List<ProductAttrBean> getKeyAttrInfoList(Integer catId);
+    List<ProductAttrBean> getKeyAttrInfoList(int catId);
 }

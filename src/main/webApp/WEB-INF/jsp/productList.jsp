@@ -207,6 +207,7 @@
 </body>
 </html>
 <script type="text/javascript">
+
     $(document).ready(function(){
 
         /* 类目下的条件筛选和排序操作 */
@@ -237,7 +238,6 @@
                 }else{
                     window.location.href = url.split("ev=").join("ev="+$(this).attr("attr_id")+"_"+$(this).attr("value_id")+"%40")
                 }
-
             }
         });
 
@@ -269,4 +269,5 @@
     }
 
 
+    showSideNav();
 </script>

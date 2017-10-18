@@ -36,7 +36,7 @@ public class ProductAttrServiceImpl implements IProductAttrService {
     }
 
     @Override
-    public ProductAttrBean getUsableAttrById(int attrId) {
+    public ProductAttrBean getUsableAttrById(long attrId) {
         return productAttrDao.getUsableAttrById(attrId);
     }
 
@@ -55,12 +55,12 @@ public class ProductAttrServiceImpl implements IProductAttrService {
     }
 
     @Override
-    public List<AttrValueBean> getAttrValues(int attrId, int status) {
+    public List<AttrValueBean> getAttrValues(long attrId, int status) {
         return productAttrDao.getValuesByAttrId(attrId,status);
     }
 
     @Override
-    public AttrValueBean updateAttrValue(int valueId, String attrValue) {
+    public AttrValueBean updateAttrValue(long valueId, String attrValue) {
 
         AttrValueBean bean = new AttrValueBean(valueId,attrValue);
         try {
@@ -89,7 +89,7 @@ public class ProductAttrServiceImpl implements IProductAttrService {
 
 
     @Override
-    public boolean changeAttrStatus(Integer attrId) {
+    public boolean changeAttrStatus(long attrId) {
         try {
             productAttrDao.changeAttrStatus(attrId);
             return true;
@@ -101,7 +101,7 @@ public class ProductAttrServiceImpl implements IProductAttrService {
     }
 
     @Override
-    public List<AttrValueBean> addAttrValueInfo(Integer attrId, Integer status, String... valuesName) {
+    public List<AttrValueBean> addAttrValueInfo(long attrId, Integer status, String... valuesName) {
         List<AttrValueBean> li = new ArrayList<>();
         for(String value: valuesName){
             li.add(new AttrValueBean(value,attrId,status));
@@ -116,7 +116,7 @@ public class ProductAttrServiceImpl implements IProductAttrService {
     }
 
     @Override
-    public boolean changeAttrValueStatus(Integer valueId) {
+    public boolean changeAttrValueStatus(long valueId) {
         try {
             productAttrDao.changeValueStatus(valueId);
             return true;

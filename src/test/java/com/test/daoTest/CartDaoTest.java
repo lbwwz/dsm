@@ -32,7 +32,7 @@ public class CartDaoTest extends BaseJunitTest {
     @Test
     public void updateCartItemTest() {
         ShoppingCartItemPO scPO = new ShoppingCartItemPO();
-        scPO.setUserId(1);
+        scPO.setUserId(1L);
         scPO.setShopId(1);
         scPO.setIsSelected(0);
         scPO.setCartItemNum(10);
@@ -43,7 +43,7 @@ public class CartDaoTest extends BaseJunitTest {
     @Test
     public void addCartItemTest() {
         ShoppingCartItemPO scPO = new ShoppingCartItemPO();
-        scPO.setUserId(1);
+        scPO.setUserId(1L);
         scPO.setSkuId(1);
         scPO.setShopId(1);
         scPO.setIsSelected(0);

@@ -37,7 +37,7 @@ public class BusinessCacheServiceImpl implements IBusinessCacheService {
     private String expire_time_separate = "@=@";
 
     @Override
-    public ProductSkuItem getProductSkuItemFromCache( boolean mustFromDB, Integer skuId) {
+    public ProductSkuItem getProductSkuItemFromCache( boolean mustFromDB, Long skuId) {
         if (skuId == null) {
             return null;
         }
@@ -85,7 +85,7 @@ public class BusinessCacheServiceImpl implements IBusinessCacheService {
 
 
     @Override
-    public List<ProductSkuItem> getProductSkuItemListFromCache(boolean mustFromDB, Integer... skuIdArr) {
+    public List<ProductSkuItem> getProductSkuItemListFromCache(boolean mustFromDB, Long... skuIdArr) {
 
         String skuCacheKey;     //缓存的key
         String cacheStr;        //缓存字符串信息
@@ -99,7 +99,7 @@ public class BusinessCacheServiceImpl implements IBusinessCacheService {
              * 循环遍历，直接调用获取单个skuItem缓存的方法
              */
             ProductSkuItem productSkuItem;
-            for (Integer skuId : skuIdArr) {
+            for (Long skuId : skuIdArr) {
                 productSkuItem = getProductSkuItemFromCache(false,skuId);
                 if(productSkuItem != null){
                     productSkuItemList.add(productSkuItem);

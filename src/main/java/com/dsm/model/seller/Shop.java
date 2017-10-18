@@ -7,13 +7,12 @@ package com.dsm.model.seller;
  */
 public class Shop {
 
-    // 店铺编号。shop+sid.taobao.com即店铺地址，如shop123456.taobao.com
-    private String shopId;
+    private Long shopId;
 
     // 店铺所属的类目编号 //
-    private String catId;
+    private Integer catId;
 
-    private int userId;
+    private Long userId;
 
     // 卖家昵称
     private String hostName;
@@ -48,38 +47,38 @@ public class Shop {
     public Shop() {
     }
 
-    public Shop(int userId, String hostName, String shopName) {
+    public Shop(long userId, String hostName, String shopName) {
         super();
         this.userId = userId;
         this.hostName = hostName;
         this.shopName = shopName;
     }
 
-    public String getShopId() {
+    public Long getShopId() {
         return shopId;
     }
 
 
-    public void setShopId(String shopId) {
+    public void setShopId(long shopId) {
         this.shopId = shopId;
     }
 
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
 
-    public String getCatId() {
+    public Integer getCatId() {
         return catId;
     }
 
 
-    public void setCatId(String catId) {
+    public void setCatId(Integer catId) {
         this.catId = catId;
     }
 

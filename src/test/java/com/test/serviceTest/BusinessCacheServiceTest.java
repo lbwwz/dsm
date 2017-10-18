@@ -20,7 +20,7 @@ public class BusinessCacheServiceTest extends BaseJunitTest{
 
     @Test
     public void getProductSkuItemListFromCacheTest(){
-        System.out.println(businessCacheService.getProductSkuItemListFromCache(false,1,null,15));
+        System.out.println(businessCacheService.getProductSkuItemListFromCache(false,1L,null,15L));
     }
 
 

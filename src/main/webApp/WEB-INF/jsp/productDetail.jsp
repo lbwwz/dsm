@@ -181,7 +181,8 @@
 
 
 <script>
-    var skuList = ${skuList}
+    var skuList = ${skuList};
+    showSideNav();
 </script>
 <script src="${rsRoot}/front-lib/layer/layer.js"></script>
 <script src="js/dsm-jqzoom.js" type="text/javascript"></script>

@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class User implements Serializable{
 
     private static final long serialVersionUID = -5248921928915633135L;
-    private int id;
+    private long id;
 
     private String userName;
 
@@ -68,7 +68,7 @@ public class User implements Serializable{
     }
 
     //用于用户基本信息的封装
-    public User(int id, int sex, String birthday, String qq) {
+    public User(long id, int sex, String birthday, String qq) {
         super();
         this.id = id;
         this.sex = sex;
@@ -77,22 +77,22 @@ public class User implements Serializable{
     }
 
     //用户头像
-    public User(int id, String headImage) {
+    public User(long id, String headImage) {
         super();
         this.id = id;
         this.headImage = headImage;
     }
 
-    public User(Integer userId, int promotedType) {
+    public User(Long userId, int promotedType) {
         this.id = userId;
         this.promotedType = promotedType;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

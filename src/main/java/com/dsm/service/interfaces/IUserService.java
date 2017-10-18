@@ -30,10 +30,10 @@ public interface IUserService {
 
     /**
      * 查询用户信息
-     * @param id 用户的ID
+     * @param userId 用户的ID
      * @return 用户对象
      */
-    User queryUserById(int id);
+    User queryUserById(long userId);
 
     /**
      * 更新用户头像信息

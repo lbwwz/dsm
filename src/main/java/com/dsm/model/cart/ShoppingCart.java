@@ -21,9 +21,15 @@ public class ShoppingCart {
 
     //商品总额
     private BigDecimal totalPrice;
+    //商品总额
+    private BigDecimal selectedTotalPrice;
+
+    //商品的总件数
+    private int totalNum;
 
     //选中商品的总件数
     private int selectTotalNum;
+
 
     //运费（需要根据分包计算总和）---待定
     private BigDecimal freight;
@@ -52,6 +58,22 @@ public class ShoppingCart {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public BigDecimal getSelectedTotalPrice() {
+        return selectedTotalPrice;
+    }
+
+    public void setSelectedTotalPrice(BigDecimal selectedTotalPrice) {
+        this.selectedTotalPrice = selectedTotalPrice;
+    }
+
+    public int getTotalNum() {
+        return totalNum;
+    }
+
+    public void setTotalNum(int totalNum) {
+        this.totalNum = totalNum;
     }
 
     public int getSelectTotalNum() {
@@ -91,6 +113,8 @@ public class ShoppingCart {
         return "ShoppingCart{" +
                 "cartPackages=" + cartPackages +
                 ", totalPrice=" + totalPrice +
+                ", selectedTotalPrice=" + selectedTotalPrice +
+                ", totalNum=" + totalNum +
                 ", selectTotalNum=" + selectTotalNum +
                 ", freight=" + freight +
                 ", selectedAll=" + selectedAll +

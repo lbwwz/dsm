@@ -55,6 +55,10 @@ public class OrderServiceImpl implements IOrderService {
     private ICartDao cartDao;
 
 
+    /**
+     * （补充）使用缓存记录订单结算地址和费用信息
+     * @return
+     */
     @Override
     public BackMsg<String> checkOrderInfo() {
         User user = SessionToolUtils.getUser();
@@ -145,7 +149,8 @@ public class OrderServiceImpl implements IOrderService {
         }
         String[] itemStrArr = items.split(";");
         String[] tempArr;
-        int skuId, num;
+        long skuId;
+        int num;
 
         List<OrderSkuItem> skuItemList = new ArrayList<>();
         List<OrderSkuItem> errorItemList = new ArrayList<>();
@@ -224,7 +229,7 @@ public class OrderServiceImpl implements IOrderService {
         } else {
             tempList = cartItemPOList.stream().map(item -> JSONObject.parseObject(item, ShoppingCartItemPO.class)).collect(Collectors.toList());
         }
-        Collections.sort(tempList, (o1, o2) -> o1.getSkuId() - o2.getSkuId());
+        Collections.sort(tempList, (o1, o2) -> (int)(o1.getSkuId()-o2.getSkuId()));
         return tempList;
     }
 
@@ -330,18 +335,6 @@ public class OrderServiceImpl implements IOrderService {
             tempList.add(item);
         });
 
-        BigDecimal totalAmount = new BigDecimal(0);
-        OrderPackage tempPackage;
-        for (Map.Entry<String, List<OrderSkuItem>> entry : map.entrySet()) {
-            tempPackage = new OrderPackage(entry.getValue().get(0).getShopId(), entry.getValue().get(0).getShopName(), entry.getValue());
-            for (OrderSkuItem item : entry.getValue()) { //计算商品总价
-                totalAmount = totalAmount.add(item.getSkuPrice().multiply(BigDecimal.valueOf(item.getItemNum())));
-            }
-            tempPackage.setShopTotalPrice(totalAmount);
-            orderCheckInfo.addOrderPackage(tempPackage);
-        }
-
-
         if (!skuList.get(0).getIsEnough()) {    //库存校验不通过的操作
             orderCheckInfo.setIsEnough(false);
         } else {    //库存充足
@@ -355,6 +348,19 @@ public class OrderServiceImpl implements IOrderService {
             //统计价格总计。。。
         }
 
+        BigDecimal itemTotalAmount = new BigDecimal(0);
+        BigDecimal orderTotalAmount = new BigDecimal(0);
+        OrderPackage tempPackage;
+        for (Map.Entry<String, List<OrderSkuItem>> entry : map.entrySet()) {
+            tempPackage = new OrderPackage(entry.getValue().get(0).getShopId(), entry.getValue().get(0).getShopName(), entry.getValue());
+            for (OrderSkuItem item : entry.getValue()) { //计算商品总价
+                itemTotalAmount = itemTotalAmount.add(item.getSkuPrice().multiply(BigDecimal.valueOf(item.getItemNum())));
+            }
+            tempPackage.setShopTotalPrice(itemTotalAmount);
+            orderCheckInfo.addOrderPackage(tempPackage);
+            orderTotalAmount = orderTotalAmount.add(itemTotalAmount);
+        }
+        orderCheckInfo.setTotalPrice(orderTotalAmount);
         return orderCheckInfo;
 
 

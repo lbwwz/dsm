@@ -20,7 +20,7 @@ public class FileUploadTest extends BaseJunitTest {
 
     @Test
     public void test(){
-        iImageDao.addImage(new ImageBean(1,"123",null,new Long(123123),1));
+        iImageDao.addImage(new ImageBean(1L,"123",null,new Long(123123),1));
 
     }
 }

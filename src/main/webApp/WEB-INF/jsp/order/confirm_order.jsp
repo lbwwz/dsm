@@ -26,16 +26,25 @@
 
         </div>
     </div>
+    <!--结算页面主体 -->
+    <div class=" orderCheck_panel">
+    </div>
+    <footer class="footer-style">
+        <div class="row">
+            <div class="col-lg-12">
+                <p class="text-center">Copyright © D.S Mall 2015</p>
+            </div>
+        </div>
+    </footer>
 </div>
 
-<!--结算页面主体 -->
-<div class="container orderCheck_panel">
-</div>
 <form action="order/confirm_order.htm" method ="post" id="confirm_order">
     <input type="hidden" value="${items}" id="items" name="items"/>
     <input type="hidden" value="cart" name="buyerFrom"/>
     <input type="hidden" value="" name="source_time" id="source_time"/>
 </form>
+
+
 </body>
 
 <script src="${rsRoot}/front-lib/layer/layer.js"></script>
@@ -43,9 +52,18 @@
     $(function(){
         $(".orderCheck_panel").on("click","[name=address]",function(){
             if($(this).parents(".selected_address").length == 0){
-                alert($(this).attr("id").split("-")[1]);
-                $(".address_list").find("li").removeClass("selected_address");
-                $(this).parents("li").addClass("selected_address")
+                var addressId = $(this).attr("id").split("-")[1];
+
+                $.ajax({
+                    url: "/order/getOrderCheckInfo",
+                    type: "post",
+                    cache: false,
+                    data: {items:$("#items").val(),addressId:addressId},
+                    success:function(data){
+                        $(".orderCheck_panel").html(data);
+                    }
+                })
+
             }
         });
 

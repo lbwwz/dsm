@@ -13,9 +13,9 @@ import java.sql.Timestamp;
 public class ProductBaseBean implements Serializable{
     private static final long serialVersionUID = -936896536518602212L;
     //产品ID
-    protected Integer productId;
+    protected Long productId;
     //店铺ID
-    protected Integer shopId;
+    protected Long shopId;
     //店铺名称
     protected String shopName;
     //分类ID
@@ -27,7 +27,7 @@ public class ProductBaseBean implements Serializable{
     //商品主图
     protected String mainImage;
     //商品排序，该字段仅用于店铺内显示的商品排序
-    protected Integer sort;
+    protected int sort;
     //商品状态 0，草稿；1，上架；2，下架；3，禁售
     protected int status;
     //添加时间
@@ -37,19 +37,19 @@ public class ProductBaseBean implements Serializable{
 
     public ProductBaseBean() {}
 
-    public Integer getProductId() {
+    public Long getProductId() {
         return productId;
     }
 
-    public void setProductId(Integer productId) {
+    public void setProductId(long productId) {
         this.productId = productId;
     }
 
-    public Integer getShopId() {
+    public Long getShopId() {
         return shopId;
     }
 
-    public void setShopId(Integer shopId) {
+    public void setShopId(long shopId) {
         this.shopId = shopId;
     }
 

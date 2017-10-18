@@ -11,10 +11,10 @@ import java.util.Map;
 public class Sku {
 
     //该条SKU的id
-    private int skuId;
+    private long skuId;
 
     //该条sku所属的商品的id
-    private int productId;
+    private long productId;
 
     // sku的销售属性的ID组合字符串（颜色，大小，等等，可通过类目API获取某类目下的销售属性）,格式是p1:v1;p2:v2(对应数据库中的数据ID)
     // 用于反映一项sku确定的商品的具体信息
@@ -38,7 +38,7 @@ public class Sku {
     public Sku() {
     }
 
-    public Sku(int productId, String propertiesName, int quantity, BigDecimal skuPrice, String shopSn) {
+    public Sku(long productId, String propertiesName, int quantity, BigDecimal skuPrice, String shopSn) {
         this.productId = productId;
         this.propertiesName = propertiesName;
         this.quantity = quantity;
@@ -46,19 +46,19 @@ public class Sku {
         this.shopSn = shopSn;
     }
 
-    public int getSkuId() {
+    public long getSkuId() {
         return skuId;
     }
 
-    public void setSkuId(int skuId) {
+    public void setSkuId(long skuId) {
         this.skuId = skuId;
     }
 
-    public int getProductId() {
+    public long getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(long productId) {
         this.productId = productId;
     }
 

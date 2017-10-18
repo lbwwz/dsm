@@ -14,10 +14,10 @@ import java.io.Serializable;
 public class ShippingAddressDTO implements Serializable{
     private static final long serialVersionUID = -4438039936880523693L;
     //收发货地址ID
-    private Integer addressId;
-    private Integer userId;
+    private Long addressId;
+    private Long userId;
 
-    private Integer locationId;
+    private Long locationId;
 
     private String consigneeProvince;
 
@@ -41,32 +41,32 @@ public class ShippingAddressDTO implements Serializable{
     public ShippingAddressDTO() {
     }
 
-    public ShippingAddressDTO(Integer addressId, Integer userId) {
+    public ShippingAddressDTO(Long addressId, Long userId) {
         this.addressId = addressId;
         this.userId = userId;
     }
 
-    public Integer getAddressId() {
+    public Long getAddressId() {
         return addressId;
     }
 
-    public void setAddressId(Integer addressId) {
+    public void setAddressId(Long addressId) {
         this.addressId = addressId;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public Integer getLocationId() {
+    public Long getLocationId() {
         return locationId;
     }
 
-    public void setLocationId(Integer locationId) {
+    public void setLocationId(long locationId) {
         this.locationId = locationId;
     }
 

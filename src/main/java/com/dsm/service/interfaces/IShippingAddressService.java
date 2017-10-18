@@ -26,7 +26,7 @@ public interface IShippingAddressService {
      *
      * @return 地址列表
      */
-    List<ShippingAddress> getConsignorAddressList(int userId);
+    List<ShippingAddress> getConsignorAddressList(long userId);
 
     /**
      * 提交用户的地址信息
@@ -39,7 +39,7 @@ public interface IShippingAddressService {
      * @param shippingAddressDTO 地址信息dto
      * @return 地址的主键id
      */
-    int addConsigneeAddress(ShippingAddressDTO shippingAddressDTO);
+    long addConsigneeAddress(ShippingAddressDTO shippingAddressDTO);
 
     /**
      * 根据ID删除相应的地址信息
@@ -47,7 +47,7 @@ public interface IShippingAddressService {
      * @param addressId 要删除的地址ID
      * @return 错误信息，若无异常，则返回null
      */
-    String deleteShippingAddress(int addressId);
+    String deleteShippingAddress(long addressId);
 
 
     /**
@@ -63,7 +63,7 @@ public interface IShippingAddressService {
      * @param addressId 地址ID
      * @return 地址id对应的地址信息
      */
-    ShippingAddress getShippingAddressByAddressId(int addressId);
+    ShippingAddress getShippingAddressByAddressId(long addressId);
 
     /**
      * 查询某个用户的默认收获地址
@@ -71,13 +71,13 @@ public interface IShippingAddressService {
      * @param userId 用户ID
      * @return 默认地址信息
      */
-    ShippingAddress getDefaultAddressFromUser(int userId);
+    ShippingAddress getDefaultAddressFromUser(long userId);
 
     /**
      * 更改默认地址
      * @return
      */
-    boolean resetDefaultAddress(int addressId);
+    boolean resetDefaultAddress(long addressId);
 
 
 }

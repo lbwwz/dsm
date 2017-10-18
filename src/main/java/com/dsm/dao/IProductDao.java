@@ -69,7 +69,7 @@ public interface IProductDao {
      * @param productId 商品号
      * @return 商品基本属性列表
      */
-    List<ProductDetailAttrInfo> getProductBaseAttrInfo(Integer productId);
+    List<ProductDetailAttrInfo> getProductBaseAttrInfo(long productId);
 
     /**
      * 为发布的商品添加自定义属性
@@ -84,7 +84,7 @@ public interface IProductDao {
      * @param productId 商品号
      * @return 自定义属性列表
      */
-    List<ProductDetailAttrInfo> getProductCustomAttrInfo(Integer productId);
+    List<ProductDetailAttrInfo> getProductCustomAttrInfo(long productId);
 
 
     /**
