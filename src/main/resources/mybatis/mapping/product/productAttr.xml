@@ -107,7 +107,7 @@
     </update>
 
     <!--更改品类下一组商品属性可用状态-->
-    <update id="changeAttrStatus" parameterType="int">
+    <update id="changeAttrStatus" parameterType="long">
         UPDATE dsm_product_def_attribute
         SET attr_status=1-attr_status
         WHERE attr_id=#{attrId}
@@ -156,7 +156,7 @@
     </update>
 
     <!--品类下更改一组商品属性值可用状态-->
-    <update id="changeValueStatus" parameterType="int">
+    <update id="changeValueStatus" parameterType="long">
         UPDATE dsm_product_def_attribute_values
         SET value_status=1-value_status
         WHERE value_id=#{valueId}

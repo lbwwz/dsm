@@ -46,16 +46,16 @@
         </foreach>
     </insert>
 
-    <select id="getSkuListByProductId" resultMap="skuResult" parameterType="int">
+    <select id="getSkuListByProductId" resultMap="skuResult" parameterType="long">
         SELECT * FROM dsm_product_sku WHERE product_id=#{productId};
     </select>
 
-    <select id="getSku" resultMap="skuResult" parameterType="int">
+    <select id="getSku" resultMap="skuResult" parameterType="long">
         SELECT * FROM dsm_product_sku WHERE product_id=#{productId};
     </select>
 
 
-    <select id="getProductSkuItem" resultMap="ProductSkuItemResult" parameterType="int">
+    <select id="getProductSkuItem" resultMap="ProductSkuItemResult" parameterType="long">
         SELECT dsm_product_sku.product_id , cat_id, product_sn, product_name, click_count, brand_id, shop_id, shop_name,
             warn_number,product_brief, main_img, product_grade, product_status,
             is_best, is_new, is_hot,sku_id,properties_name, quantity, sku_price, shop_sn
@@ -74,7 +74,7 @@
     </select>
 
     <!--查询sku单品的库存-->
-    <select id="getSkuQuantity" parameterType="int">
+    <select id="getSkuQuantity" parameterType="long">
         SELECT quantity FROM dsm_product_sku WHERE sku_id=#{skuId}
     </select>
 

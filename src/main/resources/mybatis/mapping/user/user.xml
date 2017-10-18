@@ -53,7 +53,7 @@
     </select>
 
     <!--根据用户ID查询相应的用户信息-->
-    <select id="getUserById" resultMap="userResult" parameterType="int">
+    <select id="getUserById" resultMap="userResult" parameterType="long">
         SELECT *
         FROM dsm_users
         WHERE user_id = #{id}
@@ -73,21 +73,21 @@
     </select>
 
     <!--为角色设置卖家权限-->
-    <update id="becomeSeller" parameterType="int">
+    <update id="becomeSeller" parameterType="long">
         UPDATE dsm_users
         SET role=1
         WHERE user_id=#{userId}
     </update>
 
     <!--变更用户账户的可用权限-->
-    <update id="changeStatus" parameterType="int">
+    <update id="changeStatus" parameterType="long">
         UPDATE dsm_users
         SET status=1-status
         WHERE user_id=#{userId}
     </update>
 
     <!--更新用户的最后一次登录时间-->
-    <update id="setLastVisit" parameterType="int">
+    <update id="setLastVisit" parameterType="long">
         UPDATE dsm_users
         SET last_visit = NOW()
         WHERE user_id=#{userId}

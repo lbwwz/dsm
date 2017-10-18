@@ -53,7 +53,7 @@
     </update>
 
     <!--根据地址ID查询地址库地址的详细信息-->
-    <select id="getLocation" resultMap="locationResult" parameterType="int">
+    <select id="getLocation" resultMap="locationResult" parameterType="long">
        SELECT *
        FROM dsm_location
        WHERE location_id=#{locationId}

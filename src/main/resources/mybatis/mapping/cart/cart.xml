@@ -68,12 +68,12 @@
         AND dsm_user_shopping_cart.sku_id=#{skuId}
     </select>
 
-    <select id="getShoppingCartInfoAll" resultMap="shoppingCartItemPOResult" parameterType="int">
+    <select id="getShoppingCartInfoAll" resultMap="shoppingCartItemPOResult" parameterType="long">
         <include refid="shoppingCartInfo"/>
         WHERE dsm_user_shopping_cart.user_id=#{userId}
     </select>
 
-    <select id="getShoppingCartItemByShopId" resultMap="shoppingCartItemPOResult" parameterType="int">
+    <select id="getShoppingCartItemByShopId" resultMap="shoppingCartItemPOResult" parameterType="long">
         <include refid="shoppingCartInfo"/>
         WHERE dsm_user_shopping_cart.user_id=#{userId}
         AND dsm_user_shopping_cart.shop_id=#{shopId}

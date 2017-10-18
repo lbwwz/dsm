@@ -254,20 +254,6 @@
 
     });
 
-    /**
-     * 操纵本地链接
-     * @param type 0:删除参数；1：添加参数
-     * @param param 参数：key=value形式
-     */
-    function doLocalHref(type,param){
-        if(type == 0){
-
-        }else{
-
-        }
-
-    }
 
 
-    showSideNav();
 </script>

@@ -32,14 +32,14 @@
     </resultMap>
 
     <!--查询某用户的所有收获地址-->
-    <select id="getConsigneeAddressList" resultMap="shippingAddressResult" parameterType="int">
+    <select id="getConsigneeAddressList" resultMap="shippingAddressResult" parameterType="long">
         SELECT *
         FROM vdsm_user_shipping_address
         WHERE user_id=#{userId} AND TYPE=0
     </select>
 
     <!--查询用户最新添加的收获地址-->
-    <select id="getNewestConsigneeAddress" resultMap="shippingAddressResult" parameterType="int">
+    <select id="getNewestConsigneeAddress" resultMap="shippingAddressResult" parameterType="long">
         SELECT *
         FROM vdsm_user_shipping_address
         HAVING user_id=#{userId} AND TYPE=0 ORDER BY created_time DESC
@@ -47,14 +47,14 @@
     </select>
 
     <!--查询某用户的所有发货地址-->
-    <select id="getConsignorAddressList" resultMap="shippingAddressResult" parameterType="int">
+    <select id="getConsignorAddressList" resultMap="shippingAddressResult" parameterType="long">
         SELECT *
         FROM vdsm_user_shipping_address
         WHERE user_id=#{userId} AND TYPE=1
     </select>
 
     <!--查询具体物流地址ID对应的一条地址信息-->
-    <select id="getShippingAddressById" resultMap="shippingAddressResult" parameterType="int">
+    <select id="getShippingAddressById" resultMap="shippingAddressResult" parameterType="long">
         SELECT *
         FROM vdsm_user_shipping_address
         WHERE address_id=#{addressId}
@@ -75,7 +75,7 @@
 
 
     <!--设置（插入）默认地址关联信息-->
-    <insert id="addDefaultRelevant" parameterType="int">
+    <insert id="addDefaultRelevant" parameterType="long">
         INSERT INTO dsm_shipping_address_default(user_id)
         VALUES(#{userId})
     </insert>
@@ -88,12 +88,12 @@
     </update>
 
     <!--删除某条物流地址信息(chufa器中将级联删除location中的地址信息)-->
-    <delete id="deleteShippingAddress" parameterType="int">
+    <delete id="deleteShippingAddress" parameterType="long">
         DELETE FROM dsm_shipping_address WHERE address_id=#{addressId}
     </delete>
 
     <!--查询默认的收货地址-->
-    <select id="getDefaultAddress" resultMap="shippingAddressResult" parameterType="int">
+    <select id="getDefaultAddress" resultMap="shippingAddressResult" parameterType="long">
         SELECT *
         FROM vdsm_user_shipping_address
         WHERE TYPE=0 AND address_id=(

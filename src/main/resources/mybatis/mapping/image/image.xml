@@ -24,7 +24,7 @@
     </insert>
 
     <!--删除某张图片-->
-    <delete id="deleteImage"  parameterType="int">
+    <delete id="deleteImage"  parameterType="long">
         DELETE FROM dsm_images WHERE img_id=#{imgId};
     </delete>
 
