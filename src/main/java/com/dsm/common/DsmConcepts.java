@@ -84,6 +84,8 @@ public class DsmConcepts {
 
 
 
+    //时间戳分隔符
+    public static String EXPIRE_TIME_SEPARATE = "@=@";
 
 
 

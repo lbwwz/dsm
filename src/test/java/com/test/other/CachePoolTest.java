@@ -99,7 +99,7 @@ public class CachePoolTest extends BaseJunitTest {
         String info = "1232312";
         long size = 3;
 
-        redisService.setHSet(key, orderHashCode, JSONObject.toJSONString(info) + "@=@" + System.currentTimeMillis());
+        redisService.setHSet(key, orderHashCode, JSONObject.toJSONString(info) + DsmConcepts.EXPIRE_TIME_SEPARATE + System.currentTimeMillis());
         String tempKey= key + "_affiliate";
         redisService.removeListValue(tempKey,1,orderHashCode);
         redisService.lpush(tempKey, orderHashCode);

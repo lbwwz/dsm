@@ -48,7 +48,7 @@
     </bean>
 
     <!-- 通过实例工厂方法为 filterChainDefinitionMap 赋值 -->
-    <bean id="filterChainDefinitionFactory" class="com.dsm.common.FilterChainDefinitionsFactory"></bean>
+    <bean id="filterChainDefinitionFactory" class="com.dsm.common.FilterChainDefinitionsFactory" ></bean>
     <bean id="filterChainDefinitionsMap" factory-bean="filterChainDefinitionFactory" factory-method="getFilterChainDefinitionsMap"/>
 
     <!--

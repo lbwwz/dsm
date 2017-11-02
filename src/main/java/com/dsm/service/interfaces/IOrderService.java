@@ -26,5 +26,5 @@ public interface IOrderService {
      * @param addressId 选中的运送地址ID，若为空，则默认选中为默认地址
      * @return 结算页结算信息
      */
-    BackMsg<OrderCheckInfo> getOrderCheckInfo(String items, Integer addressId);
+    BackMsg<OrderCheckInfo> getOrderCheckInfo(String items, Long addressId);
 }

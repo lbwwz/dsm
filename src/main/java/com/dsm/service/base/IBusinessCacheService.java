@@ -33,4 +33,10 @@ public interface IBusinessCacheService {
      * @param mustFromDB 是否强制从数据库获取
      */
     List<ProductSkuItem> getProductSkuItemListFromCache(boolean mustFromDB, Long... skuIdArr);
+
+    /**
+     * 清除缓存
+     * @param skuId
+     */
+    void cleanProductSkuItemFromCache(long skuId);
 }

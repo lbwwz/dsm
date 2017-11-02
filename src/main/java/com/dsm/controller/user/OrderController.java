@@ -55,7 +55,7 @@ public class OrderController {
     }
 
     @RequestMapping(value = "getOrderCheckInfo",produces = {"text/html;charset=UTF-8"})
-    public String getOrderCheckInfo(Map<String,Object> m,String items,Integer addressId){
+    public String getOrderCheckInfo(Map<String,Object> m,String items,Long addressId){
         BackMsg<OrderCheckInfo> backMsg = orderService.getOrderCheckInfo(items,addressId);
 
         m.put("orderCheckInfo",backMsg.getData());

@@ -11,6 +11,8 @@ import com.dsm.dao.ICartDao;
 import com.dsm.model.BackMsg;
 import com.dsm.model.address.ShippingAddress;
 import com.dsm.model.cart.ShoppingCartItemPO;
+import com.dsm.model.formData.OrderCreateDto;
+import com.dsm.model.order.OrderCheckCacheInfo;
 import com.dsm.model.order.OrderCheckInfo;
 import com.dsm.model.order.OrderPackage;
 import com.dsm.model.order.OrderSkuItem;
@@ -55,10 +57,7 @@ public class OrderServiceImpl implements IOrderService {
     private ICartDao cartDao;
 
 
-    /**
-     * （补充）使用缓存记录订单结算地址和费用信息
-     * @return
-     */
+
     @Override
     public BackMsg<String> checkOrderInfo() {
         User user = SessionToolUtils.getUser();
@@ -183,8 +182,8 @@ public class OrderServiceImpl implements IOrderService {
         }
 
         return skuItemList;
-
     }
+
 
 
     /**
@@ -197,10 +196,10 @@ public class OrderServiceImpl implements IOrderService {
     private void setOrderSkuListToCache(String key, String orderHashCode, List<OrderSkuItem> listInfo) {
         long size = 5;
         if (!redisService.exists(key)) {
-            redisService.setHSet(key, orderHashCode, JSONObject.toJSONString(listInfo) + "@=@" + System.currentTimeMillis());
+            redisService.setHSet(key, orderHashCode, JSONObject.toJSONString(new OrderCheckCacheInfo(listInfo)) + DsmConcepts.EXPIRE_TIME_SEPARATE + System.currentTimeMillis());
             redisService.expire(key, DsmConcepts.HOUR * 2);
         } else {
-            redisService.setHSet(key, orderHashCode, JSONObject.toJSONString(listInfo) + "@=@" + System.currentTimeMillis());
+            redisService.setHSet(key, orderHashCode, JSONObject.toJSONString(new OrderCheckCacheInfo(listInfo)) + DsmConcepts.EXPIRE_TIME_SEPARATE + System.currentTimeMillis());
         }
         String tempKey = key + "_affiliate";
         redisService.removeListValue(tempKey, 1, orderHashCode);
@@ -236,23 +235,19 @@ public class OrderServiceImpl implements IOrderService {
 
 
     @Override
-    public BackMsg<OrderCheckInfo> getOrderCheckInfo(String items, Integer addressId) {
+    public BackMsg<OrderCheckInfo> getOrderCheckInfo(String items, Long addressId) {
 
         /**
          * 先从缓存中获取结算项信息，如果获取信息为空，根据items串重新查询，
          */
-        User user = SessionToolUtils.getUser();
-        List<OrderSkuItem> skuList = getOrderSkuListFromCache("orderCheck_" + user.getId(), EncryptUtils.encryptMD5(items));
 
-        if (skuList == null || skuList.size() == 0) {
-            try {
-                skuList = checkOrderSkuItem(items);
-                String itemsString = makeItemsString(skuList);
-                setOrderSkuListToCache("orderCheck_" + user.getId(), EncryptUtils.encryptMD5(itemsString), skuList);
 
-            } catch (Exception e) { //校验出现错误
-                return new BackMsg<>(DsmConcepts.ERROR, null, (e instanceof CustomErrorMsgException) ? e.getMessage() : "商品校验异常");
-            }
+        List<OrderSkuItem> skuList;
+
+        try {
+            skuList = getOrderSkuItemList(items);
+        } catch (Exception e) { //校验出现错误
+            return new BackMsg<>(DsmConcepts.ERROR, null, (e instanceof CustomErrorMsgException) ? e.getMessage() : "商品校验异常");
         }
 
 
@@ -271,6 +266,19 @@ public class OrderServiceImpl implements IOrderService {
         return null;
     }
 
+    private List<OrderSkuItem> getOrderCheckInfo(String items) throws Exception {
+        List<OrderSkuItem> skuList;User user = SessionToolUtils.getUser();
+        skuList = getOrderSkuListFromCache("orderCheck_" + user.getId(), EncryptUtils.encryptMD5(items));
+        if (skuList == null || skuList.size() == 0) {
+            skuList = checkOrderSkuItem(items);
+            if(skuList != null){
+                String itemsString = makeItemsString(skuList);
+                setOrderSkuListToCache("orderCheck_" + user.getId(), EncryptUtils.encryptMD5(itemsString), skuList);
+            }
+        }
+        return skuList;
+    }
+
 
     /**
      * 从之前结算时候创建的订单信息中获取结算项信息（只获取做信息展示，不需要进行库存校验）
@@ -278,17 +286,17 @@ public class OrderServiceImpl implements IOrderService {
      * @param key 缓存KEY
      * @param orderHashCode hset中的key，是一串对应结算项的唯一编码
      */
-    private List<OrderSkuItem> getOrderSkuListFromCache(String key, String orderHashCode) {
+    private OrderCheckCacheInfo getOrderCheckInfoFormCache(String key, String orderHashCode) {
         String cacheStr = redisService.getHSet(key, orderHashCode);
 
         if (StringUtils.isEmpty(cacheStr)) {
             return null;
         }
-        String[] cacheInfo = cacheStr.split("@=@");
+        String[] cacheInfo = cacheStr.split(DsmConcepts.EXPIRE_TIME_SEPARATE);
         if (System.currentTimeMillis() - Long.parseLong(cacheInfo[1]) > DsmConcepts.TIMESTAMP_MINUTE * 15) {
             return null;
         }
-        return JSON.parseArray(cacheInfo[0], OrderSkuItem.class);
+        return JSON.parseObject(cacheInfo[0], OrderCheckCacheInfo.class);
     }
 
 
@@ -299,6 +307,7 @@ public class OrderServiceImpl implements IOrderService {
      * @return 结算信息串
      */
     private String makeItemsString(List<OrderSkuItem> skuList) {
+        Collections.sort(skuList,(o1, o2) -> (int)(o1.getSkuId()-o2.getSkuId()));
         StringBuilder builder = new StringBuilder();
 
         for (OrderSkuItem item : skuList) {
@@ -311,13 +320,14 @@ public class OrderServiceImpl implements IOrderService {
     /**
      * 整理结算页结算信息
      * <p>skuList结算项要判定是不是异常结算项目（库存不足），若是库存不足项，则需要进行先关的处理。。。</p>
+     * （补充）使用缓存记录订单结算地址和费用信息
      *
      * @param orderAddresses 地址信息
      * @param skuList        结算项信息
      * @param addressId      结算选中地址
      * @return 结算信息封装对象
      */
-    private OrderCheckInfo arrangeOrderCheckInfo(List<ShippingAddress> orderAddresses, List<OrderSkuItem> skuList, Integer addressId) {
+    private OrderCheckInfo arrangeOrderCheckInfo(List<ShippingAddress> orderAddresses, List<OrderSkuItem> skuList, Long addressId) {
 
         if (skuList == null) {
             return null;
@@ -335,30 +345,47 @@ public class OrderServiceImpl implements IOrderService {
             tempList.add(item);
         });
 
+        ShippingAddress selectedOrderAddress = null;
         if (!skuList.get(0).getIsEnough()) {    //库存校验不通过的操作
             orderCheckInfo.setIsEnough(false);
         } else {    //库存充足
             orderCheckInfo.setAddressList(orderAddresses);
             //设置结算页地址信息,并将地址信息返回
-            ShippingAddress selectedOrderAddress = doOrderSelectedAddress(orderAddresses, addressId);
-            if (selectedOrderAddress != null) {
-                //根据选择的地址信息计算运费等价格(待定)
-            }
-
-            //统计价格总计。。。
+            selectedOrderAddress = doOrderSelectedAddress(orderAddresses, addressId);
         }
 
-        BigDecimal itemTotalAmount = new BigDecimal(0);
+        /**
+         * 价格统计。。。
+         */
+        BigDecimal packageTotalAmount = new BigDecimal(0);
         BigDecimal orderTotalAmount = new BigDecimal(0);
         OrderPackage tempPackage;
+        //这里做订单操作的相关缓存信息
         for (Map.Entry<String, List<OrderSkuItem>> entry : map.entrySet()) {
             tempPackage = new OrderPackage(entry.getValue().get(0).getShopId(), entry.getValue().get(0).getShopName(), entry.getValue());
-            for (OrderSkuItem item : entry.getValue()) { //计算商品总价
-                itemTotalAmount = itemTotalAmount.add(item.getSkuPrice().multiply(BigDecimal.valueOf(item.getItemNum())));
-            }
-            tempPackage.setShopTotalPrice(itemTotalAmount);
             orderCheckInfo.addOrderPackage(tempPackage);
-            orderTotalAmount = orderTotalAmount.add(itemTotalAmount);
+
+
+            if(selectedOrderAddress != null){ //有物流地址时才进行订单核算
+                //计算商品总价
+                for (OrderSkuItem item : entry.getValue()) {
+                    packageTotalAmount = packageTotalAmount.add(item.getSkuPrice().multiply(BigDecimal.valueOf(item.getItemNum())));
+                }
+
+                //运费计算
+
+
+
+                //这里设置信息缓存(缓存时间15分钟)
+
+                //优惠信息折算（不设置到缓存是为了防止优惠活动超时）
+
+                //设置子单实际价格
+                tempPackage.setShopTotalPrice(packageTotalAmount);
+
+                //总价汇总
+                orderTotalAmount = orderTotalAmount.add(packageTotalAmount);
+            }
         }
         orderCheckInfo.setTotalPrice(orderTotalAmount);
         return orderCheckInfo;
@@ -373,7 +400,7 @@ public class OrderServiceImpl implements IOrderService {
      * @param addressId      要设置的地址信息的id
      * @return 设置选中的地址信息
      */
-    private ShippingAddress doOrderSelectedAddress(List<ShippingAddress> orderAddresses, Integer addressId) {
+    private ShippingAddress doOrderSelectedAddress(List<ShippingAddress> orderAddresses, Long addressId) {
         if (orderAddresses == null || orderAddresses.size() == 0) {
             return null;
         }
@@ -407,6 +434,16 @@ public class OrderServiceImpl implements IOrderService {
             temp.setCheckOrderSelected(true);
         }
         return temp;
+    }
+
+
+    public BackMsg<String[]> createOrder(OrderCreateDto dto){
+
+        User user = SessionToolUtils.getUser();
+        List<OrderSkuItem> orderSkuItems = getOrderSkuListFromCache("orderCheck_" + user.getId(), EncryptUtils.encryptMD5(dto.getItemString()));
+
+        return null;
+
     }
 
 

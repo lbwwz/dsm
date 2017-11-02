@@ -19,6 +19,8 @@ public class OrderSkuItem extends ProductSkuItem{
     //库存是否充足
     public boolean isEnough = true;
 
+    //优惠信息（待定）
+
 
     public Integer getItemNum() {
         return itemNum;
